@@ -1,5 +1,17 @@
 ﻿<Project>
   <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/HuitWorks.AdminWeb/css/auth/Login.27mdu8ctbk.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\auth\Login.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"27mdu8ctbk"},{"Name":"integrity","Value":"sha256-nq88BIRafFtWIei5wFNEQKoFYLkxFHRaaBMo7ji98c8="},{"Name":"label","Value":"_content/HuitWorks.AdminWeb/css/auth/Login.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"6692"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022nq88BIRafFtWIei5wFNEQKoFYLkxFHRaaBMo7ji98c8=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 08:02:25 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/HuitWorks.AdminWeb/css/auth/Login.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\auth\Login.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-nq88BIRafFtWIei5wFNEQKoFYLkxFHRaaBMo7ji98c8="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"6692"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022nq88BIRafFtWIei5wFNEQKoFYLkxFHRaaBMo7ji98c8=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 08:02:25 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/HuitWorks.AdminWeb/css/layout.ce4damts8u.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\layout.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
@@ -24,18 +36,6 @@
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-pAGv4ietcJNk/EwsQZ5BN9\u002BK4MuNYS2a9wl4Jw\u002Bq9D0="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"362"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022pAGv4ietcJNk/EwsQZ5BN9\u002BK4MuNYS2a9wl4Jw\u002Bq9D0=\u0022"},{"Name":"Last-Modified","Value":"Wed, 09 Apr 2025 08:05:38 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/HuitWorks.AdminWeb/css/users.2wfd9vi9qh.css">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\users.css'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"2wfd9vi9qh"},{"Name":"integrity","Value":"sha256-snaHIrtK96Bsu3c9KdwP5\u002BYUhHJnCLTiJr7kSEeEQM4="},{"Name":"label","Value":"_content/HuitWorks.AdminWeb/css/users.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"10219"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022snaHIrtK96Bsu3c9KdwP5\u002BYUhHJnCLTiJr7kSEeEQM4=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 17:51:35 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/HuitWorks.AdminWeb/css/users.css">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\users.css'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-snaHIrtK96Bsu3c9KdwP5\u002BYUhHJnCLTiJr7kSEeEQM4="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"10219"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022snaHIrtK96Bsu3c9KdwP5\u002BYUhHJnCLTiJr7kSEeEQM4=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 17:51:35 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/HuitWorks.AdminWeb/favicon.61n19gt1b8.ico">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\favicon.ico'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
@@ -52,13 +52,13 @@
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\HuitWorks.AdminWeb.50eljuojub.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"50eljuojub"},{"Name":"integrity","Value":"sha256-JaUXoA/vqKgLXQrLx9jFFRSJ0md0iQ1mUliOkqtoqUs="},{"Name":"label","Value":"_content/HuitWorks.AdminWeb/HuitWorks.AdminWeb.bundle.scp.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1136"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022JaUXoA/vqKgLXQrLx9jFFRSJ0md0iQ1mUliOkqtoqUs=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 12:40:36 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1136"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022JaUXoA/vqKgLXQrLx9jFFRSJ0md0iQ1mUliOkqtoqUs=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 07:55:43 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/HuitWorks.AdminWeb/HuitWorks.AdminWeb.bundle.scp.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\HuitWorks.AdminWeb.50eljuojub.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-JaUXoA/vqKgLXQrLx9jFFRSJ0md0iQ1mUliOkqtoqUs="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"1136"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022JaUXoA/vqKgLXQrLx9jFFRSJ0md0iQ1mUliOkqtoqUs=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 12:40:36 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"1136"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022JaUXoA/vqKgLXQrLx9jFFRSJ0md0iQ1mUliOkqtoqUs=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 07:55:43 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/HuitWorks.AdminWeb/images/user.mvfn2bx0nk.png">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\user.png'))</AssetFile>

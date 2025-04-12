@@ -1,0 +1,76 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Đăng nhập";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập | Hệ thống quản lý tuyển dụng</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="~/css/auth/login.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-sidebar">
+            <div class="overlay">
+                <div class="sidebar-pattern"></div>
+                <h1>Tuyển Dụng Nhân Tài</h1>
+                <p>Hệ thống quản lý chuyên nghiệp kết nối nhà tuyển dụng và ứng viên. Tạo cơ hội nghề nghiệp và phát triển nguồn nhân lực chất lượng cao.</p>
+                <div class="sidebar-footer">
+                    &copy; 2025 Hệ thống Quản lý Tuyển dụng
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="login-form-container">
+            <div class="login-logo">
+                <img src="/api/placeholder/140/60" alt="Logo Hệ thống">
+            </div>
+
+            <div class="login-header">
+                <h2>Đăng nhập quản trị</h2>
+                <p>Vui lòng đăng nhập để tiếp tục sử dụng hệ thống</p>
+            </div>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    @ViewBag.Error
+                </div>
+            }
+
+            <form asp-action="Login" method="post">
+                <div class="form-group">
+                    <label for="username">Tên đăng nhập</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user input-icon"></i>
+                        <input id="username" name="username" class="form-input" placeholder="Nhập tên đăng nhập" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input id="password" name="password" type="password" class="form-input" placeholder="Nhập mật khẩu" required>
+                    </div>
+                </div>
+
+                <a href="#" class="forgot-password">Quên mật khẩu?</a>
+
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                </button>
+            </form>
+
+            <div class="footer-text">
+                Tất cả quyền được bảo lưu. Bản quyền thuộc về Hệ thống Quản lý Tuyển dụng.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
