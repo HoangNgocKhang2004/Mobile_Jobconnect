@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\LTDT\\HuitWorks.WebAPI\\HuitWorks.WebAPI\\HuitWorks.WebAPI.csproj": {}
+    "D:\\LTDD\\HuitWorks.WebAPI\\HuitWorks.WebAPI\\HuitWorks.WebAPI.csproj": {}
   },
   "projects": {
-    "D:\\LTDT\\HuitWorks.WebAPI\\HuitWorks.WebAPI\\HuitWorks.WebAPI.csproj": {
+    "D:\\LTDD\\HuitWorks.WebAPI\\HuitWorks.WebAPI\\HuitWorks.WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\LTDT\\HuitWorks.WebAPI\\HuitWorks.WebAPI\\HuitWorks.WebAPI.csproj",
+        "projectUniqueName": "D:\\LTDD\\HuitWorks.WebAPI\\HuitWorks.WebAPI\\HuitWorks.WebAPI.csproj",
         "projectName": "HuitWorks.WebAPI",
-        "projectPath": "D:\\LTDT\\HuitWorks.WebAPI\\HuitWorks.WebAPI\\HuitWorks.WebAPI.csproj",
+        "projectPath": "D:\\LTDD\\HuitWorks.WebAPI\\HuitWorks.WebAPI\\HuitWorks.WebAPI.csproj",
         "packagesPath": "C:\\Users\\khang\\.nuget\\packages\\",
-        "outputPath": "D:\\LTDT\\HuitWorks.WebAPI\\HuitWorks.WebAPI\\obj\\",
+        "outputPath": "D:\\LTDD\\HuitWorks.WebAPI\\HuitWorks.WebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
