@@ -1,0 +1,423 @@
+﻿@{
+    ViewData["Title"] = "Quản lý đơn ứng tuyển";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // Dữ liệu giả định cho ứng dụng
+    var applications = new List<dynamic>
+    {
+        new {
+            Id = 1,
+            JobTitle = "Kỹ sư phần mềm",
+            CompanyName = "Tech Solutions Inc.",
+            CandidateName = "Nguyễn Văn An",
+            ApplyDate = DateTime.Now.AddDays(-5),
+            Status = "Đang xem xét",
+            CvUrl = "/uploads/cv/nguyen-van-an-cv.pdf"
+        },
+        new {
+            Id = 2,
+            JobTitle = "UI/UX Designer",
+            CompanyName = "Digital Creations",
+            CandidateName = "Trần Thị Bình",
+            ApplyDate = DateTime.Now.AddDays(-7),
+            Status = "Đã phỏng vấn",
+            CvUrl = "/uploads/cv/tran-thi-binh-cv.pdf"
+        },
+        new {
+            Id = 3,
+            JobTitle = "Product Manager",
+            CompanyName = "InnovateTech",
+            CandidateName = "Lê Hoàng Cường",
+            ApplyDate = DateTime.Now.AddDays(-2),
+            Status = "Chờ phỏng vấn",
+            CvUrl = "/uploads/cv/le-hoang-cuong-cv.pdf"
+        },
+        new {
+            Id = 4,
+            JobTitle = "Data Analyst",
+            CompanyName = "Data Insights Co.",
+            CandidateName = "Phạm Thị Dung",
+            ApplyDate = DateTime.Now.AddDays(-10),
+            Status = "Từ chối",
+            CvUrl = "/uploads/cv/pham-thi-dung-cv.pdf"
+        },
+        new {
+            Id = 5,
+            JobTitle = "DevOps Engineer",
+            CompanyName = "Cloud Services Ltd.",
+            CandidateName = "Hoàng Văn Em",
+            ApplyDate = DateTime.Now.AddDays(-3),
+            Status = "Đang xem xét",
+            CvUrl = "/uploads/cv/hoang-van-em-cv.pdf"
+        },
+        new {
+            Id = 6,
+            JobTitle = "Marketing Specialist",
+            CompanyName = "Brand Builders",
+            CandidateName = "Vũ Thị Phương",
+            ApplyDate = DateTime.Now.AddDays(-1),
+            Status = "Mới nhận",
+            CvUrl = "/uploads/cv/vu-thi-phuong-cv.pdf"
+        }
+    };
+
+    // Danh sách trạng thái lọc
+    var statuses = new List<string> { "Tất cả", "Mới nhận", "Đang xem xét", "Chờ phỏng vấn", "Đã phỏng vấn", "Đã chấp nhận", "Từ chối" };
+}
+
+<div class="container-fluid">
+    <h2 class="mb-4">Quản lý đơn ứng tuyển</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Tổng đơn ứng tuyển
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@applications.Count</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Đang xem xét
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@applications.Count(a => a.Status == "Đang xem xét")</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-search fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Đã phỏng vấn
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@applications.Count(a => a.Status == "Đã phỏng vấn")</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Chờ phỏng vấn
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@applications.Count(a => a.Status == "Chờ phỏng vấn")</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-wrap justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Danh sách đơn ứng tuyển</h6>
+            <div class="d-flex">
+                <div class="input-group mr-2">
+                    <select class="form-control" id="statusFilter">
+                        @foreach (var status in statuses)
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    </select>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm...">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="applicationsTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Vị trí ứng tuyển</th>
+                            <th>Công ty</th>
+                            <th>Ứng viên</th>
+                            <th>Ngày ứng tuyển</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var app in applications)
+                        {
+                            <tr>
+                                <td>@app.Id</td>
+                                <td>@app.JobTitle</td>
+                                <td>@app.CompanyName</td>
+                                <td>@app.CandidateName</td>
+                                <td>@app.ApplyDate.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    @{
+                                        string badgeClass = app.Status switch
+                                        {
+                                            "Mới nhận" => "badge-info",
+                                            "Đang xem xét" => "badge-primary",
+                                            "Chờ phỏng vấn" => "badge-warning",
+                                            "Đã phỏng vấn" => "badge-secondary",
+                                            "Đã chấp nhận" => "badge-success",
+                                            "Từ chối" => "badge-danger",
+                                            _ => "badge-secondary"
+                                        };
+                                    }
+                                    <span class="badge @badgeClass">@app.Status</span>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="@Url.Action("Details", "Applications", new { id = app.Id })" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="@app.CvUrl" target="_blank" class="btn btn-sm btn-secondary">
+                                            <i class="fas fa-file-pdf"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
+                                            <i class="fas fa-cog"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changeStatusModal" data-id="@app.Id">
+                                                Cập nhật trạng thái
+                                            </a>
+                                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#scheduleInterviewModal" data-id="@app.Id">
+                                                Lịch phỏng vấn
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item text-danger" href="#" data-toggle="modal" data-target="#deleteModal" data-id="@app.Id">
+                                                Xóa
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-3">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-end">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Trước</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Sau</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Change Status Modal -->
+<div class="modal fade" id="changeStatusModal" tabindex="-1" role="dialog" aria-labelledby="changeStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changeStatusModalLabel">Cập nhật trạng thái</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="statusForm">
+                    <input type="hidden" id="applicationId" name="applicationId">
+                    <div class="form-group">
+                        <label for="statusSelect">Trạng thái mới</label>
+                        <select class="form-control" id="statusSelect" name="status">
+                            <option value="Mới nhận">Mới nhận</option>
+                            <option value="Đang xem xét">Đang xem xét</option>
+                            <option value="Chờ phỏng vấn">Chờ phỏng vấn</option>
+                            <option value="Đã phỏng vấn">Đã phỏng vấn</option>
+                            <option value="Đã chấp nhận">Đã chấp nhận</option>
+                            <option value="Từ chối">Từ chối</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="statusNote">Ghi chú</label>
+                        <textarea class="form-control" id="statusNote" name="statusNote" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="saveStatusBtn">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Schedule Interview Modal -->
+<div class="modal fade" id="scheduleInterviewModal" tabindex="-1" role="dialog" aria-labelledby="scheduleInterviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="scheduleInterviewModalLabel">Lịch phỏng vấn</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="interviewForm">
+                    <input type="hidden" id="interviewApplicationId" name="applicationId">
+                    <div class="form-group">
+                        <label for="interviewDate">Ngày phỏng vấn</label>
+                        <input type="date" class="form-control" id="interviewDate" name="interviewDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="interviewTime">Giờ phỏng vấn</label>
+                        <input type="time" class="form-control" id="interviewTime" name="interviewTime">
+                    </div>
+                    <div class="form-group">
+                        <label for="interviewType">Hình thức phỏng vấn</label>
+                        <select class="form-control" id="interviewType" name="interviewType">
+                            <option value="Trực tiếp">Trực tiếp</option>
+                            <option value="Online">Online</option>
+                            <option value="Điện thoại">Điện thoại</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="interviewLocation">Địa điểm/Link phỏng vấn</label>
+                        <input type="text" class="form-control" id="interviewLocation" name="interviewLocation">
+                    </div>
+                    <div class="form-group">
+                        <label for="interviewNote">Ghi chú</label>
+                        <textarea class="form-control" id="interviewNote" name="interviewNote" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="scheduleInterviewBtn">Lịch phỏng vấn</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa đơn ứng tuyển này không?</p>
+                <p><strong>Lưu ý:</strong> Hành động này không thể hoàn tác.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Khởi tạo DataTable
+            $('#applicationsTable').DataTable({
+                "paging": false,
+                "info": false,
+                "searching": false,
+                "language": {
+                    "emptyTable": "Không có dữ liệu",
+                    "zeroRecords": "Không tìm thấy kết quả phù hợp"
+                }
+            });
+
+            // Xử lý tìm kiếm
+            $('#searchInput').on('keyup', function() {
+                var value = $(this).val().toLowerCase();
+                $("#applicationsTable tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+
+            // Xử lý lọc theo trạng thái
+            $('#statusFilter').change(function() {
+                var value = $(this).val();
+                if (value === "Tất cả") {
+                    $("#applicationsTable tbody tr").show();
+                } else {
+                    $("#applicationsTable tbody tr").filter(function() {
+                        return $(this).find("td:nth-child(6)").text().trim() !== value;
+                    }).hide();
+                    $("#applicationsTable tbody tr").filter(function() {
+                        return $(this).find("td:nth-child(6)").text().trim() === value;
+                    }).show();
+                }
+            });
+
+            // Xử lý mở modal cập nhật trạng thái
+            $('#changeStatusModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var modal = $(this);
+                modal.find('#applicationId').val(id);
+            });
+
+            // Xử lý mở modal lịch phỏng vấn
+            $('#scheduleInterviewModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var modal = $(this);
+                modal.find('#interviewApplicationId').val(id);
+
+                // Đặt ngày mặc định là ngày mai
+                var tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                var dd = String(tomorrow.getDate()).padStart(2, '0');
+                var mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+                var yyyy = tomorrow.getFullYear();
+                modal.find('#interviewDate').val(yyyy + '-' + mm + '-' + dd);
+            });
+        });
+    </script>
+}

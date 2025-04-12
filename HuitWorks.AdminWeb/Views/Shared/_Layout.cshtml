@@ -1,0 +1,239 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HuitWorks Admin Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="~/css/layout.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="wrapper d-flex flex-column min-vh-100">
+        <header class="main-header">
+            <div class="brand-logo">
+                <a class="navbar-brand logo-text" href="/">
+                    <i class="fas fa-briefcase me-2"></i>HuitWorks
+                </a>
+            </div>
+
+            <div class="navbar-content">
+                <div class="d-flex align-items-center">
+                    <div class="search-bar d-none d-md-block">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Tìm kiếm...">
+                    </div>
+                </div>
+
+                <div class="header-nav">
+                    <div class="nav-item">
+                        <button class="header-icon-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">5</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end notification-dropdown">
+                            <div class="notification-header">
+                                <h6>Thông báo</h6>
+                                <a href="#" class="text-primary" style="font-size: 0.9rem;">Đánh dấu đã đọc</a>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon bg-primary-light text-primary">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">Hồ sơ mới: Software Engineer</div>
+                                    <div class="notification-text">Nguyễn Văn A đã ứng tuyển vào vị trí Software Engineer
+                                    </div>
+                                    <div class="notification-time">30 phút trước</div>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon bg-primary-light text-primary">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">Hồ sơ mới: UX Designer</div>
+                                    <div class="notification-text">Trần Thị B đã ứng tuyển vào vị trí UX Designer</div>
+                                    <div class="notification-time">1 giờ trước</div>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon" style="background-color: #fee2e2; color: #ef4444;">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">Tin tuyển dụng hết hạn</div>
+                                    <div class="notification-text">Tin tuyển dụng vị trí Data Analyst đã hết hạn</div>
+                                    <div class="notification-time">2 giờ trước</div>
+                                </div>
+                            </div>
+                            <div class="notification-footer">
+                                <a href="#">Xem tất cả thông báo</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-item">
+                        <button class="header-icon-btn" type="button">
+                            <i class="fas fa-inbox"></i>
+                        </button>
+                    </div>
+
+                    <div class="nav-item">
+                        <div class="user-profile" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="~/images/user.png" alt="Admin User">
+                            <div class="user-info d-none d-md-block">
+                                <div class="user-name">Admin</div>
+                                <div class="user-role">Quản trị viên</div>
+                            </div>
+                            <i class="fas fa-chevron-down ms-2 d-none d-md-block"
+                                style="font-size: 0.8rem; color: var(--text-light);"></i>
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end user-dropdown">
+                            <li>
+                                <div class="px-4 py-3">
+                                    <div style="font-weight: 600;">Admin</div>
+                                    <div style="font-size: 0.9rem; color: var(--text-light);">admin@huitworks.com</div>
+                                </div>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Hồ sơ cá nhân</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Cài đặt</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#" style="color: var(--danger-color);"><i
+                                        class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <aside class="sidebar">
+            <!-- Logo Section -->
+            <div class="brand-logo">
+                <a class="navbar-brand logo-text" href="/dashboard">
+                    <i class="fas fa-user-tie"></i>
+                    <span>HuitWorks</span>
+                </a>
+            </div>
+
+            <!-- Navigation Sections -->
+            <div class="sidebar-section">
+                <h5 class="sidebar-section-title">Quản lý ứng viên</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/candidates/listcandidate">
+                            <i class="fas fa-users"></i>
+                            <span class="nav-text">Danh sách ứng viên</span>
+                            @* <span class="nav-badge">124</span> *@
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/candidates/applications">
+                            <i class="fas fa-clipboard-list"></i>
+                            <span class="nav-text">Đơn ứng tuyển</span>
+                            @* <span class="nav-badge">45</span> *@
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/candidates/topcandidates">
+                            <i class="fas fa-user-check"></i>
+                            <span class="nav-text">Ds ứng viên nổi bật</span>
+                            @* <span class="nav-badge">124</span> *@
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <h5 class="sidebar-section-title">Quản lý doanh nghiệp</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/hr/">
+                            <i class="fas fa-building"></i>
+                            <span class="nav-text">Nhà tuyển dụng</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/jobpost/">
+                            <i class="fas fa-bullhorn"></i>
+                            <span class="nav-text">Tin tuyển dụng</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/reports">
+                            <i class="fas fa-chart-bar"></i>
+                            <span class="nav-text">Báo cáo</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <h5 class="sidebar-section-title">Hệ thống</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/payment/">
+                            <i class="fas fa-wallet"></i>
+                            <span class="nav-text">Thanh toán</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users">
+                            <i class="fas fa-user-shield"></i>
+                            <span class="nav-text">Người dùng</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/settings">
+                            <i class="fas fa-cog"></i>
+                            <span class="nav-text">Cài đặt</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dataanalysis/">
+                            <i class="fas fa-brain"></i>
+                            <span class="nav-text">Quản lý dữ liệu</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home/help">
+                            <i class="fas fa-question-circle"></i>
+                            <span class="nav-text">Trợ giúp</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <div class="main-content flex-grow-1">
+            @RenderBody()
+            <!-- Scripts -->
+            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+            @RenderSection("Scripts", required: false)
+        </div>
+
+        <footer class="footer mt-auto">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>&copy; 2025 - HuitWorks Admin Portal - Kết nối nhà tuyển dụng và ứng viên</div>
+                <div>
+                    <a href="#" class="text-primary me-3">Điều khoản</a>
+                    <a href="#" class="text-primary">Bảo mật</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

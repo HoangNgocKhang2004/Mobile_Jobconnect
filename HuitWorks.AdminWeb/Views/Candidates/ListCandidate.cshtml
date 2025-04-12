@@ -1,0 +1,501 @@
+﻿<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+<style>
+    .sort {
+        cursor: pointer;
+        position: relative;
+    }
+
+        .sort.asc::after {
+            content: "↑";
+            margin-left: 5px;
+        }
+
+        .sort.desc::after {
+            content: "↓";
+            margin-left: 5px;
+        }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+
+    .candidate-avatar {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+    }
+
+    .initials-avatar {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+</style>
+<div class="container-fluid py-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">Danh sách ứng viên</h3>
+            <div>
+                <a href="#" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Thêm ứng viên mới
+                </a>
+                <button class="btn btn-outline-secondary ms-2" id="btnExport">
+                    <i class="fas fa-file-export me-2"></i>Xuất file
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm ứng viên...">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="positionFilter">
+                        <option value="">Tất cả vị trí</option>
+                        <option value="developer">Developer</option>
+                        <option value="designer">Designer</option>
+                        <option value="manager">Manager</option>
+                        <option value="tester">Tester</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="statusFilter">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="mới">Mới</option>
+                        <option value="đang xem xét">Đang xem xét</option>
+                        <option value="đã phỏng vấn">Đã phỏng vấn</option>
+                        <option value="đã tuyển">Đã tuyển</option>
+                        <option value="đã từ chối">Đã từ chối</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-outline-primary w-100" id="btnFilter">Lọc</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover" id="candidateTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="sort" data-sort="id">ID</th>
+                            <th class="sort" data-sort="name">Họ và tên</th>
+                            <th class="sort" data-sort="email">Email</th>
+                            <th class="sort" data-sort="phone">Số điện thoại</th>
+                            <th class="sort" data-sort="position">Vị trí ứng tuyển</th>
+                            <th class="sort" data-sort="experience">Kinh nghiệm</th>
+                            <th class="sort" data-sort="status">Trạng thái</th>
+                            <th class="sort" data-sort="date">Ngày ứng tuyển</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-id="1">
+                            <td>001</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2 initials-avatar">
+                                        NT
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">Nguyễn Văn Tuấn</h6>
+                                        <span class="text-muted small">Hà Nội</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>tuan.nguyen@example.com</td>
+                            <td>0987654321</td>
+                            <td>Java Developer</td>
+                            <td>3 năm</td>
+                            <td>
+                                <span class="badge bg-info rounded-pill">Mới</span>
+                            </td>
+                            <td>05/04/2025</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Chi tiết</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Chỉnh sửa</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-calendar-alt me-2"></i>Lịch phỏng vấn</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger delete-candidate" href="#" data-id="1"><i class="fas fa-trash-alt me-2"></i>Xóa</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-id="2">
+                            <td>002</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="~/images/user.png" class="rounded-circle me-2 candidate-avatar" alt="Trần Thị Mai">
+                                    <div>
+                                        <h6 class="mb-0">Trần Thị Mai</h6>
+                                        <span class="text-muted small">TP. Hồ Chí Minh</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>mai.tran@example.com</td>
+                            <td>0912345678</td>
+                            <td>UI/UX Designer</td>
+                            <td>5 năm</td>
+                            <td>
+                                <span class="badge bg-warning rounded-pill">Đang xem xét</span>
+                            </td>
+                            <td>28/03/2025</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Chi tiết</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Chỉnh sửa</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-calendar-alt me-2"></i>Lịch phỏng vấn</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger delete-candidate" href="#" data-id="2"><i class="fas fa-trash-alt me-2"></i>Xóa</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-id="3">
+                            <td>003</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-2 initials-avatar">
+                                        HA
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">Hoàng Minh Anh</h6>
+                                        <span class="text-muted small">Đà Nẵng</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>anh.hoang@example.com</td>
+                            <td>0965432109</td>
+                            <td>Frontend Developer</td>
+                            <td>2 năm</td>
+                            <td>
+                                <span class="badge bg-primary rounded-pill">Đã phỏng vấn</span>
+                            </td>
+                            <td>01/04/2025</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Chi tiết</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Chỉnh sửa</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-calendar-alt me-2"></i>Lịch phỏng vấn</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger delete-candidate" href="#" data-id="3"><i class="fas fa-trash-alt me-2"></i>Xóa</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-id="4">
+                            <td>004</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="~/images/user.png" class="rounded-circle me-2 candidate-avatar" alt="Lê Quang Hùng">
+                                    <div>
+                                        <h6 class="mb-0">Lê Quang Hùng</h6>
+                                        <span class="text-muted small">Hà Nội</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>hung.le@example.com</td>
+                            <td>0932145678</td>
+                            <td>Product Manager</td>
+                            <td>7 năm</td>
+                            <td>
+                                <span class="badge bg-success rounded-pill">Đã tuyển</span>
+                            </td>
+                            <td>15/03/2025</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Chi tiết</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Chỉnh sửa</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-calendar-alt me-2"></i>Lịch phỏng vấn</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger delete-candidate" href="#" data-id="4"><i class="fas fa-trash-alt me-2"></i>Xóa</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-id="5">
+                            <td>005</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-2 initials-avatar">
+                                        PL
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">Phạm Thị Lan</h6>
+                                        <span class="text-muted small">TP. Hồ Chí Minh</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>lan.pham@example.com</td>
+                            <td>0978123456</td>
+                            <td>Data Analyst</td>
+                            <td>4 năm</td>
+                            <td>
+                                <span class="badge bg-danger rounded-pill">Đã từ chối</span>
+                            </td>
+                            <td>20/03/2025</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Chi tiết</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Chỉnh sửa</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-calendar-alt me-2"></i>Lịch phỏng vấn</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger delete-candidate" href="#" data-id="5"><i class="fas fa-trash-alt me-2"></i>Xóa</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-id="6">
+                            <td>006</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="~/images/user.png" class="rounded-circle me-2 candidate-avatar" alt="Đỗ Văn Minh">
+                                    <div>
+                                        <h6 class="mb-0">Đỗ Văn Minh</h6>
+                                        <span class="text-muted small">Cần Thơ</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>minh.do@example.com</td>
+                            <td>0945678321</td>
+                            <td>Backend Developer</td>
+                            <td>3 năm</td>
+                            <td>
+                                <span class="badge bg-warning rounded-pill">Đang xem xét</span>
+                            </td>
+                            <td>02/04/2025</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Chi tiết</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Chỉnh sửa</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-calendar-alt me-2"></i>Lịch phỏng vấn</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger delete-candidate" href="#" data-id="6"><i class="fas fa-trash-alt me-2"></i>Xóa</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-id="7">
+                            <td>007</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-2 initials-avatar">
+                                        VH
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">Vũ Thị Hương</h6>
+                                        <span class="text-muted small">Hải Phòng</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>huong.vu@example.com</td>
+                            <td>0923456789</td>
+                            <td>QA Tester</td>
+                            <td>2 năm</td>
+                            <td>
+                                <span class="badge bg-info rounded-pill">Mới</span>
+                            </td>
+                            <td>07/04/2025</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Chi tiết</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Chỉnh sửa</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-calendar-alt me-2"></i>Lịch phỏng vấn</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger delete-candidate" href="#" data-id="7"><i class="fas fa-trash-alt me-2"></i>Xóa</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div class="text-muted">
+                    Hiển thị <span id="showingCount">7</span> trên tổng số <span id="totalCount">7</span> ứng viên
+                </div>
+                <nav>
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1"><i class="fas fa-chevron-left"></i></a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal xác nhận xóa -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa ứng viên này không?
+                Hành động này không thể hoàn tác.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Xử lý tìm kiếm
+        $("#searchInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#candidateTable tbody tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+            updateShownCount();
+        });
+
+        // Xử lý lọc
+        $("#btnFilter").click(function() {
+            var position = $("#positionFilter").val().toLowerCase();
+            var status = $("#statusFilter").val().toLowerCase();
+
+            $("#candidateTable tbody tr").filter(function() {
+                var rowPosition = $(this).find("td:eq(4)").text().toLowerCase();
+                var rowStatus = $(this).find("td:eq(6)").text().toLowerCase();
+
+                var positionMatch = position === "" || rowPosition.indexOf(position) > -1;
+                var statusMatch = status === "" || rowStatus.indexOf(status) > -1;
+
+                $(this).toggle(positionMatch && statusMatch);
+            });
+            updateShownCount();
+        });
+
+        // Cập nhật số lượng hiển thị
+        function updateShownCount() {
+            var visibleRows = $("#candidateTable tbody tr:visible").length;
+            $("#showingCount").text(visibleRows);
+        }
+
+        // Xử lý sắp xếp
+        $(".sort").click(function() {
+            var column = $(this).data("sort");
+            var table = $("#candidateTable");
+            var rows = table.find("tbody tr").toArray();
+            var isAscending = $(this).hasClass("asc");
+
+            $(".sort").removeClass("asc desc");
+
+            if (isAscending) {
+                $(this).addClass("desc");
+            } else {
+                $(this).addClass("asc");
+            }
+
+            rows.sort(function(a, b) {
+                var aValue = $(a).find("td").eq(getColumnIndex(column)).text();
+                var bValue = $(b).find("td").eq(getColumnIndex(column)).text();
+
+                if (isAscending) {
+                    return aValue.localeCompare(bValue);
+                } else {
+                    return bValue.localeCompare(aValue);
+                }
+            });
+
+            $.each(rows, function(index, row) {
+                table.children("tbody").append(row);
+            });
+        });
+
+        function getColumnIndex(column) {
+            switch(column) {
+                case "id": return 0;
+                case "name": return 1;
+                case "email": return 2;
+                case "phone": return 3;
+                case "position": return 4;
+                case "experience": return 5;
+                case "status": return 6;
+                case "date": return 7;
+                default: return 0;
+            }
+        }
+
+        // Xử lý xóa ứng viên
+        var candidateIdToDelete = null;
+
+        $(".delete-candidate").click(function(e) {
+            e.preventDefault();
+            candidateIdToDelete = $(this).data("id");
+            $("#deleteModal").modal("show");
+        });
+
+        $("#confirmDelete").click(function() {
+            if (candidateIdToDelete) {
+                // Mô phỏng xóa ứng viên
+                $("tr[data-id='" + candidateIdToDelete + "']").fadeOut(300, function() {
+                    $(this).remove();
+                    updateShownCount();
+                    toastr.success("Xóa ứng viên thành công");
+                    $("#deleteModal").modal("hide");
+                });
+            }
+        });
+
+        // Xử lý xuất file
+        $("#btnExport").click(function() {
+            toastr.info("Đang xuất file danh sách ứng viên...");
+            setTimeout(function() {
+                toastr.success("Xuất file thành công!");
+            }, 1500);
+        });
+    });
+</script>

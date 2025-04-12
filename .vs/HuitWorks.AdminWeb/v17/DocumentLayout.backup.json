@@ -1,0 +1,233 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\LTDT\\HuitWorks.AdminWeb\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|d:\\ltdt\\huitworks.adminweb\\huitworks.adminweb\\views\\users\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|solutionrelative:huitworks.adminweb\\views\\users\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|d:\\ltdt\\huitworks.adminweb\\huitworks.adminweb\\wwwroot\\css\\users.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|solutionrelative:huitworks.adminweb\\wwwroot\\css\\users.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|d:\\ltdt\\huitworks.adminweb\\huitworks.adminweb\\views\\payment\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|solutionrelative:huitworks.adminweb\\views\\payment\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|d:\\ltdt\\huitworks.adminweb\\huitworks.adminweb\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|solutionrelative:huitworks.adminweb\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|d:\\ltdt\\huitworks.adminweb\\huitworks.adminweb\\views\\candidates\\applications.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|solutionrelative:huitworks.adminweb\\views\\candidates\\applications.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|d:\\ltdt\\huitworks.adminweb\\huitworks.adminweb\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|solutionrelative:huitworks.adminweb\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|d:\\ltdt\\huitworks.adminweb\\huitworks.adminweb\\controllers\\candidatescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|solutionrelative:huitworks.adminweb\\controllers\\candidatescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|d:\\ltdt\\huitworks.adminweb\\huitworks.adminweb\\views\\candidates\\topcandidates.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|solutionrelative:huitworks.adminweb\\views\\candidates\\topcandidates.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|d:\\ltdt\\huitworks.adminweb\\huitworks.adminweb\\controllers\\dataanalysiscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|solutionrelative:huitworks.adminweb\\controllers\\dataanalysiscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|d:\\ltdt\\huitworks.adminweb\\huitworks.adminweb\\views\\dataanalysis\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|solutionrelative:huitworks.adminweb\\views\\dataanalysis\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|d:\\ltdt\\huitworks.adminweb\\huitworks.adminweb\\views\\jobpost\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|solutionrelative:huitworks.adminweb\\views\\jobpost\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|d:\\ltdt\\huitworks.adminweb\\huitworks.adminweb\\controllers\\paymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|solutionrelative:huitworks.adminweb\\controllers\\paymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|d:\\ltdt\\huitworks.adminweb\\huitworks.adminweb\\views\\candidates\\listcandidate.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A50130D6-8434-4B52-850E-C1C42CE8811F}|HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj|solutionrelative:huitworks.adminweb\\views\\candidates\\listcandidate.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "users.css",
+              "DocumentMoniker": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\wwwroot\\css\\users.css",
+              "RelativeDocumentMoniker": "HuitWorks.AdminWeb\\wwwroot\\css\\users.css",
+              "ToolTip": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\wwwroot\\css\\users.css",
+              "RelativeToolTip": "HuitWorks.AdminWeb\\wwwroot\\css\\users.css",
+              "ViewState": "AgIAAO8BAAAAAAAAAAAQwA4CAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-04-11T17:51:21.699Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Views\\Users\\Index.cshtml",
+              "RelativeDocumentMoniker": "HuitWorks.AdminWeb\\Views\\Users\\Index.cshtml",
+              "ToolTip": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Views\\Users\\Index.cshtml",
+              "RelativeToolTip": "HuitWorks.AdminWeb\\Views\\Users\\Index.cshtml",
+              "ViewState": "AgIAANgBAAAAAAAAAADwv+MBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-11T17:29:54.153Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "HuitWorks.AdminWeb\\Controllers\\UsersController.cs",
+              "ToolTip": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "HuitWorks.AdminWeb\\Controllers\\UsersController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T17:29:50.82Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Applications.cshtml",
+              "DocumentMoniker": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Views\\Candidates\\Applications.cshtml",
+              "RelativeDocumentMoniker": "HuitWorks.AdminWeb\\Views\\Candidates\\Applications.cshtml",
+              "ToolTip": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Views\\Candidates\\Applications.cshtml",
+              "RelativeToolTip": "HuitWorks.AdminWeb\\Views\\Candidates\\Applications.cshtml",
+              "ViewState": "AgIAACsAAAAAAAAAAADgvzoAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-11T16:32:25.964Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "TopCandidates.cshtml",
+              "DocumentMoniker": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Views\\Candidates\\TopCandidates.cshtml",
+              "RelativeDocumentMoniker": "HuitWorks.AdminWeb\\Views\\Candidates\\TopCandidates.cshtml",
+              "ToolTip": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Views\\Candidates\\TopCandidates.cshtml",
+              "RelativeToolTip": "HuitWorks.AdminWeb\\Views\\Candidates\\TopCandidates.cshtml",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-11T15:59:39.029Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Views\\DataAnalysis\\Index.cshtml",
+              "RelativeDocumentMoniker": "HuitWorks.AdminWeb\\Views\\DataAnalysis\\Index.cshtml",
+              "ToolTip": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Views\\DataAnalysis\\Index.cshtml",
+              "RelativeToolTip": "HuitWorks.AdminWeb\\Views\\DataAnalysis\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-11T15:00:38.488Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "DataAnalysisController.cs",
+              "DocumentMoniker": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Controllers\\DataAnalysisController.cs",
+              "RelativeDocumentMoniker": "HuitWorks.AdminWeb\\Controllers\\DataAnalysisController.cs",
+              "ToolTip": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Controllers\\DataAnalysisController.cs",
+              "RelativeToolTip": "HuitWorks.AdminWeb\\Controllers\\DataAnalysisController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T14:56:28.043Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Views\\Payment\\Index.cshtml",
+              "RelativeDocumentMoniker": "HuitWorks.AdminWeb\\Views\\Payment\\Index.cshtml",
+              "ToolTip": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Views\\Payment\\Index.cshtml",
+              "RelativeToolTip": "HuitWorks.AdminWeb\\Views\\Payment\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-11T14:50:34.583Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "CandidatesController.cs",
+              "DocumentMoniker": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Controllers\\CandidatesController.cs",
+              "RelativeDocumentMoniker": "HuitWorks.AdminWeb\\Controllers\\CandidatesController.cs",
+              "ToolTip": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Controllers\\CandidatesController.cs",
+              "RelativeToolTip": "HuitWorks.AdminWeb\\Controllers\\CandidatesController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABIAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T13:30:49.069Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Views\\JobPost\\Index.cshtml",
+              "RelativeDocumentMoniker": "HuitWorks.AdminWeb\\Views\\JobPost\\Index.cshtml",
+              "ToolTip": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Views\\JobPost\\Index.cshtml",
+              "RelativeToolTip": "HuitWorks.AdminWeb\\Views\\JobPost\\Index.cshtml",
+              "ViewState": "AgIAAA4AAAAAAAAAAADgvyEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-11T13:27:58.135Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "HuitWorks.AdminWeb\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "HuitWorks.AdminWeb\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAMYAAAAAAAAAAAAAAOIAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-09T14:27:19.309Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "PaymentController.cs",
+              "DocumentMoniker": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Controllers\\PaymentController.cs",
+              "RelativeDocumentMoniker": "HuitWorks.AdminWeb\\Controllers\\PaymentController.cs",
+              "ToolTip": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Controllers\\PaymentController.cs",
+              "RelativeToolTip": "HuitWorks.AdminWeb\\Controllers\\PaymentController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T14:38:05.529Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ListCandidate.cshtml",
+              "DocumentMoniker": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Views\\Candidates\\ListCandidate.cshtml",
+              "RelativeDocumentMoniker": "HuitWorks.AdminWeb\\Views\\Candidates\\ListCandidate.cshtml",
+              "ToolTip": "D:\\LTDT\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\Views\\Candidates\\ListCandidate.cshtml",
+              "RelativeToolTip": "HuitWorks.AdminWeb\\Views\\Candidates\\ListCandidate.cshtml",
+              "ViewState": "AgIAANYBAAAAAAAAAADwv/ABAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-11T13:38:16.206Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
