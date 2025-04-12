@@ -5,6 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HuitWorks Admin Portal</title>
+    <!-- Thêm jQuery trước Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Di chuyển Chart.js sau phần tử canvas trong HTML -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link href="~/css/layout.css" rel="stylesheet" />
@@ -125,6 +130,15 @@
 
             <!-- Navigation Sections -->
             <div class="sidebar-section">
+                <ul class="nav flex-column">
+                    <li class="nav-item" style="margin-bottom: 1rem !important;">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-th-large"></i>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
+
                 <h5 class="sidebar-section-title">Quản lý ứng viên</h5>
                 <ul class="nav flex-column">
                     <li class="nav-item">
@@ -166,18 +180,18 @@
                             <span class="nav-text">Tin tuyển dụng</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/reports">
-                            <i class="fas fa-chart-bar"></i>
-                            <span class="nav-text">Báo cáo</span>
-                        </a>
-                    </li>
                 </ul>
             </div>
 
             <div class="sidebar-section">
                 <h5 class="sidebar-section-title">Hệ thống</h5>
                 <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/reports">
+                            <i class="fas fa-chart-bar"></i>
+                            <span class="nav-text">Báo cáo</span>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/payment/">
                             <i class="fas fa-wallet"></i>
@@ -203,12 +217,6 @@
                             <span class="nav-text">Quản lý dữ liệu</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/home/help">
-                            <i class="fas fa-question-circle"></i>
-                            <span class="nav-text">Trợ giúp</span>
-                        </a>
-                    </li>
                 </ul>
             </div>
         </aside>
@@ -218,6 +226,15 @@
             <!-- Scripts -->
             <script src="~/lib/jquery/dist/jquery.min.js"></script>
             <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Initialize all dropdowns
+                    var dropdowns = document.querySelectorAll('[data-bs-toggle="dropdown"]');
+                    dropdowns.forEach(function(dropdown) {
+                        new bootstrap.Dropdown(dropdown);
+                    });
+                });
+            </script>
             @RenderSection("Scripts", required: false)
         </div>
 
@@ -232,8 +249,6 @@
         </footer>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
