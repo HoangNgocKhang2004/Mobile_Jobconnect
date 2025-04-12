@@ -5,7 +5,7 @@ VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HuitWorks.AdminWeb", "HuitWorks.AdminWeb\HuitWorks.AdminWeb.csproj", "{A50130D6-8434-4B52-850E-C1C42CE8811F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HuitWorks.RecruiterWeb", "HuitWorks.RecruiterWeb\HuitWorks.RecruiterWeb.csproj", "{7D05C333-67FD-4240-82F9-55917CD1F169}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HuitWorks.RecruiterWeb", "HuitWorks.RecruiterWeb\HuitWorks.RecruiterWeb.csproj", "{6C1E778B-B923-4BB0-BF12-8FB8B3E6A100}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{A50130D6-8434-4B52-850E-C1C42CE8811F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A50130D6-8434-4B52-850E-C1C42CE8811F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A50130D6-8434-4B52-850E-C1C42CE8811F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7D05C333-67FD-4240-82F9-55917CD1F169}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D05C333-67FD-4240-82F9-55917CD1F169}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D05C333-67FD-4240-82F9-55917CD1F169}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D05C333-67FD-4240-82F9-55917CD1F169}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C1E778B-B923-4BB0-BF12-8FB8B3E6A100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C1E778B-B923-4BB0-BF12-8FB8B3E6A100}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C1E778B-B923-4BB0-BF12-8FB8B3E6A100}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C1E778B-B923-4BB0-BF12-8FB8B3E6A100}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
