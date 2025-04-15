@@ -1,43 +1,50 @@
-// CompanyModel - Quản lý thông tin công ty
+// Quản lý thông tin công ty đăng tuyển
+// Chức năng: Quản lý hồ sơ công ty, hiển thị chi tiết công việc, tìm kiếm công việc
 class CompanyModel {
-  String idCompany; // Mã công ty -- IDC0001
-  String companyName; // Tên công ty
-  String address; // Địa chỉ công ty
-  String? description; // Mô tả công ty (có thể null)
-  //...thêm tùy ý
+  String idCompany; // Mã công ty, ví dụ: IDC0001
+  String companyName; // Tên công ty, ví dụ: "Công ty ABC"
+  String address; // Địa chỉ, ví dụ: "123 Đường Láng, Hà Nội"
+  String? description; // Mô tả công ty, có thể null
+  String? logoUrl; // URL logo công ty, ví dụ: "logo.png", có thể null
+  String? websiteUrl; // URL website, ví dụ: "www.abc.com", có thể null
+  String industry; // Ngành nghề, ví dụ: "Công nghệ"
 
   CompanyModel({
     required this.idCompany,
     required this.companyName,
     required this.address,
     this.description,
-  }) : assert(idCompany.isNotEmpty, 'idCompany must not be empty'),
-       assert(companyName.isNotEmpty, 'companyName must not be empty');
+    this.logoUrl,
+    this.websiteUrl,
+    required this.industry,
+  });
 
-  // Factory constructor từ Map
   factory CompanyModel.fromMap(Map<String, dynamic> map) {
     return CompanyModel(
-      idCompany: map['idCompany'] as String? ?? 'IDC000',
-      companyName: map['companyName'] as String? ?? 'Unknown',
-      address: map['address'] as String? ?? 'Unknown',
+      idCompany: map['idCompany'] as String,
+      companyName: map['companyName'] as String,
+      address: map['address'] as String,
       description: map['description'] as String?,
+      logoUrl: map['logoUrl'] as String?,
+      websiteUrl: map['websiteUrl'] as String?,
+      industry: map['industry'] as String,
     );
   }
 
-  // Chuyển đổi sang Map
   Map<String, dynamic> toMap() {
     return {
       'idCompany': idCompany,
       'companyName': companyName,
       'address': address,
       'description': description,
+      'logoUrl': logoUrl,
+      'websiteUrl': websiteUrl,
+      'industry': industry,
     };
   }
 
-  // Override toString để dễ debug
   @override
   String toString() {
-    return 'CompanyModel(idCompany: $idCompany, companyName: $companyName, '
-        'address: $address, description: $description)';
+    return 'CompanyModel(idCompany: $idCompany, companyName: $companyName, industry: $industry)';
   }
 }

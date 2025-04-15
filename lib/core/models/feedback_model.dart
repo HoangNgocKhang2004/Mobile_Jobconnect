@@ -1,57 +1,59 @@
-// FeedbackModel - Quản lý phản hồi
+// Quản lý phản hồi từ người dùng về bài đăng hoặc công ty
+// Chức năng: Đánh giá công việc/công ty, xếp hạng ứng viên nổi bật
 class FeedbackModel {
-  String idFeedBack; // Mã phản hồi - IDF001
-  String idUser; // Mã người dùng
-  String idJobPost; // Mã bài đăng
-  int rating; // Số sao đánh giá (0-5)
-  String? comment; // Bình luận (có thể null)
-  DateTime createdAt; // Ngày tạo
-  DateTime updatedAt; // Ngày cập nhật
+  String idFeedBack; // Mã phản hồi, ví dụ: IDF001
+  String idUser; // Mã người dùng gửi phản hồi, ví dụ: IDU001
+  String? idJobPost; // Mã bài đăng, ví dụ: IDJP001, có thể null
+  String? idCompany; // Mã công ty, ví dụ: IDC001, có thể null
+  int rating; // Điểm đánh giá (0-5), ví dụ: 4
+  String? comment; // Bình luận, ví dụ: "Công ty tốt", có thể null
+  FeedbackType feedbackType; // Loại phản hồi: JobPost hoặc Company
+  DateTime createdAt; // Thời gian tạo phản hồi
+  DateTime updatedAt; // Thời gian cập nhật phản hồi
 
-  // Constructor với các tham số required
   FeedbackModel({
     required this.idFeedBack,
     required this.idUser,
-    required this.idJobPost,
+    this.idJobPost,
+    this.idCompany,
     required this.rating,
     this.comment,
+    required this.feedbackType,
     required this.createdAt,
     required this.updatedAt,
-  })  : assert(idFeedBack.isNotEmpty, 'idFeedBack must not be empty'),
-        assert(idUser.isNotEmpty, 'idUser must not be empty'),
-        assert(idJobPost.isNotEmpty, 'idJobPost must not be empty'),
-        assert(rating >= 0 && rating <= 5, 'Rating must be between 0 and 5');
+  });
 
-  // Factory constructor để tạo instance từ Map
   factory FeedbackModel.fromMap(Map<String, dynamic> map) {
     return FeedbackModel(
-      idFeedBack: map['idFeedBack'] as String? ?? 'IDF000',
-      idUser: map['idUser'] as String? ?? 'IDU000',
-      idJobPost: map['idJobPost'] as String? ?? 'IDJP000',
-      rating: (map['rating'] as num?)?.toInt().clamp(0, 5) ?? 0, 
-      comment: map['comment'] as String?, // Có thể null
-      createdAt: DateTime.tryParse(map['createdAt'] as String? ?? '') ?? DateTime(1970, 1, 1),
-      updatedAt: DateTime.tryParse(map['updatedAt'] as String? ?? '') ?? DateTime(1970, 1, 1),
+      idFeedBack: map['idFeedBack'] as String,
+      idUser: map['idUser'] as String,
+      idJobPost: map['idJobPost'] as String?,
+      idCompany: map['idCompany'] as String?,
+      rating: map['rating'] as int,
+      comment: map['comment'] as String?,
+      feedbackType: FeedbackType.values.firstWhere((e) => e.toString() == map['feedbackType']),
+      createdAt: DateTime.parse(map['createdAt'] as String),
+      updatedAt: DateTime.parse(map['updatedAt'] as String),
     );
   }
 
-  // Phương thức toMap để chuyển object thành Map
   Map<String, dynamic> toMap() {
     return {
       'idFeedBack': idFeedBack,
       'idUser': idUser,
       'idJobPost': idJobPost,
+      'idCompany': idCompany,
       'rating': rating,
       'comment': comment,
+      'feedbackType': feedbackType.toString(),
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
     };
   }
 
-  // Override toString để dễ debug
   @override
   String toString() {
-    return 'FeedbackModel(idFeedBack: $idFeedBack, idUser: $idUser, idJobPost: $idJobPost, '
-        'rating: $rating, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'FeedbackModel(idFeedBack: $idFeedBack, idUser: $idUser, rating: $rating, feedbackType: $feedbackType)';
   }
 }
+enum FeedbackType { jobPost, company }

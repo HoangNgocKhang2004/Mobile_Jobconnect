@@ -1,91 +1,63 @@
-// Payment - Quản lý thanh toán và dịch vụ
+// Quản lý các giao dịch thanh toán của nhà tuyển dụng
+// Chức năng: Thanh toán dịch vụ nâng cấp, theo dõi trạng thái giao dịch, lưu lịch sử thanh toán
 import 'package:job_connect/core/models/service_model.dart';
 
-class Payment {
-  String idPayment; // Mã giao dịch
-  String idUser; // ID người dùng
-  double amount; // Số tiền thanh toán
-  ServiceModel service; // Tham chiếu đến dịch vụ 
-  PaymentStatus paymentStatus; // Trạng thái
-  PaymentMethod paymentMethod; // Phương thức thanh toán
-  DateTime createdAt; // Ngày giao dịch
+class PaymentModel {
+  String idPayment; // Mã giao dịch, ví dụ: IDP001
+  String idUser; // Mã người dùng thực hiện thanh toán, ví dụ: IDU001
+  double amount; // Số tiền thanh toán, ví dụ: 100.0
+  ServiceModel service; // Dịch vụ liên quan, ví dụ: Nâng cấp VIP
+  PaymentStatus paymentStatus; // Trạng thái thanh toán: pending, completed, failed
+  PaymentMethod paymentMethod; // Phương thức thanh toán: card, bank_transfer, mobile_payment
+  String? transactionId; // ID giao dịch từ cổng thanh toán, ví dụ: "txn_123", có thể null
+  DateTime createdAt; // Thời gian tạo giao dịch
+  DateTime updatedAt; // Thời gian cập nhật giao dịch
 
-  // Constructor với các tham số required
-  Payment({
+  PaymentModel({
     required this.idPayment,
     required this.idUser,
     required this.amount,
     required this.service,
     required this.paymentStatus,
     required this.paymentMethod,
+    this.transactionId,
     required this.createdAt,
-  })  : assert(amount >= 0, 'Amount must be non-negative'),
-        assert(idPayment.isNotEmpty, 'idPayment must not be empty'),
-        assert(idUser.isNotEmpty, 'idUser must not be empty');
+    required this.updatedAt,
+  });
 
-  // Factory constructor từ Map
-  factory Payment.fromMap(Map<String, dynamic> map) {
-    return Payment(
-      idPayment: map['idPayment'] as String? ?? 'IDP000',
-      idUser: map['idUser'] as String? ?? 'IDU000',
-      amount: (map['amount'] as num?)?.toDouble() ?? 0.0,
-      service: ServiceModel.fromMap(map['service'] as Map<String, dynamic>? ?? {'idService': 'IDS000'}),
-      paymentStatus: _parsePaymentStatus(map['paymentStatus']),
-      paymentMethod: _parsePaymentMethod(map['paymentMethod']),
-      createdAt: DateTime.tryParse(map['createdAt'] as String? ?? '') ?? DateTime(1970, 1, 1),
+  factory PaymentModel.fromMap(Map<String, dynamic> map) {
+    return PaymentModel(
+      idPayment: map['idPayment'] as String,
+      idUser: map['idUser'] as String,
+      amount: (map['amount'] as num).toDouble(),
+      service: ServiceModel.fromMap(map['service'] as Map<String, dynamic>),
+      paymentStatus: PaymentStatus.values.firstWhere((e) => e.toString() == 'PaymentStatus.${map['paymentStatus']}'),
+      paymentMethod: PaymentMethod.values.firstWhere((e) => e.toString() == 'PaymentMethod.${map['paymentMethod']}'),
+      transactionId: map['transactionId'] as String?,
+      createdAt: DateTime.parse(map['createdAt'] as String),
+      updatedAt: DateTime.parse(map['updatedAt'] as String),
     );
   }
 
-  // Chuyển đổi sang Map
   Map<String, dynamic> toMap() {
     return {
       'idPayment': idPayment,
       'idUser': idUser,
       'amount': amount,
       'service': service.toMap(),
-      'paymentStatus': paymentStatus.name,
-      'paymentMethod': paymentMethod.name,
+      'paymentStatus': paymentStatus.toString().split('.').last,
+      'paymentMethod': paymentMethod.toString().split('.').last,
+      'transactionId': transactionId,
       'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
     };
   }
 
-  // Hàm phụ trợ để parse PaymentStatus
-  static PaymentStatus _parsePaymentStatus(dynamic value) {
-    if (value is String) {
-      return PaymentStatus.values.firstWhere(
-        (e) => e.name == value,
-        orElse: () => PaymentStatus.Unknown,
-      );
-    }
-    return PaymentStatus.Unknown;
-  }
-
-  // Hàm phụ trợ để parse PaymentMethod
-  static PaymentMethod _parsePaymentMethod(dynamic value) {
-    if (value is String) {
-      return PaymentMethod.values.firstWhere(
-        (e) => e.name == value,
-        orElse: () => PaymentMethod.Unknown,
-      );
-    }
-    return PaymentMethod.Unknown;
-  }
-
-  // Override toString để dễ debug
   @override
   String toString() {
-    return 'Payment(idPayment: $idPayment, idUser: $idUser, amount: $amount, '
-        'service: $service, paymentStatus: $paymentStatus, '
-        'paymentMethod: $paymentMethod, createdAt: $createdAt)';
+    return 'PaymentModel(idPayment: $idPayment, idUser: $idUser, amount: $amount, paymentStatus: $paymentStatus)';
   }
 }
 
-// Enum cho trạng thái thanh toán
-enum PaymentStatus { Paid, NotPaid, Unknown }
-// Paid: thanh toán
-// NotPaid: chưa thanh toán
-
-// Enum cho phương thức thanh toán
-enum PaymentMethod { Bank, MoMo, VNPay, ZaloPay, PayPal, Unknown }
-// Bank: thanh toán ngân hàng
-//MoMo, VNPay, ZaloPay, PayPal: thanh toán app
+enum PaymentStatus { pending, completed, failed }
+enum PaymentMethod { card, bank_transfer, mobile_payment }
