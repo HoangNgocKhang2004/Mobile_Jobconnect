@@ -1,0 +1,231 @@
+﻿@model Job
+@{
+    ViewData["Title"] = "Chi tiết bài tuyển dụng";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-2 text-gray-800">Chi tiết bài tuyển dụng</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none">Quản lý tuyển dụng</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Chi tiết</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i>Quay lại
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow border-0 rounded-lg mb-4">
+        <div class="card-header bg-white px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <div class="bg-primary rounded-circle p-2 me-3">
+                    <i class="fas fa-briefcase text-white"></i>
+                </div>
+                <h5 class="mb-0 fw-bold">@Model.Title</h5>
+            </div>
+            <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger") px-3 py-2">
+                <i class="fas fa-circle me-1" style="font-size: 8px;"></i>@(Model.IsActive ? "Đang hoạt động" : "Đã tắt")
+            </span>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="row g-0">
+                <div class="col-md-8 p-4 border-end">
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-tasks text-primary me-2"></i>
+                            <h5 class="mb-0 fw-bold">Mô tả công việc</h5>
+                        </div>
+                        <div class="content-box p-4 bg-light rounded-3 border">
+                            @Html.Raw(Model.Description)
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-clipboard-list text-primary me-2"></i>
+                            <h5 class="mb-0 fw-bold">Yêu cầu công việc</h5>
+                        </div>
+                        <div class="content-box p-4 bg-light rounded-3 border">
+                            @Html.Raw(Model.Requirements)
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn @(Model.IsActive ? "btn-outline-danger" : "btn-outline-success") toggle-status"
+                                    data-id="@Model.Id" data-active="@Model.IsActive.ToString().ToLower()">
+                                <i class="fas @(Model.IsActive ? "fa-toggle-off" : "fa-toggle-on") me-1"></i>
+                                @(Model.IsActive ? "Tắt bài tuyển dụng" : "Kích hoạt bài tuyển dụng")
+                            </button>
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                                <i class="fas fa-edit me-1"></i>Chỉnh sửa
+                            </a>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal">
+                                <i class="fas fa-trash me-1"></i>Xóa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 p-0">
+                    <div style="top: 20px;">
+                        <div class="p-4">
+                            <div class="card shadow-sm border-0 mb-4">
+                                <div class="card-header bg-light py-3">
+                                    <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Thông tin chi tiết</h6>
+                                </div>
+                                <div class="card-body p-0">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex justify-content-between py-3">
+                                            <span class="text-muted"><i class="fas fa-fingerprint me-2"></i>ID:</span>
+                                            <span class="fw-medium">@Model.Id</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between py-3">
+                                            <span class="text-muted"><i class="fas fa-map-marker-alt me-2"></i>Địa điểm:</span>
+                                            <span class="fw-medium">@Model.Location</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between py-3">
+                                            <span class="text-muted"><i class="fas fa-money-bill-wave me-2"></i>Mức lương:</span>
+                                            <span class="fw-medium">@Model.Salary</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between py-3">
+                                            <span class="text-muted"><i class="fas fa-calendar-check me-2"></i>Ngày đăng:</span>
+                                            <span class="fw-medium">@Model.PostedDate.ToString("dd/MM/yyyy")</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between py-3">
+                                            <span class="text-muted"><i class="fas fa-calendar-times me-2"></i>Ngày hết hạn:</span>
+                                            <span class="fw-medium">@Model.ExpiryDate.ToString("dd/MM/yyyy")</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between py-3">
+                                            <span class="text-muted"><i class="fas fa-users me-2"></i>Số lượng cần tuyển:</span>
+                                            <span class="fw-medium">@Model.RequiredCandidates</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between py-3">
+                                            <span class="text-muted"><i class="fas fa-toggle-on me-2"></i>Trạng thái:</span>
+                                            <span class="fw-medium text-@(Model.IsActive ? "success" : "danger")">
+                                                @(Model.IsActive ? "Đang hoạt động" : "Đã tắt")
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Thống kê đơn ứng tuyển -->
+                            <div class="card shadow-sm border-0">
+                                <div class="card-header bg-light py-3">
+                                    <h6 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Thống kê ứng viên</h6>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="text-center py-3">
+                                        <div class="display-5 fw-bold">0</div>
+                                        <p class="text-muted mb-0">Ứng viên đã nộp đơn</p>
+                                    </div>
+
+                                    <div class="my-4">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span class="text-muted small">Tiến độ tuyển dụng</span>
+                                            <span class="text-primary fw-medium">0/@Model.RequiredCandidates</span>
+                                        </div>
+                                        <div class="progress" style="height: 10px;">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 0%;"
+                                                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="@Model.RequiredCandidates">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="alert alert-info py-2 mb-0 d-flex align-items-center" role="alert">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        <div class="small">
+                                            Đây là dữ liệu mẫu. Trong hệ thống thực tế, thông tin sẽ được cập nhật từ cơ sở dữ liệu.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal xác nhận xóa -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteConfirmModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4">
+                <div class="text-center mb-3">
+                    <i class="fas fa-exclamation-triangle text-danger fa-3x"></i>
+                </div>
+                <p class="text-center mb-0">Bạn có chắc chắn muốn xóa bài tuyển dụng này?</p>
+                <p class="text-center text-danger small">Hành động này không thể hoàn tác.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+                    <i class="fas fa-trash me-1"></i>Xác nhận xóa
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Xử lý toggle trạng thái bài tuyển dụng
+            $('.toggle-status').on('click', function () {
+                var button = $(this);
+                var jobId = button.data('id');
+                var isActive = button.data('active') === 'true';
+
+                // Hiển thị loading trên nút
+                button.prop('disabled', true);
+                button.html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>' +
+                          (isActive ? 'Đang tắt...' : 'Đang kích hoạt...'));
+
+                $.ajax({
+                    url: '@Url.Action("ToggleStatus")',
+                    type: 'POST',
+                    data: { id: jobId },
+                    success: function (result) {
+                        if (result.success) {
+                            // Hiển thị thông báo thành công
+                            toastr.success('Cập nhật trạng thái thành công');
+
+                            // Tải lại trang sau 1 giây để cập nhật UI
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        }
+                    },
+                    error: function () {
+                        // Khôi phục trạng thái nút
+                        button.prop('disabled', false);
+                        button.html('<i class="fas ' + (isActive ? 'fa-toggle-off' : 'fa-toggle-on') + ' me-1"></i>' +
+                                  (isActive ? 'Tắt bài tuyển dụng' : 'Kích hoạt bài tuyển dụng'));
+
+                        toastr.error('Có lỗi xảy ra, vui lòng thử lại.');
+                    }
+                });
+            });
+
+            // Nút xóa và modal xác nhận
+            $('#deleteConfirmModal').on('show.bs.modal', function () {
+                // Animation cho biểu tượng cảnh báo
+                $('.fa-exclamation-triangle').addClass('animate__animated animate__heartBeat');
+            });
+        });
+    </script>
+}

@@ -3,47 +3,313 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - HuitWorks.RecruiterWeb</title>
+    <title>@ViewData["Title"] - HuitWorks Recruitment Platform</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/HuitWorks.RecruiterWeb.styles.css" asp-append-version="true" />
+    <link href="~/css/layout.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    @RenderSection("Head", required: false)
+
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">HuitWorks.RecruiterWeb</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <div class="wrapper" style="min-height: 100vh; display: flex; flex-direction: column;">
+        <!-- Top header with contact info -->
+        <div class="top-header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8">
+                        <span class="me-4"><i class="fas fa-phone-alt me-2"></i>+84 33 429 7551</span>
+                        <span><i class="fas fa-envelope me-2"></i>career@huitworks.vn</span>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <a href="#" class="me-3"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </div>
+
+        <!-- Main navigation header -->
+        <header class="main-header sticky-top">
+            <div class="container">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                        <img src="~/images/sv_logo_dashboard.png" alt="HuitWorks Logo" onerror="this.src='/img/default-logo.png'; this.onerror=null;" style="height: 50px !important;">
+                        @* <span class="ms-2 fw-bold text-primary">HuitWorks</span> *@
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarContent">
+                        <ul class="navbar-nav mx-auto">
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Home" ? "active" : "")"
+                                   asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Jobs" ? "active" : "")"
+                                   asp-area="" asp-controller="Jobs" asp-action="Index">Quản lý đăng bài</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Candidates" ? "active" : "")"
+                                   asp-area="" asp-controller="Candidates" asp-action="Index">Ứng viên</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Chat" ? "active" : "")"
+                                   asp-area="" asp-controller="Chat" asp-action="Index">
+                                    <div class="position-relative d-inline-block">
+                                        Tin nhắn
+                                        <span id="unreadMessagesBadge" class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-danger"
+                                              style="transform: translate(30%, -50%);">
+                                            3
+                                            <span class="visually-hidden">Tin nhắn chưa đọc</span>
+                                        </span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Company" ? "active" : "")"
+                                   asp-area="" asp-controller="Company" asp-action="Index">Hồ sơ công ty</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Blogs" ? "active" : "")"
+                                   asp-area="" asp-controller="Blogs" asp-action="Index">Blog</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Contact" ? "active" : "")"
+                                   asp-area="" asp-controller="Contact" asp-action="Index">Liên hệ</a>
+                            </li>
+                        </ul>
+
+                        <div class="user-actions">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-user-circle me-2"></i>@User.Identity.Name
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Auth" asp-action="Profile">My Profile</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Auth" asp-action="Settings">Settings</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <form asp-area="" asp-controller="Auth" asp-action="Logout" method="post">
+                                                <button type="submit" class="dropdown-item">Sign Out</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+                            else
+                            {
+                                <a class="btn btn-outline-primary me-2" asp-area="" asp-controller="Auth" asp-action="Login">Sign In</a>
+                                <a class="btn btn-primary" asp-area="" asp-controller="Auth" asp-action="Register">Sign Up</a>
+                            }
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main content area -->
+        <div class="page-content" style="flex: 1;">
+            <div class="container">
+                @RenderBody()
+            </div>
+        </div>
+
+        <div></div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - HuitWorks.RecruiterWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <!-- Footer -->
+    <footer class="footer mt-5" style="margin-top: 0 !important;">
+        <div class="footer-bottom text-center">
+            <div class="container">
+                <p class="mb-0">&copy; @DateTime.Now.Year - HuitWorks Recruitment Platform - All Rights Reserved</p>
+            </div>
         </div>
     </footer>
+
+    <!-- Chat Button and Container -->
+    <div class="chatbox-button" id="chatboxButton">
+        <i class="fas fa-comment-dots fa-lg"></i>
+    </div>
+
+    <div class="chatbox-container" id="chatboxContainer">
+        <div class="chatbox-header">
+            <h5 class="mb-0">HuitWorks Support</h5>
+            <button class="chatbox-close" id="chatboxClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chatbox-messages" id="chatboxMessages">
+            <div class="chatbox-message chatbox-agent-message">
+                Hello! How can I help you with HuitWorks recruitment services today?
+            </div>
+        </div>
+        <div class="chatbox-input-container">
+            <input type="text" class="chatbox-input" id="chatboxInput" placeholder="Type your message..." />
+            <button class="chatbox-send-button" id="chatboxSendButton">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Enhanced JavaScript with animations -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chatbox functionality
+            const chatboxButton = document.getElementById('chatboxButton');
+            const chatboxContainer = document.getElementById('chatboxContainer');
+            const chatboxClose = document.getElementById('chatboxClose');
+            const chatboxInput = document.getElementById('chatboxInput');
+            const chatboxSendButton = document.getElementById('chatboxSendButton');
+            const chatboxMessages = document.getElementById('chatboxMessages');
+
+            // Toggle chat container visibility with animation
+            chatboxButton.addEventListener('click', function() {
+                chatboxContainer.style.display = 'flex';
+                chatboxButton.style.display = 'none';
+            });
+
+            // Close chat container with animation
+            chatboxClose.addEventListener('click', function() {
+                chatboxContainer.style.animation = 'zoomOut 0.3s ease forwards';
+                setTimeout(() => {
+                    chatboxContainer.style.display = 'none';
+                    chatboxButton.style.display = 'flex';
+                    chatboxContainer.style.animation = 'zoomIn 0.3s ease';
+                }, 300);
+            });
+
+            // Send message function
+            function sendMessage() {
+                const message = chatboxInput.value.trim();
+                if (message !== '') {
+                    // Add user message
+                    addMessage(message, 'user');
+                    chatboxInput.value = '';
+
+                    // Simulate response (can be replaced with actual API call)
+                    setTimeout(() => {
+                        const responses = [
+                            "Thank you for your message. Our recruitment team will assist you shortly.",
+                            "I understand your question. Let me connect you with our specialists.",
+                            "Thanks for reaching out! We'll get back to you with more information about our recruitment services."
+                        ];
+                        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                        addMessage(randomResponse, 'agent');
+                    }, 1000);
+                }
+            }
+
+            // Add message to chat with animation
+            function addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('chatbox-message');
+                messageDiv.classList.add(sender === 'user' ? 'chatbox-user-message' : 'chatbox-agent-message');
+                messageDiv.textContent = text;
+
+                chatboxMessages.appendChild(messageDiv);
+                chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
+            }
+
+            // Send message on button click
+            chatboxSendButton.addEventListener('click', sendMessage);
+
+            // Send message on Enter key
+            chatboxInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            // Navigation animation on scroll
+            const header = document.querySelector('.main-header');
+            const navItems = document.querySelectorAll('.nav-link');
+
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Add hover animations to nav items
+            navItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    if (!this.classList.contains('active')) {
+                        this.style.transform = 'translateY(-2px)';
+                    }
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('active')) {
+                        this.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            // Animation for active nav item on page load
+            document.querySelectorAll('.nav-link.active').forEach(activeLink => {
+                activeLink.style.animation = 'fadeIn 0.5s ease';
+            });
+
+            // Add keyframes for custom animations
+            const style = document.createElement('style');
+            style.type = 'text/css';
+            document.getElementsByTagName('head')[0].appendChild(style);
+        });
+
+        // Xử lý hiển thị số tin nhắn chưa đọc
+        function updateUnreadMessagesBadge(count) {
+            const badge = document.getElementById('unreadMessagesBadge');
+            if (badge) {
+                if (count > 0) {
+                    badge.textContent = count > 99 ? '99+' : count;
+                    badge.classList.remove('d-none');
+                } else {
+                    badge.classList.add('d-none');
+                }
+            }
+        }
+
+        // Giả lập việc lấy số tin nhắn chưa đọc (thay thế bằng API thực tế)
+        function fetchUnreadMessagesCount() {
+            // Đây là nơi bạn sẽ gọi API để lấy số tin nhắn chưa đọc
+            // Ví dụ mẫu với số ngẫu nhiên
+            const unreadCount = 3; // Thay thế bằng dữ liệu thực từ API
+            updateUnreadMessagesBadge(unreadCount);
+        }
+
+        // Gọi hàm lấy số tin nhắn khi trang được tải
+        fetchUnreadMessagesCount();
+
+        // Thiết lập cập nhật định kỳ (ví dụ: mỗi 30 giây)
+        setInterval(fetchUnreadMessagesCount, 30000);
+        // Thêm hiệu ứng nhấp nháy khi có tin nhắn mới
+        function notifyNewMessage() {
+            const badge = document.getElementById('unreadMessagesBadge');
+            badge.classList.add('badge-animation');
+            setTimeout(() => {
+                badge.classList.remove('badge-animation');
+            }, 5000); // Ngừng hiệu ứng sau 5 giây
+        }
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

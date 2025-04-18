@@ -1,0 +1,447 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<style>
+    :root {
+        --primary-color: #3498db;
+        --secondary-color: #2980b9;
+        --success-color: #2ecc71;
+        --danger-color: #e74c3c;
+        --warning-color: #f39c12;
+        --light-gray: #f8f9fa;
+        --medium-gray: #e9ecef;
+        --dark-gray: #495057;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+
+    .main-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .page-title {
+        font-size: 1.75rem;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .action-button {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .action-button:hover {
+        background-color: var(--secondary-color);
+    }
+
+    .card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 1.5rem;
+        overflow: hidden;
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--medium-gray);
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .tabs {
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .tab {
+        padding: 0.75rem 1.25rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .tab.active {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .tab:not(.active) {
+        background-color: var(--light-gray);
+        color: var(--dark-gray);
+    }
+
+    .tab:hover:not(.active) {
+        background-color: var(--medium-gray);
+    }
+
+    .search-box {
+        display: flex;
+        margin-bottom: 1.5rem;
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--medium-gray);
+        border-radius: 6px 0 0 6px;
+        font-size: 1rem;
+        min-width: 0;
+    }
+
+    .search-button {
+        padding: 0.75rem 1rem;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 0 6px 6px 0;
+        cursor: pointer;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+        margin: 0 -1.5rem;
+        padding: 0 1.5rem;
+    }
+
+    .notification-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 800px;
+    }
+
+    .notification-table th,
+    .notification-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--medium-gray);
+    }
+
+    .notification-table th {
+        background-color: var(--light-gray);
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .notification-table tr:hover {
+        background-color: var(--light-gray);
+    }
+
+    .notification-table td {
+        vertical-align: middle;
+    }
+
+    .status {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-align: center;
+        min-width: 100px;
+    }
+
+    .status-scheduled {
+        background-color: #e3f2fd;
+        color: #1565c0;
+    }
+
+    .status-sent {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .status-failed {
+        background-color: #ffebee;
+        color: #c62828;
+    }
+
+    .status-pending {
+        background-color: #fff8e1;
+        color: #f57f17;
+    }
+
+    .btn {
+        padding: 0.75rem 1.25rem;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .btn-secondary {
+        background-color: white;
+        color: var(--dark-gray);
+        border: 1px solid var(--medium-gray);
+    }
+
+    .btn-secondary:hover {
+        background-color: var(--light-gray);
+    }
+</style>
+<div class="container">
+    <div class="main-content" style="margin-left: 0px !important; padding: 10px !important;">
+        <div class="page-header">
+            <h1 class="page-title">Quản lý thông báo</h1>
+            <button class="action-button" id="createNotificationBtn">Tạo thông báo mới</button>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Danh sách thông báo</h2>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active">Tất cả</div>
+                <div class="tab">Đã gửi</div>
+                <div class="tab">Lên lịch</div>
+                <div class="tab">Chờ xử lý</div>
+                <div class="tab">Lỗi</div>
+            </div>
+
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Tìm kiếm thông báo...">
+                <button class="search-button">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                        <path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="notification-table">
+                    <thead>
+                        <tr>
+                            <th>Tiêu đề</th>
+                            <th>Đối tượng</th>
+                            <th>Loại</th>
+                            <th>Thời gian</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cập nhật trạng thái hồ sơ</td>
+                            <td>Nguyễn Văn A</td>
+                            <td>Cập nhật ứng tuyển</td>
+                            <td>15/04/2025 10:30</td>
+                            <td><span class="status status-sent">Đã gửi</span></td>
+                            <td>
+                                <button class="btn btn-secondary">Chi tiết</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Nhắc nhở phỏng vấn</td>
+                            <td>Trần Thị B</td>
+                            <td>Phỏng vấn</td>
+                            <td>16/04/2025 09:00</td>
+                            <td><span class="status status-scheduled">Lên lịch</span></td>
+                            <td>
+                                <button class="btn btn-secondary">Chi tiết</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Hồ sơ được chấp nhận</td>
+                            <td>Lê Văn C</td>
+                            <td>Cập nhật ứng tuyển</td>
+                            <td>14/04/2025 14:45</td>
+                            <td><span class="status status-sent">Đã gửi</span></td>
+                            <td>
+                                <button class="btn btn-secondary">Chi tiết</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Mời ứng tuyển vị trí mới</td>
+                            <td>Phạm Thị D</td>
+                            <td>Việc làm mới</td>
+                            <td>17/04/2025 08:30</td>
+                            <td><span class="status status-scheduled">Lên lịch</span></td>
+                            <td>
+                                <button class="btn btn-secondary">Chi tiết</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Lời mời phỏng vấn</td>
+                            <td>Hoàng Văn E</td>
+                            <td>Phỏng vấn</td>
+                            <td>15/04/2025 16:00</td>
+                            <td><span class="status status-pending">Chờ xử lý</span></td>
+                            <td>
+                                <button class="btn btn-secondary">Chi tiết</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Thông báo tạm dừng tuyển dụng</td>
+                            <td>Công ty ABC</td>
+                            <td>Thông báo chung</td>
+                            <td>13/04/2025 11:20</td>
+                            <td><span class="status status-failed">Lỗi</span></td>
+                            <td>
+                                <button class="btn btn-secondary">Chi tiết</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <a href="#" class="pagination-item">«</a>
+                <a href="#" class="pagination-item active">1</a>
+                <a href="#" class="pagination-item">2</a>
+                <a href="#" class="pagination-item">3</a>
+                <a href="#" class="pagination-item">»</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal tạo thông báo mới -->
+<div class="modal" id="createNotificationModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Tạo thông báo mới</h3>
+            <button class="close-button" id="closeModalBtn">&times;</button>
+        </div>
+
+        <form id="notificationForm">
+            <div class="form-group">
+                <label class="form-label">Loại thông báo</label>
+                <select class="form-control">
+                    <option value="">Chọn loại thông báo</option>
+                    <option value="update">Cập nhật ứng tuyển</option>
+                    <option value="interview">Phỏng vấn</option>
+                    <option value="job">Việc làm mới</option>
+                    <option value="general">Thông báo chung</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Đối tượng nhận</label>
+                <select class="form-control">
+                    <option value="">Chọn đối tượng</option>
+                    <option value="candidate">Ứng viên cụ thể</option>
+                    <option value="employer">Nhà tuyển dụng cụ thể</option>
+                    <option value="all_candidates">Tất cả ứng viên</option>
+                    <option value="all_employers">Tất cả nhà tuyển dụng</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Tiêu đề</label>
+                <input type="text" class="form-control" placeholder="Nhập tiêu đề thông báo">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Nội dung</label>
+                <textarea class="form-control" placeholder="Nhập nội dung thông báo"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Thời gian gửi</label>
+                <select class="form-control" id="sendTimeOption">
+                    <option value="now">Gửi ngay</option>
+                    <option value="schedule">Lên lịch gửi</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="scheduleTimeGroup" style="display: none;">
+                <label class="form-label">Thời gian lên lịch</label>
+                <input type="datetime-local" class="form-control">
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" id="cancelBtn">Hủy</button>
+                <button type="submit" class="btn btn-primary">Tạo thông báo</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Xử lý hiển thị modal
+    const createNotificationBtn = document.getElementById('createNotificationBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const createNotificationModal = document.getElementById('createNotificationModal');
+
+    createNotificationBtn.addEventListener('click', () => {
+        createNotificationModal.classList.add('active');
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+        createNotificationModal.classList.remove('active');
+    });
+
+    cancelBtn.addEventListener('click', () => {
+        createNotificationModal.classList.remove('active');
+    });
+
+    // Xử lý hiển thị trường lên lịch
+    const sendTimeOption = document.getElementById('sendTimeOption');
+    const scheduleTimeGroup = document.getElementById('scheduleTimeGroup');
+
+    sendTimeOption.addEventListener('change', () => {
+        if (sendTimeOption.value === 'schedule') {
+            scheduleTimeGroup.style.display = 'block';
+        } else {
+            scheduleTimeGroup.style.display = 'none';
+        }
+    });
+
+    // Xử lý chuyển tab
+    const tabs = document.querySelectorAll('.tab');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+        });
+    });
+</script>

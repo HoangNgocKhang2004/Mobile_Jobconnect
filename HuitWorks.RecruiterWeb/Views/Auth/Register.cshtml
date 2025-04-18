@@ -1,0 +1,944 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng ký tài khoản nhà tuyển dụng - HuitWorks</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* Animation */
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-300 {
+            animation-delay: 0.3s;
+        }
+
+        /* Background gradients */
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        }
+
+        .bg-gradient-secondary {
+            background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
+        }
+
+        /* Input styling */
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+            color: #6b7280;
+            z-index: 10;
+        }
+
+        .form-input {
+            padding-left: 2.5rem !important;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s;
+        }
+
+            .form-input:focus {
+                border-color: #1e40af;
+                box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+            }
+
+        .floating-label {
+            position: absolute;
+            top: -0.5rem;
+            left: 0.5rem;
+            font-size: 0.75rem;
+            padding: 0 0.25rem;
+            background-color: white;
+            color: #1e40af;
+            opacity: 0;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+
+        .form-input:focus + .floating-label,
+        .form-input:not(:placeholder-shown) + .floating-label {
+            opacity: 1;
+        }
+
+        /* Button styling */
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            transition: all 0.3s;
+        }
+
+            .btn-primary:hover {
+                background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
+                box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.2);
+            }
+
+        .social-btn {
+            transition: all 0.3s;
+        }
+
+            .social-btn:hover {
+                box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+            }
+
+        /* Stepper */
+        .stepper-item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+            .stepper-item::before {
+                position: absolute;
+                content: "";
+                border-bottom: 2px solid #e5e7eb;
+                width: 100%;
+                top: 1rem;
+                left: -50%;
+                z-index: 0;
+            }
+
+            .stepper-item:first-child::before {
+                content: none;
+            }
+
+            .stepper-item.active::before {
+                border-bottom: 2px solid #1e40af;
+            }
+
+        .step-counter {
+            position: relative;
+            z-index: 5;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background-color: #e5e7eb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .stepper-item.active .step-counter {
+            background-color: #1e40af;
+            color: white;
+        }
+
+        .step-name {
+            position: absolute;
+            top: 2.5rem;
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .stepper-item.active .step-name {
+            color: #1e40af;
+            font-weight: 600;
+        }
+
+        /* Card styling */
+        .register-container {
+            background-color: #f0f7ff;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%231e40af' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+    </style>
+    <link href="~/css/auth/login.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="register-container min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto w-full space-y-8 animate-fadeIn">
+            <!-- Logo -->
+            <div class="flex justify-center">
+                <a href="/" class="flex items-center space-x-2">
+                    <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" fill="none">
+                        <path d="M20 5C12.8 5 7 10.8 7 18s5.8 13 13 13c7.2 0 13-5.8 13-13S27.2 5 20 5zm-3 19.5c0 .8-.7 1.5-1.5 1.5s-1.5-.7-1.5-1.5V16c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5v8.5zm10 0c0 .8-.7 1.5-1.5 1.5s-1.5-.7-1.5-1.5V16c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5v8.5z" fill="#1e40af" />
+                    </svg>
+                    <span class="text-xl font-bold text-blue-700">HuitWorks</span>
+                </a>
+            </div>
+
+            <!-- Card đăng ký -->
+            <div class="card bg-white overflow-hidden rounded-2xl shadow-xl border border-gray-100 animate-fadeIn delay-100">
+                <div class="bg-gradient-secondary p-6 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-primary opacity-80"></div>
+                    <div class="relative z-10">
+                        <h2 class="text-xl font-bold text-white">Đăng ký tài khoản nhà tuyển dụng</h2>
+                        <p class="text-indigo-100 text-sm mt-1">Tạo tài khoản doanh nghiệp mới để bắt đầu đăng tin tuyển dụng</p>
+                    </div>
+                    <div class="absolute right-0 bottom-0 transform translate-x-4 translate-y-4">
+                        <svg width="120" height="120" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" fill="none">
+                            <path d="M20 5C12.8 5 7 10.8 7 18s5.8 13 13 13c7.2 0 13-5.8 13-13S27.2 5 20 5zm-3 19.5c0 .8-.7 1.5-1.5 1.5s-1.5-.7-1.5-1.5V16c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5v8.5zm10 0c0 .8-.7 1.5-1.5 1.5s-1.5-.7-1.5-1.5V16c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5v8.5z" fill="white" fill-opacity="0.15" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Stepper -->
+                <div class="px-8 pt-6">
+                    <div class="flex justify-between">
+                        <div class="stepper-item active">
+                            <div class="step-counter">1</div>
+                            <div class="step-name">Thông tin cơ bản</div>
+                        </div>
+                        <div class="stepper-item">
+                            <div class="step-counter">2</div>
+                            <div class="step-name">Thông tin doanh nghiệp</div>
+                        </div>
+                        <div class="stepper-item">
+                            <div class="step-counter">3</div>
+                            <div class="step-name">Xác thực</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 1: Thông tin cơ bản -->
+                <div id="step1" style="padding: 3rem;">
+                    <form id="registerForm" class="space-y-4" action="#" method="POST">
+                        <div class="md:grid md:grid-cols-2 md:gap-6">
+                            <!-- Email Input -->
+                            <div class="input-group">
+                                <span class="input-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                                <input id="email" name="email" type="email" autocomplete="email" required
+                                       class="form-input block w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                                       placeholder="Email công ty">
+                                <label for="email" class="floating-label">Email công ty</label>
+                            </div>
+
+                            <!-- Phone Input -->
+                            <div class="input-group">
+                                <span class="input-icon">
+                                    <i class="fas fa-phone"></i>
+                                </span>
+                                <input id="phone" name="phone" type="tel" autocomplete="tel" required
+                                       class="form-input block w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                                       placeholder="Số điện thoại liên hệ">
+                                <label for="phone" class="floating-label">Số điện thoại liên hệ</label>
+                            </div>
+                        </div>
+
+                        <div class="md:grid md:grid-cols-2 md:gap-6">
+                            <!-- Password Input -->
+                            <div class="input-group">
+                                <span class="input-icon">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input id="password" name="password" type="password" autocomplete="new-password" required
+                                       class="form-input block w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                                       placeholder="Mật khẩu">
+                                <label for="password" class="floating-label">Mật khẩu</label>
+                            </div>
+
+                            <!-- Confirm Password Input -->
+                            <div class="input-group">
+                                <span class="input-icon">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" required
+                                       class="form-input block w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                                       placeholder="Xác nhận mật khẩu">
+                                <label for="confirmPassword" class="floating-label">Xác nhận mật khẩu</label>
+                            </div>
+                        </div>
+
+                        <div class="md:grid md:grid-cols-2 md:gap-6">
+                            <!-- Họ tên người liên hệ -->
+                            <div class="input-group">
+                                <span class="input-icon">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                                <input id="contactName" name="contactName" type="text" required
+                                       class="form-input block w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                                       placeholder="Họ tên người liên hệ">
+                                <label for="contactName" class="floating-label">Họ tên người liên hệ</label>
+                            </div>
+
+                            <!-- Chức vụ -->
+                            <div class="input-group">
+                                <span class="input-icon">
+                                    <i class="fas fa-briefcase"></i>
+                                </span>
+                                <input id="jobTitle" name="jobTitle" type="text" required
+                                       class="form-input block w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                                       placeholder="Chức vụ">
+                                <label for="jobTitle" class="floating-label">Chức vụ</label>
+                            </div>
+                        </div>
+
+                        <!-- Terms and Privacy Policy -->
+                        <div class="mt-6">
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input id="terms" name="terms" type="checkbox" required
+                                           class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="terms" class="text-gray-700">
+                                        Tôi đồng ý với <a href="#" class="text-indigo-600 hover:text-indigo-500">Điều khoản sử dụng</a> và <a href="#" class="text-indigo-600 hover:text-indigo-500">Chính sách bảo mật</a> của HuitWorks
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Next Button -->
+                        <div class="flex justify-end mt-6">
+                            <button type="button" id="nextToStep2"
+                                    class="btn-primary group relative flex justify-center py-2.5 px-6 rounded-lg text-white focus:outline-none">
+                                Tiếp theo
+                                <span class="absolute right-3 inset-y-0 flex items-center">
+                                    <i class="fas fa-arrow-right ml-1"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Step 2: Thông tin doanh nghiệp (ẩn ban đầu) -->
+                <div id="step2" class="p-8 hidden">
+                    <form id="companyForm" class="space-y-4">
+                        <!-- Tên công ty -->
+                        <div class="input-group">
+                            <span class="input-icon">
+                                <i class="fas fa-building"></i>
+                            </span>
+                            <input id="companyName" name="companyName" type="text" required
+                                   class="form-input block w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                                   placeholder="Tên công ty">
+                            <label for="companyName" class="floating-label">Tên công ty</label>
+                        </div>
+
+                        <div class="md:grid md:grid-cols-2 md:gap-6">
+                            <!-- Mã số thuế -->
+                            <div class="input-group">
+                                <span class="input-icon">
+                                    <i class="fas fa-file-invoice"></i>
+                                </span>
+                                <input id="taxCode" name="taxCode" type="text" required
+                                       class="form-input block w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                                       placeholder="Mã số thuế">
+                                <label for="taxCode" class="floating-label">Mã số thuế</label>
+                            </div>
+
+                            <!-- Quy mô công ty -->
+                            <div class="input-group">
+                                <span class="input-icon">
+                                    <i class="fas fa-users"></i>
+                                </span>
+                                <select id="companySize" name="companySize" required
+                                        class="form-input block w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                                        placeholder="Quy mô công ty">
+                                    <option value="" disabled selected>Chọn quy mô công ty</option>
+                                    <option value="1-10">1-10 nhân viên</option>
+                                    <option value="11-50">11-50 nhân viên</option>
+                                    <option value="51-200">51-200 nhân viên</option>
+                                    <option value="201-500">201-500 nhân viên</option>
+                                    <option value="501-1000">501-1000 nhân viên</option>
+                                    <option value="1000+">Trên 1000 nhân viên</option>
+                                </select>
+                                <label for="companySize" class="floating-label">Quy mô công ty</label>
+                            </div>
+                        </div>
+
+                        <div class="md:grid md:grid-cols-2 md:gap-6">
+                            <!-- Lĩnh vực hoạt động -->
+                            <div class="input-group">
+                                <span class="input-icon">
+                                    <i class="fas fa-industry"></i>
+                                </span>
+                                <select id="industry" name="industry" required
+                                        class="form-input block w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                                        placeholder="Lĩnh vực hoạt động">
+                                    <option value="" disabled selected>Chọn lĩnh vực hoạt động</option>
+                                    <option value="it">Công nghệ thông tin</option>
+                                    <option value="finance">Tài chính - Ngân hàng</option>
+                                    <option value="education">Giáo dục - Đào tạo</option>
+                                    <option value="manufacturing">Sản xuất - Vận hành</option>
+                                    <option value="retail">Bán lẻ - Tiêu dùng</option>
+                                    <option value="healthcare">Y tế - Dược phẩm</option>
+                                    <option value="other">Khác</option>
+                                </select>
+                                <label for="industry" class="floating-label">Lĩnh vực hoạt động</label>
+                            </div>
+
+                            <!-- Website -->
+                            <div class="input-group">
+                                <span class="input-icon">
+                                    <i class="fas fa-globe"></i>
+                                </span>
+                                <input id="website" name="website" type="url"
+                                       class="form-input block w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                                       placeholder="Website công ty (nếu có)">
+                                <label for="website" class="floating-label">Website công ty</label>
+                            </div>
+                        </div>
+
+                        <!-- Địa chỉ công ty -->
+                        <div class="input-group">
+                            <span class="input-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </span>
+                            <input id="address" name="address" type="text" required
+                                   class="form-input block w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                                   placeholder="Địa chỉ công ty">
+                            <label for="address" class="floating-label">Địa chỉ công ty</label>
+                        </div>
+
+                        <div class="md:grid md:grid-cols-3 md:gap-6">
+                            <!-- Tỉnh/Thành phố -->
+                            <div class="input-group">
+                                <span class="input-icon">
+                                    <i class="fas fa-city"></i>
+                                </span>
+                                <select id="province" name="province" required
+                                        class="form-input block w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                                        placeholder="Tỉnh/Thành phố">
+                                    <option value="" disabled selected>Chọn tỉnh/thành phố</option>
+                                    <option value="hanoi">Hà Nội</option>
+                                    <option value="hcm">TP Hồ Chí Minh</option>
+                                    <option value="danang">Đà Nẵng</option>
+                                    <option value="other">Khác</option>
+                                </select>
+                                <label for="province" class="floating-label">Tỉnh/Thành phố</label>
+                            </div>
+
+                            <!-- Quận/Huyện -->
+                            <div class="input-group">
+                                <span class="input-icon">
+                                    <i class="fas fa-map"></i>
+                                </span>
+                                <select id="district" name="district" required
+                                        class="form-input block w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                                        placeholder="Quận/Huyện">
+                                    <option value="" disabled selected>Chọn quận/huyện</option>
+                                </select>
+                                <label for="district" class="floating-label">Quận/Huyện</label>
+                            </div>
+
+                            <!-- Phường/Xã -->
+                            <div class="input-group">
+                                <span class="input-icon">
+                                    <i class="fas fa-map-signs"></i>
+                                </span>
+                                <select id="ward" name="ward" required
+                                        class="form-input block w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                                        placeholder="Phường/Xã">
+                                    <option value="" disabled selected>Chọn phường/xã</option>
+                                </select>
+                                <label for="ward" class="floating-label">Phường/Xã</label>
+                            </div>
+                        </div>
+
+                        <!-- Giới thiệu ngắn về công ty -->
+                        <div class="input-group">
+                            <span class="input-icon top-3">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
+                            <textarea id="companyDescription" name="companyDescription" rows="3" required
+                                      class="form-input block w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                                      placeholder="Giới thiệu ngắn về công ty"></textarea>
+                            <label for="companyDescription" class="floating-label">Giới thiệu ngắn về công ty</label>
+                        </div>
+
+                        <!-- Logo công ty -->
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Logo công ty</label>
+                            <div class="flex items-center">
+                                <div class="w-20 h-20 mr-4 flex-shrink-0 rounded-md border border-gray-200 bg-gray-50 flex items-center justify-center text-gray-400">
+                                    <i class="fas fa-image text-2xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <input type="file" id="logo" name="logo" accept="image/*" class="hidden">
+                                    <label for="logo" class="btn-primary group relative inline-flex justify-center py-2 px-4 rounded-lg text-white focus:outline-none cursor-pointer">
+                                        <i class="fas fa-upload mr-2"></i>
+                                        Tải logo lên
+                                    </label>
+                                    <p class="text-xs text-gray-500 mt-1">PNG, JPG, GIF. Tối đa 2MB</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigation buttons -->
+                        <div class="flex justify-between mt-6">
+                            <button type="button" id="backToStep1"
+                                    class="bg-gray-200 hover:bg-gray-300 group relative flex justify-center py-2.5 px-6 rounded-lg text-gray-700 focus:outline-none">
+                                <span class="absolute left-3 inset-y-0 flex items-center">
+                                    <i class="fas fa-arrow-left mr-1"></i>
+                                </span>
+                                Quay lại
+                            </button>
+                            <button type="button" id="nextToStep3"
+                                    class="btn-primary group relative flex justify-center py-2.5 px-6 rounded-lg text-white focus:outline-none">
+                                Tiếp theo
+                                <span class="absolute right-3 inset-y-0 flex items-center">
+                                    <i class="fas fa-arrow-right ml-1"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Step 3: Xác thực (ẩn ban đầu) -->
+                <div id="step3" class="p-8 hidden">
+                    <div class="text-center mb-6">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-4">
+                            <i class="fas fa-shield-alt text-2xl text-green-600"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900">Xác thực tài khoản</h3>
+                        <p class="text-gray-600 text-sm mt-1">Chúng tôi đã gửi mã xác thực đến email công ty của bạn</p>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-info-circle text-indigo-500"></i>
+                            </div>
+                            <div class="ml-3 text-sm text-gray-700">
+                                <p>Vui lòng kiểm tra hộp thư đến và nhập mã xác thực được gửi đến địa chỉ email <span id="confirmationEmail" class="font-medium">example@company.com</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form id="verificationForm" class="space-y-4">
+                        <!-- Mã xác thực -->
+                        <div class="mt-4">
+                            <label for="verificationCode" class="block text-sm font-medium text-gray-700 mb-1">
+                                Mã xác thực
+                            </label>
+                            <div class="flex justify-center space-x-3 mt-2">
+                                <input type="text" maxlength="1" class="verification-input w-12 h-12 text-center text-xl font-bold border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                <input type="text" maxlength="1" class="verification-input w-12 h-12 text-center text-xl font-bold border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                <input type="text" maxlength="1" class="verification-input w-12 h-12 text-center text-xl font-bold border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                <input type="text" maxlength="1" class="verification-input w-12 h-12 text-center text-xl font-bold border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                <input type="text" maxlength="1" class="verification-input w-12 h-12 text-center text-xl font-bold border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                <input type="text" maxlength="1" class="verification-input w-12 h-12 text-center text-xl font-bold border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                            </div>
+                            <div class="flex justify-center mt-4">
+                                <button type="button" id="resendCode" class="text-sm text-indigo-600 hover:text-indigo-500">
+                                    Gửi lại mã (còn <span id="countdown">60</span>s)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Navigation buttons -->
+                        <div class="flex justify-between mt-8">
+                            <button type="button" id="backToStep2"
+                                    class="bg-gray-200 hover:bg-gray-300 group relative flex justify-center py-2.5 px-6 rounded-lg text-gray-700 focus:outline-none">
+                                <span class="absolute left-3 inset-y-0 flex items-center">
+                                    <i class="fas fa-arrow-left mr-1"></i>
+                                </span>
+                                Quay lại
+                            </button>
+                            <button type="submit"
+                                    class="btn-primary group relative flex justify-center py-2.5 px-6 rounded-lg text-white focus:outline-none">
+                                <span class="absolute left-3 inset-y-0 flex items-center">
+                                    <i class="fas fa-check mr-1"></i>
+                                </span>
+                                Hoàn tất đăng ký
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Login Link Section -->
+                <div class="px-8 py-6 bg-gray-50 border-t border-gray-100 animate-fadeIn delay-200">
+                    <p class="text-sm text-gray-600 text-center">
+                        Đã có tài khoản?
+                        <a href="/Auth/Login" class="font-medium text-indigo-600 hover:text-indigo-700">
+                            Đăng nhập ngay
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center mt-6 animate-fadeIn delay-300">
+                <p class="text-xs text-gray-500">
+                    © 2025 HuitWorks. Tất cả các quyền được bảo lưu.
+                </p>
+                <div class="mt-2 flex justify-center space-x-4 text-xs">
+                    <a href="#" class="text-gray-500 hover:text-gray-700">Điều khoản sử dụng</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-700">Chính sách bảo mật</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-700">Trợ giúp</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Form validation
+            $("#registerForm").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    phone: {
+                        required: true,
+                        minlength: 10,
+                        maxlength: 11
+                    },
+                    password: {
+                        required: true,
+                        minlength: 8
+                    },
+                    confirmPassword: {
+                        required: true,
+                        equalTo: "#password"
+                    },
+                    contactName: {
+                        required: true,
+                        minlength: 2
+                    },
+                    jobTitle: {
+                        required: true
+                    },
+                    terms: {
+                        required: true
+                    }
+                },
+                messages: {
+                    email: {
+                        required: "Vui lòng nhập email",
+                        email: "Email không hợp lệ"
+                    },
+                    phone: {
+                        required: "Vui lòng nhập số điện thoại",
+                        minlength: "Số điện thoại không hợp lệ",
+                        maxlength: "Số điện thoại không hợp lệ"
+                    },
+                    password: {
+                        required: "Vui lòng nhập mật khẩu",
+                        minlength: "Mật khẩu phải có ít nhất 8 ký tự"
+                    },
+                    confirmPassword: {
+                        required: "Vui lòng xác nhận mật khẩu",
+                        equalTo: "Mật khẩu xác nhận không khớp"
+                    },
+                    contactName: {
+                        required: "Vui lòng nhập họ tên người liên hệ",
+                        minlength: "Họ tên phải có ít nhất 2 ký tự"
+                    },
+                    jobTitle: {
+                        required: "Vui lòng nhập chức vụ của bạn"
+                    },
+                    terms: {
+                        required: "Bạn phải đồng ý với điều khoản sử dụng"
+                    }
+                },
+                errorElement: 'div',
+                errorPlacement: function(error, element) {
+                    if (element.attr("name") === "terms") {
+                        error.addClass('text-red-500 text-xs mt-1');
+                        error.insertAfter(element.parent().parent());
+                    } else {
+                        error.addClass('text-red-500 text-xs mt-1');
+                        error.insertAfter(element.parent());
+                    }
+                },
+                highlight: function(element) {
+                    $(element).addClass('border-red-500').removeClass('border-gray-300');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('border-red-500').addClass('border-gray-300');
+                }
+            });
+
+            $("#companyForm").validate({
+                rules: {
+                    companyName: {
+                        required: true,
+                        minlength: 2
+                    },
+                    taxCode: {
+                        required: true,
+                        minlength: 10,
+                        maxlength: 13
+                    },
+                    companySize: {
+                        required: true
+                    },
+                    industry: {
+                        required: true
+                    },
+                    address: {
+                        required: true
+                    },
+                    province: {
+                        required: true
+                    },
+                    district: {
+                        required: true
+                    },
+                    ward: {
+                        required: true
+                    },
+                    companyDescription: {
+                        required: true,
+                        minlength: 20
+                    }
+                },
+                messages: {
+                    companyName: {
+                        required: "Vui lòng nhập tên công ty",
+                        minlength: "Tên công ty phải có ít nhất 2 ký tự"
+                    },
+                    taxCode: {
+                        required: "Vui lòng nhập mã số thuế",
+                        minlength: "Mã số thuế không hợp lệ",
+                        maxlength: "Mã số thuế không hợp lệ"
+                    },
+                    companySize: {
+                        required: "Vui lòng chọn quy mô công ty"
+                    },
+                    industry: {
+                        required: "Vui lòng chọn lĩnh vực hoạt động"
+                    },
+                    address: {
+                        required: "Vui lòng nhập địa chỉ công ty"
+                    },
+                    province: {
+                        required: "Vui lòng chọn tỉnh/thành phố"
+                    },
+                    district: {
+                        required: "Vui lòng chọn quận/huyện"
+                    },
+                    ward: {
+                        required: "Vui lòng chọn phường/xã"
+                    },
+                    companyDescription: {
+                        required: "Vui lòng nhập giới thiệu về công ty",
+                        minlength: "Giới thiệu công ty phải có ít nhất 20 ký tự"
+                    }
+                },
+                errorElement: 'div',
+                errorPlacement: function(error, element) {
+                    error.addClass('text-red-500 text-xs mt-1');
+                    error.insertAfter(element.parent());
+                },
+                highlight: function(element) {
+                    $(element).addClass('border-red-500').removeClass('border-gray-300');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('border-red-500').addClass('border-gray-300');
+                }
+            });
+
+            // Next and back button handlers
+            $("#nextToStep2").click(function() {
+                if ($("#registerForm").valid()) {
+                    $("#step1").addClass("hidden");
+                    $("#step2").removeClass("hidden");
+                    $(".stepper-item:nth-child(1)").removeClass("active");
+                    $(".stepper-item:nth-child(2)").addClass("active");
+                }
+            });
+
+            $("#backToStep1").click(function() {
+                $("#step2").addClass("hidden");
+                $("#step1").removeClass("hidden");
+                $(".stepper-item:nth-child(2)").removeClass("active");
+                $(".stepper-item:nth-child(1)").addClass("active");
+            });
+
+            $("#nextToStep3").click(function() {
+                if ($("#companyForm").valid()) {
+                    $("#step2").addClass("hidden");
+                    $("#step3").removeClass("hidden");
+                    $(".stepper-item:nth-child(2)").removeClass("active");
+                    $(".stepper-item:nth-child(3)").addClass("active");
+
+                    // Update confirmation email display
+                    $("#confirmationEmail").text($("#email").val());
+                }
+            });
+
+            $("#backToStep2").click(function() {
+                $("#step3").addClass("hidden");
+                $("#step2").removeClass("hidden");
+                $(".stepper-item:nth-child(3)").removeClass("active");
+                $(".stepper-item:nth-child(2)").addClass("active");
+            });
+
+            // Verification code input handling
+            $(".verification-input").on('input', function() {
+                if ($(this).val().length === 1) {
+                    $(this).next('.verification-input').focus();
+                }
+            });
+
+            $(".verification-input").on('keydown', function(e) {
+                if (e.key === 'Backspace' && $(this).val().length === 0) {
+                    $(this).prev('.verification-input').focus();
+                }
+            });
+
+            // Dynamic district and ward loading
+            $("#province").change(function() {
+                const provinceId = $(this).val();
+
+                // Clear old options
+                $("#district").html('<option value="" disabled selected>Chọn quận/huyện</option>');
+                $("#ward").html('<option value="" disabled selected>Chọn phường/xã</option>');
+
+                // Load districts based on province (demo data)
+                if (provinceId === "hanoi") {
+                    $("#district").append(`
+                        <option value="hoankiem">Hoàn Kiếm</option>
+                        <option value="dongda">Đống Đa</option>
+                        <option value="caugiay">Cầu Giấy</option>
+                        <option value="hadong">Hà Đông</option>
+                    `);
+                } else if (provinceId === "hcm") {
+                    $("#district").append(`
+                        <option value="dist1">Quận 1</option>
+                        <option value="dist3">Quận 3</option>
+                        <option value="dist7">Quận 7</option>
+                        <option value="thuduc">Thủ Đức</option>
+                    `);
+                } else if (provinceId === "danang") {
+                    $("#district").append(`
+                        <option value="haichau">Hải Châu</option>
+                        <option value="sontra">Sơn Trà</option>
+                        <option value="nguhanhson">Ngũ Hành Sơn</option>
+                    `);
+                }
+            });
+
+            $("#district").change(function() {
+                const districtId = $(this).val();
+
+                // Clear old options
+                $("#ward").html('<option value="" disabled selected>Chọn phường/xã</option>');
+
+                // Load wards based on district (demo data)
+                if (districtId === "hoankiem") {
+                    $("#ward").append(`
+                        <option value="hangbac">Hàng Bạc</option>
+                        <option value="hanggai">Hàng Gai</option>
+                        <option value="hangbo">Hàng Bồ</option>
+                    `);
+                } else if (districtId === "dist1") {
+                    $("#ward").append(`
+                        <option value="bennghe">Bến Nghé</option>
+                        <option value="benthanh">Bến Thành</option>
+                        <option value="dakao">Đa Kao</option>
+                    `);
+                } else if (districtId === "haichau") {
+                    $("#ward").append(`
+                        <option value="thacgian">Thạch Gián</option>
+                        <option value="thanhhoa">Thanh Bình</option>
+                        <option value="haichaui">Hải Châu I</option>
+                    `);
+                } else {
+                    // Demo data for other districts
+                    $("#ward").append(`
+                        <option value="ward1">Phường 1</option>
+                        <option value="ward2">Phường 2</option>
+                        <option value="ward3">Phường 3</option>
+                    `);
+                }
+            });
+
+            // Countdown for resend code
+            let timeLeft = 60;
+            let countdownTimer = setInterval(function() {
+                timeLeft--;
+                $("#countdown").text(timeLeft);
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdownTimer);
+                    $("#resendCode").text("Gửi lại mã").removeAttr("disabled");
+                    $("#resendCode").css("opacity", "1");
+                }
+            }, 1000);
+
+            $("#resendCode").click(function() {
+                if (timeLeft <= 0) {
+                    // Reset countdown
+                    timeLeft = 60;
+                    $("#countdown").text(timeLeft);
+                    $("#resendCode").html(`Gửi lại mã (còn <span id="countdown">60</span>s)`);
+                    $("#resendCode").attr("disabled", true);
+                    $("#resendCode").css("opacity", "0.5");
+
+                    countdownTimer = setInterval(function() {
+                        timeLeft--;
+                        $("#countdown").text(timeLeft);
+
+                        if (timeLeft <= 0) {
+                            clearInterval(countdownTimer);
+                            $("#resendCode").text("Gửi lại mã").removeAttr("disabled");
+                            $("#resendCode").css("opacity", "1");
+                        }
+                    }, 1000);
+
+                    // Simulate code resend
+                    alert("Mã xác thực đã được gửi lại đến email của bạn!");
+                }
+            });
+
+            // Handle form submission
+            $("#verificationForm").submit(function(e) {
+                e.preventDefault();
+
+                // Collect verification code
+                let verificationCode = "";
+                $(".verification-input").each(function() {
+                    verificationCode += $(this).val();
+                });
+
+                // Validate code length
+                if (verificationCode.length !== 6) {
+                    alert("Vui lòng nhập đầy đủ mã xác thực 6 chữ số!");
+                    return false;
+                }
+
+                // Simulate verification process
+                alert("Đăng ký thành công! Bạn sẽ được chuyển đến trang đăng nhập.");
+                window.location.href = "/Auth/Login";
+            });
+
+            // File input handling
+            $("#logo").change(function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = $("<img>").attr({
+                            src: e.target.result,
+                            class: "w-full h-full object-cover rounded-md"
+                        });
+                        $(".w-20.h-20").empty().append(img);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

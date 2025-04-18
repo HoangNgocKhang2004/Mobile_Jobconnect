@@ -1,0 +1,238 @@
+﻿@model Job
+@{
+    ViewData["Title"] = "Chỉnh sửa bài tuyển dụng";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-2 text-gray-800">Chỉnh sửa bài tuyển dụng</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none">Quản lý tuyển dụng</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Chỉnh sửa</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i>Quay lại
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow border-0 rounded-lg">
+        <div class="card-header bg-white px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-edit text-primary me-2"></i>
+                <h5 class="mb-0 text-primary">Bài tuyển dụng #@Model.Id</h5>
+            </div>
+            <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger") px-3 py-2">
+                <i class="fas fa-circle me-1" style="font-size: 8px;"></i>@(Model.IsActive ? "Đang hoạt động" : "Đã tắt")
+            </span>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="Edit" method="post" id="jobEditForm">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 mb-4" role="alert"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="PostedDate" />
+
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="card shadow-sm border-0 h-100">
+                            <div class="card-header bg-light py-3">
+                                <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Thông tin chính</h6>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="form-group mb-4">
+                                    <label asp-for="Title" class="form-label fw-medium">Tiêu đề công việc <span class="text-danger">*</span></label>
+                                    <input asp-for="Title" class="form-control form-control-lg" placeholder="Nhập tiêu đề vị trí tuyển dụng" />
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <label asp-for="Description" class="form-label fw-medium">Mô tả công việc <span class="text-danger">*</span></label>
+                                    <div class="border rounded">
+                                        <textarea asp-for="Description" class="form-control editor" rows="8" placeholder="Nhập mô tả chi tiết về công việc"></textarea>
+                                    </div>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                    <div class="form-text">Mô tả chi tiết về vị trí, trách nhiệm và nhiệm vụ của công việc.</div>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="Requirements" class="form-label fw-medium">Yêu cầu ứng viên <span class="text-danger">*</span></label>
+                                    <div class="border rounded">
+                                        <textarea asp-for="Requirements" class="form-control editor" rows="8" placeholder="Nhập yêu cầu đối với ứng viên"></textarea>
+                                    </div>
+                                    <span asp-validation-for="Requirements" class="text-danger"></span>
+                                    <div class="form-text">Liệt kê kỹ năng, kinh nghiệm và trình độ cần thiết cho vị trí này.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card shadow-sm border-0 mb-4">
+                            <div class="card-header bg-light py-3">
+                                <h6 class="mb-0"><i class="fas fa-cog me-2"></i>Cài đặt tuyển dụng</h6>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Location" class="form-label fw-medium">Địa điểm làm việc <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="fas fa-map-marker-alt"></i></span>
+                                        <input asp-for="Location" class="form-control" placeholder="Nhập địa điểm làm việc" />
+                                    </div>
+                                    <span asp-validation-for="Location" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="Salary" class="form-label fw-medium">Mức lương</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="fas fa-money-bill-wave"></i></span>
+                                        <input asp-for="Salary" class="form-control" placeholder="VD: 15-20 triệu, Thỏa thuận..." />
+                                    </div>
+                                    <span asp-validation-for="Salary" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="RequiredCandidates" class="form-label fw-medium">Số lượng cần tuyển <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="fas fa-users"></i></span>
+                                        <input asp-for="RequiredCandidates" class="form-control" type="number" min="1" max="100" placeholder="Nhập số lượng" />
+                                    </div>
+                                    <span asp-validation-for="RequiredCandidates" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <label asp-for="ExpiryDate" class="form-label fw-medium">Ngày hết hạn <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="fas fa-calendar-alt"></i></span>
+                                        <input asp-for="ExpiryDate" class="form-control datepicker" type="date" value="@Model.ExpiryDate.ToString("yyyy-MM-dd")" />
+                                    </div>
+                                    <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+                                </div>
+
+                                <hr class="my-4">
+
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-medium d-block">Trạng thái</label>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" asp-for="IsActive" role="switch" id="statusSwitch">
+                                        <label class="form-check-label" for="statusSwitch">
+                                            <span class="text-success fw-medium" id="statusText">Đang hoạt động</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-text" id="statusHelp">Bỏ chọn để tạm dừng hiển thị bài tuyển dụng này</div>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-medium">Ngày đăng</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="fas fa-clock"></i></span>
+                                        <input class="form-control bg-light" value="@Model.PostedDate.ToString("dd/MM/yyyy")" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card shadow-sm border-0">
+                            <div class="card-header bg-light py-3">
+                                <h6 class="mb-0"><i class="fas fa-check-circle me-2"></i>Hoàn tất</h6>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-save me-2"></i>Lưu thay đổi
+                                    </button>
+                                    <a asp-action="Index" class="btn btn-outline-secondary">
+                                        Hủy chỉnh sửa
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function() {
+            // Khởi tạo Summernote với giao diện cải tiến
+            $('.editor').summernote({
+                height: 250,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+                ],
+                styleTags: [
+                    'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+                ],
+                callbacks: {
+                    onImageUpload: function(files) {
+                        toastr.warning('Chức năng upload ảnh không được hỗ trợ trong trình soạn thảo này.');
+                    }
+                }
+            });
+
+            // Cập nhật trạng thái động
+            function updateStatusDisplay() {
+                if ($('#statusSwitch').is(':checked')) {
+                    $('#statusText').removeClass('text-danger').addClass('text-success').text('Đang hoạt động');
+                    $('#statusHelp').text('Bỏ chọn để tạm dừng hiển thị bài tuyển dụng này');
+                } else {
+                    $('#statusText').removeClass('text-success').addClass('text-danger').text('Đã tắt');
+                    $('#statusHelp').text('Chọn để kích hoạt lại bài tuyển dụng này');
+                }
+            }
+
+            // Khởi tạo trạng thái ban đầu
+            updateStatusDisplay();
+
+            // Theo dõi thay đổi trạng thái
+            $('#statusSwitch').on('change', function() {
+                updateStatusDisplay();
+            });
+
+            // Thông báo xác nhận khi rời trang có thay đổi
+            let formChanged = false;
+            $('#jobEditForm').on('input change', function() {
+                formChanged = true;
+            });
+
+            $(window).on('beforeunload', function() {
+                if (formChanged) {
+                    return "Bạn có thay đổi chưa lưu. Bạn có chắc chắn muốn rời đi?";
+                }
+            });
+
+            // Loại bỏ cảnh báo khi submit form
+            $('#jobEditForm').on('submit', function() {
+                $(window).off('beforeunload');
+            });
+
+            // Hiển thị các thông báo validation với hiệu ứng
+            $('form').on('submit', function() {
+                if (!$(this).valid()) {
+                    toastr.error('Vui lòng kiểm tra lại thông tin nhập liệu!');
+                    $('html, body').animate({
+                        scrollTop: $('.text-danger').first().offset().top - 100
+                    }, 500);
+                    return false;
+                }
+                return true;
+            });
+        });
+    </script>
+}

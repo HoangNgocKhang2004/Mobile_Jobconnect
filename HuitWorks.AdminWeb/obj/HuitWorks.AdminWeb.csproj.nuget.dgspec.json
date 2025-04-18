@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\LTDD\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj": {}
+    "D:\\LTDD\\HuitWorks.Web\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj": {}
   },
   "projects": {
-    "D:\\LTDD\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj": {
+    "D:\\LTDD\\HuitWorks.Web\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\LTDD\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj",
+        "projectUniqueName": "D:\\LTDD\\HuitWorks.Web\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj",
         "projectName": "HuitWorks.AdminWeb",
-        "projectPath": "D:\\LTDD\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj",
+        "projectPath": "D:\\LTDD\\HuitWorks.Web\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb.csproj",
         "packagesPath": "C:\\Users\\khang\\.nuget\\packages\\",
-        "outputPath": "D:\\LTDD\\HuitWorks.AdminWeb\\HuitWorks.AdminWeb\\obj\\",
+        "outputPath": "D:\\LTDD\\HuitWorks.Web\\HuitWorks.AdminWeb\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

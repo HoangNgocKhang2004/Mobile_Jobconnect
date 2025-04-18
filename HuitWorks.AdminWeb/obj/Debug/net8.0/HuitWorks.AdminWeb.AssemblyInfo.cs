@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HuitWorks.AdminWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+50c5896f3334e078d41841a60cefd6771738a6a1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+740a6833324e41873bae6222603a889d9425cbbe")]
 [assembly: System.Reflection.AssemblyProductAttribute("HuitWorks.AdminWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HuitWorks.AdminWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,0 +1,81 @@
+﻿@model Job
+@{
+    ViewData["Title"] = "Xóa bài tuyển dụng";
+}
+
+<div class="container-fluid p-4">
+    <div class="row mb-3">
+        <div class="col">
+            <h1>Xóa bài tuyển dụng</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Quản lý tuyển dụng</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Xóa</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h5 class="mb-0">Xác nhận xóa</h5>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Cảnh báo:</strong> Bạn có chắc chắn muốn xóa bài tuyển dụng này? Hành động này không thể hoàn tác.
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">Thông tin bài tuyển dụng</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>@Model.Title</h5>
+                            <p class="text-muted">
+                                <i class="fas fa-map-marker-alt me-1"></i>@Model.Location<br>
+                                <i class="fas fa-money-bill-wave me-1"></i>@Model.Salary
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between px-0">
+                                    <span>ID:</span>
+                                    <span>@Model.Id</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between px-0">
+                                    <span>Ngày đăng:</span>
+                                    <span>@Model.PostedDate.ToString("dd/MM/yyyy")</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between px-0">
+                                    <span>Ngày hết hạn:</span>
+                                    <span>@Model.ExpiryDate.ToString("dd/MM/yyyy")</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between px-0">
+                                    <span>Trạng thái:</span>
+                                    <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger")">
+                                        @(Model.IsActive ? "Đang hoạt động" : "Đã tắt")
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-times me-1"></i>Hủy
+                    </a>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-1"></i>Xác nhận xóa
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,529 @@
+﻿@{
+    ViewData["Title"] = "Quản lý danh sách ứng viên";
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+
+<div class="container py-4">
+    <!-- Bộ lọc và tìm kiếm -->
+    <div class="card mb-4">
+        <div class="card-header bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Tìm kiếm và lọc ứng viên</h5>
+                <button class="btn btn-sm btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+        </div>
+        <div class="collapse show" id="filterCollapse">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label">Từ khóa</label>
+                            <input type="text" class="form-control" placeholder="Tên, kỹ năng, vị trí...">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label">Vị trí ứng tuyển</label>
+                            <select class="form-select">
+                                <option selected>Tất cả vị trí</option>
+                                <option>Lập trình viên Frontend</option>
+                                <option>Lập trình viên Backend</option>
+                                <option>Quản lý dự án</option>
+                                <option>UI/UX Designer</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label">Kinh nghiệm</label>
+                            <select class="form-select">
+                                <option selected>Tất cả</option>
+                                <option>Dưới 1 năm</option>
+                                <option>1-3 năm</option>
+                                <option>3-5 năm</option>
+                                <option>Trên 5 năm</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label">Kỹ năng</label>
+                            <select class="form-select">
+                                <option selected>Tất cả</option>
+                                <option>JavaScript</option>
+                                <option>React</option>
+                                <option>Angular</option>
+                                <option>Vue.js</option>
+                                <option>.NET</option>
+                                <option>Java</option>
+                                <option>Python</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label">Trạng thái</label>
+                            <select class="form-select">
+                                <option selected>Tất cả</option>
+                                <option>Mới nộp hồ sơ</option>
+                                <option>Đang xem xét</option>
+                                <option>Đã mời phỏng vấn</option>
+                                <option>Đã phỏng vấn</option>
+                                <option>Đã nhận việc</option>
+                                <option>Từ chối</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label">Mức điểm AI</label>
+                            <select class="form-select">
+                                <option selected>Tất cả</option>
+                                <option>90% - 100%</option>
+                                <option>80% - 89%</option>
+                                <option>70% - 79%</option>
+                                <option>Dưới 70%</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-search me-2"></i>Tìm kiếm
+                        </button>
+                        <button class="btn btn-outline-secondary ms-2">
+                            <i class="fas fa-redo me-2"></i>Đặt lại
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kết quả tìm kiếm -->
+    <div class="card mb-4">
+        <div class="card-header bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-users me-2"></i>Danh sách ứng viên phù hợp</h5>
+                <div>
+                    <span class="badge bg-primary me-2">15 ứng viên</span>
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-download me-1"></i>Xuất Excel
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-print me-1"></i>In
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th style="width: 3%">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="selectAll">
+                                </div>
+                            </th>
+                            <th style="width: 23%">Ứng viên</th>
+                            <th style="width: 20%">Vị trí ứng tuyển</th>
+                            <th style="width: 15%">Kỹ năng</th>
+                            <th style="width: 10%">Kinh nghiệm</th>
+                            <th style="width: 10%">Điểm AI</th>
+                            <th style="width: 10%">Trạng thái</th>
+                            <th style="width: 9%">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dữ liệu mẫu -->
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar me-3">
+                                        <img src="~/images/logo.png" class="rounded-circle w-10 h-10" alt="Avatar">
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">Nguyễn Văn A</h6>
+                                        <small class="text-muted">nguyenvana@gmail.com</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Lập trình viên Frontend</td>
+                            <td>
+                                <span class="badge bg-light text-dark">HTML</span>
+                                <span class="badge bg-light text-dark">CSS</span>
+                                <span class="badge bg-light text-dark">JavaScript</span>
+                            </td>
+                            <td>3 năm</td>
+                            <td><span class="badge bg-success">95%</span></td>
+                            <td><span class="badge bg-warning text-dark">Đang xem xét</span></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Xem chi tiết</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-calendar-alt me-2"></i>Mời phỏng vấn</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Liên hệ</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-times-circle me-2"></i>Từ chối</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar me-3">
+                                        <img src="~/images/logo.png" class="rounded-circle w-10 h-10" alt="Avatar">
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">Trần Thị B</h6>
+                                        <small class="text-muted">tranthib@gmail.com</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Lập trình viên Backend</td>
+                            <td>
+                                <span class="badge bg-light text-dark">.NET</span>
+                                <span class="badge bg-light text-dark">C#</span>
+                                <span class="badge bg-light text-dark">SQL</span>
+                            </td>
+                            <td>5 năm</td>
+                            <td><span class="badge bg-success">92%</span></td>
+                            <td><span class="badge bg-info text-dark">Đã mời phỏng vấn</span></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Xem chi tiết</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-calendar-alt me-2"></i>Đổi lịch phỏng vấn</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Liên hệ</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-times-circle me-2"></i>Từ chối</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar me-3">
+                                        <img src="~/images/logo.png" class="rounded-circle w-10 h-10" alt="Avatar">
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">Lê Văn C</h6>
+                                        <small class="text-muted">levanc@gmail.com</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>UI/UX Designer</td>
+                            <td>
+                                <span class="badge bg-light text-dark">Figma</span>
+                                <span class="badge bg-light text-dark">Adobe XD</span>
+                                <span class="badge bg-light text-dark">Sketch</span>
+                            </td>
+                            <td>2 năm</td>
+                            <td><span class="badge bg-warning text-dark">78%</span></td>
+                            <td><span class="badge bg-secondary">Mới nộp hồ sơ</span></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Xem chi tiết</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-calendar-alt me-2"></i>Mời phỏng vấn</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Liên hệ</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-times-circle me-2"></i>Từ chối</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <button class="btn btn-sm btn-primary me-2">
+                        <i class="fas fa-envelope me-1"></i>Liên hệ đã chọn
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-calendar-alt me-1"></i>Mời phỏng vấn đã chọn
+                    </button>
+                </div>
+                <nav>
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phân tích dữ liệu và chấm điểm AI -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Chấm điểm & Phân tích dữ liệu</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="mb-3">AI tự động chấm điểm ứng viên</h6>
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Mức độ phù hợp theo vị trí</span>
+                            <span class="text-success">85% trung bình</span>
+                        </div>
+                        <div class="progress mb-3" style="height: 10px;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 85%"></div>
+                        </div>
+                        <small class="text-muted">AI phân tích hồ sơ, kỹ năng và kinh nghiệm của ứng viên để đánh giá mức độ phù hợp với vị trí đang tuyển dụng.</small>
+                    </div>
+
+                    <hr>
+
+                    <h6 class="mb-3">Phân tích xu hướng tuyển dụng</h6>
+                    <div class="chart-container" style="position: relative; width: 100%;">
+                        <canvas id="recruitmentChart"></canvas>
+                    </div>
+                    <div class="text-center mt-3">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-sm btn-outline-secondary active">30 ngày</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">3 tháng</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">6 tháng</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">1 năm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="fas fa-lightbulb me-2"></i>Phân tích kỹ năng ứng viên</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h6 class="mb-3">Top kỹ năng được yêu cầu</h6>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>JavaScript</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="progress mb-3" style="height: 8px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 85%"></div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>React</span>
+                            <span>78%</span>
+                        </div>
+                        <div class="progress mb-3" style="height: 8px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 78%"></div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>.NET</span>
+                            <span>65%</span>
+                        </div>
+                        <div class="progress mb-3" style="height: 8px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 65%"></div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>SQL</span>
+                            <span>62%</span>
+                        </div>
+                        <div class="progress mb-3" style="height: 8px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 62%"></div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Python</span>
+                            <span>48%</span>
+                        </div>
+                        <div class="progress mb-3" style="height: 8px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 48%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal mời phỏng vấn-->
+<div class="modal fade" id="interviewModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Mời phỏng vấn</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Ứng viên</label>
+                    <input type="text" class="form-control" value="Nguyễn Văn A" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Ngày phỏng vấn</label>
+                    <input type="date" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Thời gian</label>
+                    <input type="time" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Hình thức</label>
+                    <select class="form-select">
+                        <option>Trực tiếp tại văn phòng</option>
+                        <option>Phỏng vấn online</option>
+                        <option>Phỏng vấn qua điện thoại</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Ghi chú</label>
+                    <textarea class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary">Gửi lời mời</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript cho các biểu đồ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Biểu đồ xu hướng tuyển dụng
+        const recruitmentCtx = document.getElementById('recruitmentChart').getContext('2d');
+        const recruitmentChart = new Chart(recruitmentCtx, {
+            type: 'line',
+            data: {
+                labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+                datasets: [{
+                    label: 'Số lượng ứng viên',
+                    data: [12, 19, 15, 17, 22, 25, 32, 38, 25, 30, 35, 28],
+                    borderColor: '#3498db',
+                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Tuyển dụng thành công',
+                    data: [5, 7, 4, 6, 8, 10, 12, 15, 10, 12, 14, 11],
+                    borderColor: '#2ecc71',
+                    backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            boxWidth: 10,
+                            font: {
+                                size: 11
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                size: 10
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 10
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Biểu đồ thống kê tình trạng
+        const statusCtx = document.getElementById('statusChart').getContext('2d');
+        const statusChart = new Chart(statusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Mới nộp', 'Đang xem xét', 'Đã mời PV', 'Đã phỏng vấn', 'Đã nhận việc', 'Từ chối'],
+                datasets: [{
+                    data: [25, 15, 10, 8, 5, 7],
+                    backgroundColor: [
+                        '#3498db',
+                        '#f1c40f',
+                        '#9b59b6',
+                        '#1abc9c',
+                        '#2ecc71',
+                        '#e74c3c'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            boxWidth: 10,
+                            font: {
+                                size: 10
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
