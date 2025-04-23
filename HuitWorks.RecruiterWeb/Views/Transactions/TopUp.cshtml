@@ -1,0 +1,216 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nạp tiền tài khoản</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #094174;
+        }
+
+        .text-primary {
+            color: #094174;
+        }
+
+        .bg-primary {
+            background-color: #094174;
+        }
+
+        .border-primary {
+            border-color: #094174;
+        }
+
+        .hover-bg-primary:hover {
+            background-color: #07325a;
+        }
+
+        .bg-primary-light {
+            background-color: #e6eef4;
+        }
+
+        .payment-method {
+            transition: all 0.3s ease;
+        }
+
+            .payment-method:hover {
+                transform: translateY(-5px);
+            }
+
+            .payment-method.selected {
+                border-color: #094174;
+                background-color: #e6eef4;
+            }
+    </style>
+</head>
+<body>
+    <!-- Chỉ hiển thị phần body, giả định phần sidebar và header đã được xử lý bởi layout -->
+    <div class="container mx-auto px-4 py-6">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h1 class="text-2xl font-bold text-gray-800 mb-6">Nạp tiền vào tài khoản</h1>
+
+            <!-- Thông tin số dư -->
+            <div class="bg-primary-light rounded-md p-4 mb-8">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600">Số dư hiện tại</p>
+                        <h2 class="text-3xl font-bold" style="color: #094174">0 VNĐ</h2>
+                    </div>
+                    <div>
+                        <button class="hover:bg-opacity-90 text-white px-4 py-2 rounded-md text-sm flex items-center" style="background: #094174">
+                            <i class="fas fa-history mr-2"></i> Lịch sử giao dịch
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form nạp tiền -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Số tiền muốn nạp</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-gray-50 border border-gray-200 rounded-md p-4 text-center cursor-pointer hover:bg-gray-100">
+                        <p class="font-bold" style="color: #094174">500.000 VNĐ</p>
+                    </div>
+                    <div class="bg-gray-50 border border-gray-200 rounded-md p-4 text-center cursor-pointer hover:bg-gray-100">
+                        <p class="font-bold" style="color: #094174">1.000.000 VNĐ</p>
+                    </div>
+                    <div class="bg-gray-50 border border-gray-200 rounded-md p-4 text-center cursor-pointer hover:bg-gray-100">
+                        <p class="font-bold" style="color: #094174">2.000.000 VNĐ</p>
+                    </div>
+                    <div class="bg-gray-50 border border-gray-200 rounded-md p-4 text-center cursor-pointer hover:bg-gray-100">
+                        <p class="font-bold" style="color: #094174">5.000.000 VNĐ</p>
+                    </div>
+                    <div class="bg-gray-50 border border-gray-200 rounded-md p-4 text-center cursor-pointer hover:bg-gray-100">
+                        <p class="font-bold" style="color: #094174">10.000.000 VNĐ</p>
+                    </div>
+                    <div class="bg-white border p-4 cursor-pointer" style="border-color: #094174">
+                        <input type="text" placeholder="Số tiền khác" class="w-full text-center outline-none" />
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Phương thức thanh toán</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Phương thức thanh toán 1 -->
+                        <div class="payment-method border border-gray-200 rounded-lg p-4 cursor-pointer flex flex-col items-center">
+                            <div class="h-12 w-12 rounded-full flex items-center justify-center mb-3" style="color: #094174">
+                                <i class="fas fa-credit-card text-xl"></i>
+                            </div>
+                            <h4 class="font-medium">Thẻ ngân hàng</h4>
+                            <p class="text-gray-500 text-sm text-center mt-2">Thanh toán qua thẻ ATM/Internet Banking</p>
+                        </div>
+
+                        <!-- Phương thức thanh toán 2 -->
+                        <div class="payment-method border border-gray-200 rounded-lg p-4 cursor-pointer flex flex-col items-center">
+                            <div class="h-12 w-12 rounded-full flex items-center justify-center mb-3" style="color: #094174">
+                                <i class="fas fa-wallet text-xl"></i>
+                            </div>
+                            <h4 class="font-medium">Ví điện tử</h4>
+                            <p class="text-gray-500 text-sm text-center mt-2">MoMo, ZaloPay, VNPay, ShopeePay</p>
+                        </div>
+
+                        <!-- Phương thức thanh toán 3 -->
+                        <div class="payment-method border border-gray-200 rounded-lg p-4 cursor-pointer flex flex-col items-center">
+                            <div class="h-12 w-12 rounded-full flex items-center justify-center mb-3" style="color: #094174">
+                                <i class="fas fa-university text-xl"></i>
+                            </div>
+                            <h4 class="font-medium">Chuyển khoản</h4>
+                            <p class="text-gray-500 text-sm text-center mt-2">Chuyển khoản ngân hàng trực tiếp</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chi tiết phương thức thanh toán -->
+                <div class="border border-gray-200 rounded-lg p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Chi tiết thanh toán</h3>
+
+                    <!-- Thông tin ngân hàng - hiển thị khi chọn chuyển khoản -->
+                    <div class="bg-gray-50 p-4 rounded-md mb-4">
+                        <p class="font-medium mb-2">Thông tin tài khoản nhận tiền:</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-gray-600 text-sm">Ngân hàng:</p>
+                                <p class="font-medium">Vietcombank</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-600 text-sm">Số tài khoản:</p>
+                                <p class="font-medium">0123456789</p>
+                                <button class="text-primary text-sm flex items-center mt-1">
+                                    <i class="far fa-copy mr-1"></i> Sao chép
+                                </button>
+                            </div>
+                            <div>
+                                <p class="text-gray-600 text-sm">Chủ tài khoản:</p>
+                                <p class="font-medium">CÔNG TY TNHH TUYỂN DỤNG ABC</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-600 text-sm">Nội dung chuyển khoản:</p>
+                                <p class="font-medium">NAP [mã nhà tuyển dụng]</p>
+                                <button class="text-primary text-sm flex items-center mt-1">
+                                    <i class="far fa-copy mr-1"></i> Sao chép
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center mb-3">
+                        <p class="text-gray-600">Số tiền nạp:</p>
+                        <p class="font-bold">1.000.000 VNĐ</p>
+                    </div>
+                    <div class="flex justify-between items-center mb-3">
+                        <p class="text-gray-600">Phí giao dịch:</p>
+                        <p class="font-bold">0 VNĐ</p>
+                    </div>
+                    <div class="border-t border-gray-200 pt-3 flex justify-between items-center">
+                        <p class="font-semibold">Tổng thanh toán:</p>
+                        <p class="font-bold text-xl text-primary">1.000.000 VNĐ</p>
+                    </div>
+                </div>
+
+                <!-- Nút thanh toán -->
+                <div class="flex justify-center">
+                    <button class="hover:bg-opacity-90 text-white font-medium py-3 px-8 rounded-md text-lg" style="background: #094174">
+                        Thanh toán ngay
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hướng dẫn và câu hỏi thường gặp -->
+            <div class="mt-12">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Hướng dẫn và câu hỏi thường gặp</h3>
+                <div class="bg-gray-50 rounded-md p-4">
+                    <details class="mb-3">
+                        <summary class="font-medium cursor-pointer">Tôi có thể sử dụng số dư cho những gì?</summary>
+                        <p class="mt-2 text-gray-600">Số dư tài khoản có thể được sử dụng để đăng tin tuyển dụng, xem hồ sơ ứng viên, và mua các dịch vụ cao cấp khác trên hệ thống.</p>
+                    </details>
+                    <details class="mb-3">
+                        <summary class="font-medium cursor-pointer">Làm thế nào để xác nhận giao dịch chuyển khoản?</summary>
+                        <p class="mt-2 text-gray-600">Sau khi chuyển khoản, hệ thống sẽ tự động cập nhật số dư trong vòng 24 giờ. Nếu sau 24 giờ chưa được cập nhật, vui lòng liên hệ với bộ phận hỗ trợ.</p>
+                    </details>
+                    <details>
+                        <summary class="font-medium cursor-pointer">Tôi cần hỗ trợ thêm về việc nạp tiền</summary>
+                        <p class="mt-2 text-gray-600">Vui lòng liên hệ với chúng tôi qua email support@example.com hoặc hotline 1900 1234 để được hỗ trợ.</p>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Xử lý chọn phương thức thanh toán
+            const paymentMethods = document.querySelectorAll('.payment-method');
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', function() {
+                    // Remove selected class from all methods
+                    paymentMethods.forEach(m => m.classList.remove('selected'));
+                    // Add selected class to clicked method
+                    this.classList.add('selected');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -2,191 +2,1212 @@
 @{
     ViewData["Title"] = "Tạo bài tuyển dụng mới";
 }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Bài Đăng Tuyển Dụng</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script> *@
+    @* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css"> *@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.6/quill.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.6/quill.snow.css">
+    <style>
+        :root {
+            --primary-color: #094174; /* màu chủ đạo */
+            --primary-light: #0f5998; /* sáng hơn một chút */
+            --primary-dark: #062c57; /* tối hơn một chút  */
+        }
 
-<div class="container-fluid py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="h3 mb-2 text-gray-800">Tạo bài tuyển dụng mới</h1>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none">Quản lý tuyển dụng</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Tạo mới</li>
-                </ol>
-            </nav>
-        </div>
-        <div>
-            <a asp-action="Index" class="btn btn-outline-secondary">
-                <i class="fas fa-arrow-left me-1"></i>Quay lại
-            </a>
-        </div>
-    </div>
+        /*============  Khung form chung  ============*/
+        .job-post-form {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+        }
 
-    <div class="card shadow border-0 rounded-lg">
-        <div class="card-header bg-white px-4 py-3 border-bottom">
-            <h5 class="mb-0 text-primary"><i class="fas fa-file-alt me-2"></i>Thông tin bài tuyển dụng</h5>
-        </div>
-        <div class="card-body p-4">
-            <form asp-action="Create" method="post" id="jobForm">
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 mb-4" role="alert"></div>
+        /*============  Section Heading  ============*/
+        .section-title {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: var(--primary-dark);
+        }
 
-                <div class="row g-4">
-                    <div class="col-lg-8">
-                        <div class="card shadow-sm border-0 h-100">
-                            <div class="card-header bg-light py-3">
-                                <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Thông tin chính</h6>
+        .form-label {
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        .required-field::after {
+            content: "*";
+            color: #e74c3c;
+            margin-left: 4px;
+        }
+
+        /*============  Buttons  ============*/
+        .btn-post-job {
+            background-color: #2ecc71;
+            border-color: #27ae60;
+            padding: 10px 25px;
+            font-weight: 600;
+        }
+
+            .btn-post-job:hover {
+                background-color: #27ae60;
+                border-color: #219d54;
+            }
+
+        .btn-preview {
+            background-color: var(--primary-color);
+            border-color: var(--primary-dark);
+            padding: 10px 25px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+            .btn-preview:hover {
+                background-color: var(--primary-dark);
+                border-color: var(--primary-dark);
+                color: #fff;
+            }
+
+        .btn-draft {
+            background-color: #95a5a6;
+            border-color: #7f8c8d;
+            padding: 10px 25px;
+            font-weight: 600;
+        }
+
+            .btn-draft:hover {
+                background-color: #7f8c8d;
+                border-color: #6c7a7d;
+            }
+
+        /*============  Quill  ============*/
+        #editor-container {
+            height: 300px;
+            margin-bottom: 20px;
+        }
+
+        /*============  Benefit item  ============*/
+        .benefit-item {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .remove-benefit {
+            color: #e74c3c;
+            cursor: pointer;
+        }
+
+        /*============  Drag‑&‑Drop Zone  ============*/
+        .drag-drop-zone {
+            border: 2px dashed #bdc3c7;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .drag-drop-zone:hover {
+                border-color: var(--primary-color);
+                background-color: #f0f5fc;
+            }
+
+        /*============  Skill Tags  ============*/
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .skill-tag {
+            background-color: #e8f1fc;
+            color: var(--primary-light);
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .remove-tag {
+            margin-left: 5px;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+
+            .remove-tag:hover {
+                color: #e74c3c;
+            }
+
+        /*============  Page Header  ============*/
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        /*============  Progress & Steps  ============*/
+        .progress-container {
+            margin-bottom: 25px;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #ecf0f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 5px;
+            color: #7f8c8d;
+            font-weight: bold;
+        }
+
+        .active-step .step-circle {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .complete-step .step-circle {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .step-title {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .active-step .step-title {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .complete-step .step-title {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .step-line {
+            position: absolute;
+            top: 15px;
+            height: 2px;
+            background-color: #ecf0f1;
+            width: 100%;
+            left: -50%;
+            z-index: -1;
+        }
+
+        .active-step .step-line,
+        .complete-step .step-line {
+            background-color: var(--primary-color);
+        }
+
+        /*============  Tips  ============*/
+        .tip-container {
+            background-color: #f9f9f9;
+            border-left: 4px solid #f1c40f;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .tip-title {
+            color: #d35400;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+            .tip-title i {
+                margin-right: 8px;
+            }
+
+        /*============  Preview Styles  ============*/
+        .job-title-preview {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .company-name-preview {
+            font-size: 18px;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .location-preview {
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+            .location-preview i {
+                margin-right: 5px;
+            }
+
+        .salary-preview {
+            background-color: #e8f8f5;
+            color: #16a085;
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /*============  Helper overrides for Bootstrap ============*/
+        .bg-info {
+            background-color: var(--primary-color) !important;
+        }
+
+        .text-info {
+            color: var(--primary-color) !important;
+        }
+
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+
+        .badge.bg-primary {
+            background-color: var(--primary-color) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4 mb-5">
+        <div class="page-header">
+            <h1><i class="fas fa-bullhorn me-2"></i>Tạo Bài Đăng Tuyển Dụng</h1>
+            <p class="mb-0">Hoàn thiện các thông tin dưới đây để đăng tuyển vị trí mới</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress" style="height: 10px;">
+                <div class="progress-bar bg-info" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="step-indicator mt-2">
+                <div class="step active-step">
+                    <div class="step-line"></div>
+                    <div class="step-circle">1</div>
+                    <div class="step-title">Thông tin cơ bản</div>
+                </div>
+                <div class="step">
+                    <div class="step-line"></div>
+                    <div class="step-circle">2</div>
+                    <div class="step-title">Mô tả & yêu cầu</div>
+                </div>
+                <div class="step">
+                    <div class="step-line"></div>
+                    <div class="step-circle">3</div>
+                    <div class="step-title">Đãi ngộ & hoàn tất</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="job-post-form">
+                    <form id="createJobForm" method="post">
+                        <div class="section-title">
+                            <h4><i class="fas fa-info-circle me-2"></i>Thông tin cơ bản</h4>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="jobTitle" class="form-label required-field">Chức danh công việc</label>
+                                <input type="text" class="form-control" id="jobTitle" name="JobTitle" placeholder="VD: Senior React Developer" required>
                             </div>
-                            <div class="card-body p-4">
-                                <div class="form-group mb-4">
-                                    <label asp-for="Title" class="form-label fw-medium">Tiêu đề công việc <span class="text-danger">*</span></label>
-                                    <input asp-for="Title" class="form-control form-control-lg" placeholder="Nhập tiêu đề vị trí tuyển dụng" />
-                                    <span asp-validation-for="Title" class="text-danger"></span>
-                                </div>
+                            <div class="col-md-6">
+                                <label for="jobCategory" class="form-label required-field">Ngành nghề</label>
+                                <select class="form-select" id="jobCategory" name="CategoryId" required>
+                                    <option value="" selected disabled>-- Chọn ngành nghề --</option>
+                                    <option value="1">Công nghệ thông tin</option>
+                                    <option value="2">Tài chính - Kế toán</option>
+                                    <option value="3">Marketing</option>
+                                    <option value="4">Nhân sự</option>
+                                    <option value="5">Bán hàng</option>
+                                    <option value="6">Quản lý dự án</option>
+                                    <option value="7">Hành chính - Văn phòng</option>
+                                    <option value="8">Khác</option>
+                                </select>
+                            </div>
+                        </div>
 
-                                <div class="form-group mb-4">
-                                    <label asp-for="Description" class="form-label fw-medium">Mô tả công việc <span class="text-danger">*</span></label>
-                                    <div class="border rounded">
-                                        <textarea asp-for="Description" class="form-control editor" rows="8" placeholder="Nhập mô tả chi tiết về công việc"></textarea>
-                                    </div>
-                                    <span asp-validation-for="Description" class="text-danger"></span>
-                                    <div class="form-text">Mô tả chi tiết về vị trí, trách nhiệm và nhiệm vụ của công việc.</div>
-                                </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="jobType" class="form-label required-field">Loại hình công việc</label>
+                                <select class="form-select" id="jobType" name="JobType" required>
+                                    <option value="" selected disabled>-- Chọn loại hình --</option>
+                                    <option value="1">Toàn thời gian</option>
+                                    <option value="2">Bán thời gian</option>
+                                    <option value="3">Thực tập</option>
+                                    <option value="4">Freelancer</option>
+                                    <option value="5">Remote</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="experienceLevel" class="form-label required-field">Kinh nghiệm yêu cầu</label>
+                                <select class="form-select" id="experienceLevel" name="ExperienceLevel" required>
+                                    <option value="" selected disabled>-- Chọn yêu cầu kinh nghiệm --</option>
+                                    <option value="1">Không yêu cầu kinh nghiệm</option>
+                                    <option value="2">Dưới 1 năm</option>
+                                    <option value="3">1 - 3 năm</option>
+                                    <option value="4">3 - 5 năm</option>
+                                    <option value="5">5 - 10 năm</option>
+                                    <option value="6">Trên 10 năm</option>
+                                </select>
+                            </div>
+                        </div>
 
-                                <div class="form-group mb-3">
-                                    <label asp-for="Requirements" class="form-label fw-medium">Yêu cầu ứng viên <span class="text-danger">*</span></label>
-                                    <div class="border rounded">
-                                        <textarea asp-for="Requirements" class="form-control editor" rows="8" placeholder="Nhập yêu cầu đối với ứng viên"></textarea>
-                                    </div>
-                                    <span asp-validation-for="Requirements" class="text-danger"></span>
-                                    <div class="form-text">Liệt kê kỹ năng, kinh nghiệm và trình độ cần thiết cho vị trí này.</div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="location" class="form-label required-field">Địa điểm làm việc</label>
+                                <input type="text" class="form-control" id="location" name="Location" placeholder="VD: Hà Nội" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="deadline" class="form-label required-field">Hạn nộp hồ sơ</label>
+                                <input type="date" class="form-control" id="deadline" name="Deadline" required>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="salaryFrom" class="form-label">Mức lương từ (VNĐ)</label>
+                                <input type="number" class="form-control" id="salaryFrom" name="SalaryFrom" placeholder="VD: 15000000">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="salaryTo" class="form-label">Đến (VNĐ)</label>
+                                <input type="number" class="form-control" id="salaryTo" name="SalaryTo" placeholder="VD: 25000000">
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" id="negotiableSalary" name="NegotiableSalary">
+                                    <label class="form-check-label" for="negotiableSalary">
+                                        Mức lương thỏa thuận
+                                    </label>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="positions" class="form-label required-field">Số lượng tuyển</label>
+                                <input type="number" class="form-control" id="positions" name="Positions" min="1" value="1" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="gender" class="form-label">Giới tính</label>
+                                <select class="form-select" id="gender" name="Gender">
+                                    <option value="0" selected>Không yêu cầu</option>
+                                    <option value="1">Nam</option>
+                                    <option value="2">Nữ</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="section-title mt-4">
+                            <h4><i class="fas fa-file-alt me-2"></i>Mô tả & Yêu cầu công việc</h4>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editor" class="form-label required-field">Mô tả công việc</label>
+                            <div id="editor-container">
+                                <div id="editor"></div>
+                            </div>
+                            <input type="hidden" id="jobDescription" name="JobDescription">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="skillsInput" class="form-label">Kỹ năng yêu cầu</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="skillsInput" placeholder="Nhập kỹ năng và nhấn Enter">
+                                <button class="btn btn-outline-secondary" type="button" id="addSkillBtn">Thêm</button>
+                            </div>
+                            <div class="tag-container" id="skillTags"></div>
+                            <input type="hidden" id="skills" name="Skills">
+                        </div>
+
+                        <div class="section-title mt-4">
+                            <h4><i class="fas fa-gift me-2"></i>Đãi ngộ & Quyền lợi</h4>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Quyền lợi được hưởng</label>
+                            <div id="benefitsList">
+                                <div class="benefit-item">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="Benefits[]" placeholder="VD: Lương tháng 13, bảo hiểm sức khỏe,...">
+                                        <button class="btn btn-outline-danger remove-benefit" type="button">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-info mt-2" id="addBenefitBtn">
+                                <i class="fas fa-plus me-1"></i> Thêm quyền lợi
+                            </button>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="companyLogo" class="form-label">Logo công ty</label>
+                            <div class="drag-drop-zone" id="dropZone">
+                                <i class="fas fa-cloud-upload-alt fa-2x mb-2"></i>
+                                <p>Kéo và thả file ảnh hoặc click để chọn</p>
+                                <small class="text-muted">Định dạng hỗ trợ: JPG, PNG (Max: 2MB)</small>
+                            </div>
+                            <input type="file" class="form-control d-none" id="companyLogo" name="CompanyLogo" accept="image/*">
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="urgentJob" name="IsUrgent">
+                                <label class="form-check-label" for="urgentJob">
+                                    <span class="badge bg-danger">HOT</span> Đánh dấu là "Tuyển gấp"
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="tip-container">
+                            <div class="tip-title">
+                                <i class="fas fa-lightbulb"></i> Mẹo để có bài đăng hiệu quả
+                            </div>
+                            <ul class="mt-2 mb-0">
+                                <li>Mô tả công việc chi tiết và rõ ràng sẽ thu hút ứng viên phù hợp hơn</li>
+                                <li>Nêu rõ lợi ích, chế độ đãi ngộ để tăng tính cạnh tranh</li>
+                                <li>Đặt tiêu đề nổi bật giúp bài đăng được chú ý nhiều hơn</li>
+                            </ul>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" class="btn btn-draft">
+                                <i class="fas fa-save me-1"></i> Lưu nháp
+                            </button>
+                            <div>
+                                <button type="button" class="btn btn-preview me-2" data-bs-toggle="modal" data-bs-target="#previewModal">
+                                    <i class="fas fa-eye me-1"></i> Xem trước
+                                </button>
+                                <button type="submit" class="btn btn-post-job">
+                                    <i class="fas fa-paper-plane me-1"></i> Đăng tuyển
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="job-post-form position-sticky" style="top: 20px;">
+                    <h4 class="section-title"><i class="fas fa-chart-line me-2"></i>Tối ưu bài đăng</h4>
+
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Đánh giá bài đăng</h5>
+                            <div class="progress mb-3" style="height: 8px;">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p class="card-text">Hoàn thiện: <strong>65%</strong></p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span><i class="fas fa-check-circle text-success me-2"></i> Thông tin cơ bản</span>
+                                    <span class="badge bg-success rounded-pill">100%</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span><i class="fas fa-exclamation-circle text-warning me-2"></i> Mô tả công việc</span>
+                                    <span class="badge bg-warning rounded-pill">50%</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span><i class="fas fa-times-circle text-danger me-2"></i> Quyền lợi & đãi ngộ</span>
+                                    <span class="badge bg-danger rounded-pill">25%</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
 
-                    <div class="col-lg-4">
-                        <div class="card shadow-sm border-0 mb-4">
-                            <div class="card-header bg-light py-3">
-                                <h6 class="mb-0"><i class="fas fa-cog me-2"></i>Cài đặt tuyển dụng</h6>
-                            </div>
-                            <div class="card-body p-4">
-                                <div class="form-group mb-3">
-                                    <label asp-for="Location" class="form-label fw-medium">Địa điểm làm việc <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-light"><i class="fas fa-map-marker-alt"></i></span>
-                                        <input asp-for="Location" class="form-control" placeholder="Nhập địa điểm làm việc" />
-                                    </div>
-                                    <span asp-validation-for="Location" class="text-danger"></span>
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label asp-for="Salary" class="form-label fw-medium">Mức lương</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-light"><i class="fas fa-money-bill-wave"></i></span>
-                                        <input asp-for="Salary" class="form-control" placeholder="VD: 15-20 triệu, Thỏa thuận..." />
-                                    </div>
-                                    <span asp-validation-for="Salary" class="text-danger"></span>
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label asp-for="RequiredCandidates" class="form-label fw-medium">Số lượng cần tuyển <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-light"><i class="fas fa-users"></i></span>
-                                        <input asp-for="RequiredCandidates" class="form-control" type="number" min="1" max="100" placeholder="Nhập số lượng" />
-                                    </div>
-                                    <span asp-validation-for="RequiredCandidates" class="text-danger"></span>
-                                </div>
-
-                                <div class="form-group">
-                                    <label asp-for="ExpiryDate" class="form-label fw-medium">Ngày hết hạn <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-light"><i class="fas fa-calendar-alt"></i></span>
-                                        <input asp-for="ExpiryDate" class="form-control datepicker" type="date" />
-                                    </div>
-                                    <span asp-validation-for="ExpiryDate" class="text-danger"></span>
-                                    <div class="form-text">Thời hạn nhận hồ sơ ứng tuyển.</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card shadow-sm border-0">
-                            <div class="card-header bg-light py-3">
-                                <h6 class="mb-0"><i class="fas fa-check-circle me-2"></i>Hoàn tất</h6>
-                            </div>
-                            <div class="card-body p-4">
-                                <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-primary btn-lg">
-                                        <i class="fas fa-save me-2"></i>Lưu bài tuyển dụng
-                                    </button>
-                                    <a asp-action="Index" class="btn btn-outline-secondary">
-                                        Hủy
-                                    </a>
-                                </div>
-                            </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Thống kê</h5>
+                            <p class="card-text">Những vị trí tương tự thường nhận được:</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-users me-2 text-primary"></i> <strong>15-20</strong> ứng viên/tuần</li>
+                                <li class="mb-2"><i class="fas fa-eye me-2 text-info"></i> <strong>200+</strong> lượt xem/tuần</li>
+                                <li><i class="fas fa-clock me-2 text-success"></i> Thời gian đóng tuyển trung bình: <strong>14 ngày</strong></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
-</div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <!-- Preview Modal -->
+    <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true" style="z-index: 1050 !important;">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="previewModalLabel">Xem trước bài đăng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="job-title-preview" id="previewJobTitle">Senior React Developer</div>
+                    <div class="company-name-preview">Công ty ABC</div>
+                    <div class="location-preview">
+                        <i class="fas fa-map-marker-alt"></i> <span id="previewLocation">Hà Nội</span>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <span class="badge bg-primary" id="previewJobType">Toàn thời gian</span>
+                        <span class="badge bg-info" id="previewExperience">3-5 năm kinh nghiệm</span>
+                        <span class="badge bg-warning text-dark" id="previewDeadline">Hạn nộp: 30/04/2025</span>
+                    </div>
+                    <div class="salary-preview" id="previewSalary">15.000.000 - 25.000.000 VNĐ</div>
+
+                    <div class="mb-4">
+                        <h5>Mô tả công việc</h5>
+                        <div id="previewDescription"></div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5>Kỹ năng yêu cầu</h5>
+                        <div id="previewSkills" class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-light text-dark border">React.js</span>
+                            <span class="badge bg-light text-dark border">JavaScript</span>
+                            <span class="badge bg-light text-dark border">HTML/CSS</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h5>Quyền lợi được hưởng</h5>
+                        <ul id="previewBenefits">
+                            <li>Lương tháng 13, thưởng các dịp lễ tết</li>
+                            <li>Bảo hiểm sức khỏe cho nhân viên và người thân</li>
+                            <li>Chế độ nghỉ phép linh hoạt</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="closePreviewBtn">Đóng</button>
+                    <button type="button" class="btn btn-primary">Chỉnh sửa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function() {
-            // Khởi tạo Summernote với giao diện cải tiến
-            $('.editor').summernote({
-                height: 250,
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'underline', 'clear']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link']],
-                    ['view', ['fullscreen', 'codeview', 'help']]
-                ],
-                placeholder: 'Nhập nội dung chi tiết ở đây...',
-                styleTags: [
-                    'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
-                ],
-                callbacks: {
-                    onImageUpload: function(files) {
-                        toastr.warning('Chức năng upload ảnh không được hỗ trợ trong trình soạn thảo này.');
+            // Initialize Quill editor
+            var quill = new Quill('#editor', {
+                theme: 'snow',
+                placeholder: 'Nhập mô tả chi tiết về công việc, trách nhiệm, quyền hạn,...',
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                        ['link'],
+                        ['clean']
+                    ]
+                }
+            });
+
+            // Khai báo biến để theo dõi trạng thái modal
+            var previewModal = null;
+            
+            // Khắc phục vấn đề modal
+            const previewBtn = document.querySelector('.btn-preview');
+            if (previewBtn) {
+                previewBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Đảm bảo modal được đặt đúng vị trí
+                    const modalElement = document.getElementById('previewModal');
+                    if (modalElement && modalElement.parentNode !== document.body) {
+                        document.body.appendChild(modalElement);
+                    }
+                    
+                    // Cập nhật thông tin trước khi hiển thị
+                    updatePreviewContent();
+                    
+                    // Hiển thị modal theo cách thủ công
+                    previewModal = new bootstrap.Modal(document.getElementById('previewModal'), {
+                        backdrop: true, // Thay đổi từ 'static' thành true
+                        keyboard: true // Cho phép đóng bằng ESC
+                    });
+                    previewModal.show();
+                });
+            }
+            
+            // Xử lý đóng modal
+            document.getElementById('closePreviewBtn').addEventListener('click', function() {
+                if (previewModal) {
+                    previewModal.hide();
+                    
+                    // Đảm bảo backdrop được xóa hoàn toàn
+                    setTimeout(function() {
+                        const backdrops = document.querySelectorAll('.modal-backdrop');
+                        backdrops.forEach(function(backdrop) {
+                            backdrop.remove();
+                        });
+                        document.body.classList.remove('modal-open');
+                        document.body.style.overflow = '';
+                        document.body.style.paddingRight = '';
+                    }, 200);
+                }
+            });
+            
+            // Xử lý sự kiện khi modal đóng để đảm bảo làm sạch backdrop
+            document.getElementById('previewModal').addEventListener('hidden.bs.modal', function (event) {
+                // Đảm bảo backdrop được xóa hoàn toàn
+                setTimeout(function() {
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach(function(backdrop) {
+                        backdrop.remove();
+                    });
+                    document.body.classList.remove('modal-open');
+                    document.body.style.overflow = '';
+                    document.body.style.paddingRight = '';
+                }, 200);
+            });
+
+            // Add benefit
+            $('#addBenefitBtn').click(function() {
+                var newBenefit = `
+                    <div class="benefit-item">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="Benefits[]" placeholder="VD: Lương tháng 13, bảo hiểm sức khỏe,...">
+                            <button class="btn btn-outline-danger remove-benefit" type="button">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                $('#benefitsList').append(newBenefit);
+            });
+
+            // Remove benefit
+            $(document).on('click', '.remove-benefit', function() {
+                $(this).closest('.benefit-item').remove();
+            });
+
+            // Add skill tags
+            $('#addSkillBtn, #skillsInput').on('click keypress', function(e) {
+                if ((e.type === 'click') || (e.type === 'keypress' && e.which === 13)) {
+                    e.preventDefault();
+                    addSkillTag();
+                }
+            });
+
+            function addSkillTag() {
+                var skill = $('#skillsInput').val().trim();
+                if (skill) {
+                    var skillTag = `
+                        <div class="skill-tag">
+                            ${skill}
+                            <span class="remove-tag ms-2"><i class="fas fa-times"></i></span>
+                        </div>
+                    `;
+                    $('#skillTags').append(skillTag);
+                    $('#skillsInput').val('');
+                    updateSkillsInput();
+                }
+            }
+
+            // Remove skill tag
+            $(document).on('click', '.remove-tag', function() {
+                $(this).closest('.skill-tag').remove();
+                updateSkillsInput();
+            });
+
+            function updateSkillsInput() {
+                var skills = [];
+                $('.skill-tag').each(function() {
+                    skills.push($(this).text().trim());
+                });
+                $('#skills').val(JSON.stringify(skills));
+            }
+            
+            // Cập nhật nội dung xem trước
+            function updatePreviewContent() {
+                $('#previewJobTitle').text($('#jobTitle').val() || 'Chức danh công việc');
+                $('#previewLocation').text($('#location').val() || 'Địa điểm');
+
+                // Job type
+                const jobTypeText = $('#jobType option:selected').text();
+                if (jobTypeText !== '-- Chọn loại hình --') {
+                    $('#previewJobType').text(jobTypeText);
+                }
+
+                // Experience
+                const experienceText = $('#experienceLevel option:selected').text();
+                if (experienceText !== '-- Chọn yêu cầu kinh nghiệm --') {
+                    $('#previewExperience').text(experienceText);
+                }
+
+                // Deadline
+                if ($('#deadline').val()) {
+                    const deadline = new Date($('#deadline').val());
+                    const formattedDate = deadline.getDate() + '/' + (deadline.getMonth() + 1) + '/' + deadline.getFullYear();
+                    $('#previewDeadline').text('Hạn nộp: ' + formattedDate);
+                }
+
+                // Salary
+                const salaryFrom = $('#salaryFrom').val();
+                const salaryTo = $('#salaryTo').val();
+                const negotiable = $('#negotiableSalary').is(':checked');
+
+                if (negotiable) {
+                    $('#previewSalary').text('Thỏa thuận');
+                } else if (salaryFrom && salaryTo) {
+                    $('#previewSalary').text(formatNumber(salaryFrom) + ' - ' + formatNumber(salaryTo) + ' VNĐ');
+                } else if (salaryFrom) {
+                    $('#previewSalary').text('Từ ' + formatNumber(salaryFrom) + ' VNĐ');
+                } else if (salaryTo) {
+                    $('#previewSalary').text('Đến ' + formatNumber(salaryTo) + ' VNĐ');
+                } else {
+                    $('#previewSalary').text('Chưa cập nhật');
+                }
+
+                // Description
+                $('#previewDescription').html(quill.root.innerHTML);
+
+                // Skills
+                $('#previewSkills').empty();
+                $('.skill-tag').each(function() {
+                    let skillText = $(this).text().trim();
+                    $('#previewSkills').append(`<span class="badge bg-light text-dark border">${skillText}</span>`);
+                });
+
+                // Benefits
+                $('#previewBenefits').empty();
+                $('input[name="Benefits[]"]').each(function() {
+                    const benefitText = $(this).val().trim();
+                    if (benefitText) {
+                        $('#previewBenefits').append(`<li>${benefitText}</li>`);
+                    }
+                });
+            }
+
+            function formatNumber(num) {
+                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
+
+            // Drag and drop for logo
+            var dropZone = document.getElementById('dropZone');
+            var fileInput = document.getElementById('companyLogo');
+
+            dropZone.addEventListener('click', function() {
+                fileInput.click();
+            });
+
+            dropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                dropZone.classList.add('bg-light');
+            });
+
+            dropZone.addEventListener('dragleave', function() {
+                dropZone.classList.remove('bg-light');
+            });
+
+            dropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                dropZone.classList.remove('bg-light');
+
+                if (e.dataTransfer.files.length) {
+                    fileInput.files = e.dataTransfer.files;
+                    updateLogoPreview(e.dataTransfer.files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', function() {
+                if (fileInput.files.length) {
+                    updateLogoPreview(fileInput.files[0]);
+                }
+            });
+
+            function updateLogoPreview(file) {
+                if (file.type.match('image.*')) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        dropZone.innerHTML = `
+                            <img src="${e.target.result}" alt="Logo Preview" style="max-width: 100%; max-height: 150px;" class="mb-2">
+                            <p>Logo đã được tải lên</p>
+                            <button type="button" class="btn btn-sm btn-outline-danger" id="removeLogoBtn">Xóa</button>
+                        `;
+
+                        document.getElementById('removeLogoBtn').addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            resetLogoUpload();
+                        });
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            function resetLogoUpload() {
+                fileInput.value = '';
+                dropZone.innerHTML = `
+                    <i class="fas fa-cloud-upload-alt fa-2x mb-2"></i>
+                    <p>Kéo và thả file ảnh hoặc click để chọn</p>
+                    <small class="text-muted">Định dạng hỗ trợ: JPG, PNG (Max: 2MB)</small>
+                `;
+            }
+
+            // Form submission
+            $('#createJobForm').submit(function(e) {
+                e.preventDefault();
+
+                // Get content from Quill editor
+                var jobDescriptionContent = quill.root.innerHTML;
+                $('#jobDescription').val(jobDescriptionContent);
+
+                // Validate form
+                if (validateForm()) {
+                    // Here you would normally submit the form
+                    // For demo, just show success message
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Bài đăng tuyển dụng đã được tạo',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redirect to index page or job listing
+                            // window.location.href = '/JobPost/Index';
+                        }
+                    });
+                }
+            });
+
+            function validateForm() {
+                var isValid = true;
+
+                // Basic validation
+                if ($('#jobTitle').val().trim() === '') {
+                    isValid = false;
+                    showError('#jobTitle', 'Vui lòng nhập chức danh công việc');
+                } else {
+                    hideError('#jobTitle');
+                }
+
+                if ($('#jobCategory').val() === null) {
+                    isValid = false;
+                    showError('#jobCategory', 'Vui lòng chọn ngành nghề');
+                } else {
+                    hideError('#jobCategory');
+                }
+
+                if ($('#jobType').val() === null) {
+                    isValid = false;
+                    showError('#jobType', 'Vui lòng chọn loại hình công việc');
+                } else {
+                    hideError('#jobType');
+                }
+
+                if ($('#experienceLevel').val() === null) {
+                    isValid = false;
+                    showError('#experienceLevel', 'Vui lòng chọn yêu cầu kinh nghiệm');
+                } else {
+                    hideError('#experienceLevel');
+                }
+
+                if ($('#location').val().trim() === '') {
+                    isValid = false;
+                    showError('#location', 'Vui lòng nhập địa điểm làm việc');
+                } else {
+                    hideError('#location');
+                }
+
+                if ($('#deadline').val() === '') {
+                    isValid = false;
+                    showError('#deadline', 'Vui lòng chọn hạn nộp hồ sơ');
+                } else {
+                    hideError('#deadline');
+                }
+
+                if ($('#positions').val() < 1) {
+                    isValid = false;
+                    showError('#positions', 'Số lượng tuyển phải lớn hơn 0');
+                } else {
+                    hideError('#positions');
+                }
+
+                // Quill editor validation
+                var editorContent = quill.getText().trim();
+                if (editorContent.length < 50) {
+                    isValid = false;
+                    showError('#editor-container', 'Mô tả công việc phải có ít nhất 50 ký tự');
+                } else {
+                    hideError('#editor-container');
+                }
+
+                return isValid;
+            }
+
+            function showError(selector, message) {
+                $(selector).addClass('is-invalid');
+                if (!$(selector).next('.invalid-feedback').length) {
+                    $(selector).after(`<div class="invalid-feedback">${message}</div>`);
+                } else {
+                    $(selector).next('.invalid-feedback').text(message);
+                }
+            }
+
+            function hideError(selector) {
+                $(selector).removeClass('is-invalid');
+                $(selector).next('.invalid-feedback').remove();
+            }
+
+            // Hàm để thêm CSS cần thiết vào header
+            function addCustomStyles() {
+                const customStyles = `
+                    <style>
+                        /* Modal backdrop và modal z-index */
+                        .modal-backdrop {
+                            z-index: 1040 !important;
+                        }
+                        
+                        .modal {
+                            z-index: 1050 !important;
+                        }
+                        
+                        /* Đảm bảo không bị xung đột nếu modal nằm trong container */
+                        .modal-dialog {
+                            max-width: 800px;
+                            margin: 1.75rem auto;
+                            pointer-events: auto;
+                        }
+                        
+                        .modal-content {
+                            background-color: #fff;
+                            position: relative;
+                            display: flex;
+                            flex-direction: column;
+                            pointer-events: auto;
+                            outline: 0;
+                        }
+                        
+                        /* Đảm bảo nút đóng có thể click được */
+                        .btn-close {
+                            z-index: 2;
+                            position: relative;
+                        }
+                    </style>
+                `;
+                
+                $('head').append(customStyles);
+            }
+            
+            // Thêm CSS để đảm bảo modal hoạt động đúng
+            addCustomStyles();
+
+            // Multi-step form navigation
+            $('.step-circle').click(function() {
+                var stepIndex = $(this).text();
+                navigateToStep(stepIndex);
+            });
+
+            function navigateToStep(stepIndex) {
+                // Here you would implement step navigation logic
+                // For simplicity, just updating the progress bar and active step
+                $('.step').removeClass('active-step complete-step');
+
+                for (var i = 1; i <= 3; i++) {
+                    if (i < stepIndex) {
+                        $(`.step:nth-child(${i})`).addClass('complete-step');
+                    } else if (i == stepIndex) {
+                        $(`.step:nth-child(${i})`).addClass('active-step');
                     }
                 }
-            });
 
-            // Thông báo xác nhận khi rời trang có thay đổi
-            let formChanged = false;
-            $('#jobForm').on('input change', function() {
-                formChanged = true;
-            });
+                // Update progress bar
+                var progress = ((stepIndex - 1) / 2) * 100;
+                $('.progress-bar').css('width', progress + '%');
+                $('.progress-bar').attr('aria-valuenow', progress);
+            }
 
-            $(window).on('beforeunload', function() {
-                if (formChanged) {
-                    return "Bạn có thay đổi chưa lưu. Bạn có chắc chắn muốn rời đi?";
+            // Real-time form completion tracking
+            function updateFormCompletion() {
+                var totalFields = 12; // Adjust based on your required fields
+                var completedFields = 0;
+
+                // Basic info section
+                if ($('#jobTitle').val().trim() !== '') completedFields++;
+                if ($('#jobCategory').val() !== null) completedFields++;
+                if ($('#jobType').val() !== null) completedFields++;
+                if ($('#experienceLevel').val() !== null) completedFields++;
+                if ($('#location').val().trim() !== '') completedFields++;
+                if ($('#deadline').val() !== '') completedFields++;
+                if ($('#positions').val() > 0) completedFields++;
+
+                // Description section
+                var editorContent = quill.getText().trim();
+                if (editorContent.length >= 50) completedFields++;
+                if ($('.skill-tag').length > 0) completedFields++;
+
+                // Benefits section
+                var hasBenefits = false;
+                $('input[name="Benefits[]"]').each(function() {
+                    if ($(this).val().trim() !== '') {
+                        hasBenefits = true;
+                        return false;
+                    }
+                });
+                if (hasBenefits) completedFields++;
+
+                // Logo
+                if ($('#companyLogo').val() !== '') completedFields++;
+
+                // Update progress
+                var completion = Math.round((completedFields / totalFields) * 100);
+                $('.progress-bar.bg-warning').css('width', completion + '%');
+                $('.progress-bar.bg-warning').attr('aria-valuenow', completion);
+                $('strong:contains("65%")').text(completion + '%');
+
+                // Update section completion
+                updateSectionCompletion();
+            }
+
+            function updateSectionCompletion() {
+                // Basic info section - 7 fields
+                var basicInfoFields = ['#jobTitle', '#jobCategory', '#jobType', '#experienceLevel', '#location', '#deadline', '#positions'];
+                var basicInfoCompleted = 0;
+
+                basicInfoFields.forEach(function(field) {
+                    if ($(field).val() && $(field).val() !== '') basicInfoCompleted++;
+                });
+
+                var basicInfoPercentage = Math.round((basicInfoCompleted / basicInfoFields.length) * 100);
+                $('.list-group-item:contains("Thông tin cơ bản") .badge').text(basicInfoPercentage + '%');
+
+                // Description section - 2 fields
+                var descCompleted = 0;
+                var editorContent = quill.getText().trim();
+                if (editorContent.length >= 50) descCompleted++;
+                if ($('.skill-tag').length > 0) descCompleted++;
+
+                var descPercentage = Math.round((descCompleted / 2) * 100);
+                $('.list-group-item:contains("Mô tả công việc") .badge').text(descPercentage + '%');
+                $('.list-group-item:contains("Mô tả công việc") .badge').removeClass('bg-success bg-warning bg-danger');
+                if (descPercentage >= 80) {
+                    $('.list-group-item:contains("Mô tả công việc") .badge').addClass('bg-success');
+                } else if (descPercentage >= 40) {
+                    $('.list-group-item:contains("Mô tả công việc") .badge').addClass('bg-warning');
+                } else {
+                    $('.list-group-item:contains("Mô tả công việc") .badge').addClass('bg-danger');
                 }
-            });
 
-            // Loại bỏ cảnh báo khi submit form
-            $('#jobForm').on('submit', function() {
-                $(window).off('beforeunload');
-            });
+                // Benefits section - 2 fields
+                var benefitsCompleted = 0;
+                var hasBenefits = false;
+                $('input[name="Benefits[]"]').each(function() {
+                    if ($(this).val().trim() !== '') {
+                        hasBenefits = true;
+                        return false;
+                    }
+                });
+                if (hasBenefits) benefitsCompleted++;
+                if ($('#companyLogo').val() !== '') benefitsCompleted++;
 
-            // Hiển thị các thông báo validation với hiệu ứng
-            $('form').on('submit', function() {
-                if (!$(this).valid()) {
-                    toastr.error('Vui lòng kiểm tra lại thông tin nhập liệu!');
-                    $('html, body').animate({
-                        scrollTop: $('.text-danger').first().offset().top - 100
-                    }, 500);
-                    return false;
+                var benefitsPercentage = Math.round((benefitsCompleted / 2) * 100);
+                $('.list-group-item:contains("Quyền lợi & đãi ngộ") .badge').text(benefitsPercentage + '%');
+                $('.list-group-item:contains("Quyền lợi & đãi ngộ") .badge').removeClass('bg-success bg-warning bg-danger');
+                if (benefitsPercentage >= 80) {
+                    $('.list-group-item:contains("Quyền lợi & đãi ngộ") .badge').addClass('bg-success');
+                } else if (benefitsPercentage >= 40) {
+                    $('.list-group-item:contains("Quyền lợi & đãi ngộ") .badge').addClass('bg-warning');
+                } else {
+                    $('.list-group-item:contains("Quyền lợi & đãi ngộ") .badge').addClass('bg-danger');
                 }
-                return true;
+
+                // Update icons
+                $('.list-group-item:contains("Thông tin cơ bản") i').removeClass('fa-check-circle fa-exclamation-circle fa-times-circle text-success text-warning text-danger');
+                $('.list-group-item:contains("Mô tả công việc") i').removeClass('fa-check-circle fa-exclamation-circle fa-times-circle text-success text-warning text-danger');
+                $('.list-group-item:contains("Quyền lợi & đãi ngộ") i').removeClass('fa-check-circle fa-exclamation-circle fa-times-circle text-success text-warning text-danger');
+
+                if (basicInfoPercentage >= 80) {
+                    $('.list-group-item:contains("Thông tin cơ bản") i').addClass('fa-check-circle text-success');
+                } else if (basicInfoPercentage >= 40) {
+                    $('.list-group-item:contains("Thông tin cơ bản") i').addClass('fa-exclamation-circle text-warning');
+                } else {
+                    $('.list-group-item:contains("Thông tin cơ bản") i').addClass('fa-times-circle text-danger');
+                }
+
+                if (descPercentage >= 80) {
+                    $('.list-group-item:contains("Mô tả công việc") i').addClass('fa-check-circle text-success');
+                } else if (descPercentage >= 40) {
+                    $('.list-group-item:contains("Mô tả công việc") i').addClass('fa-exclamation-circle text-warning');
+                } else {
+                    $('.list-group-item:contains("Mô tả công việc") i').addClass('fa-times-circle text-danger');
+                }
+
+                if (benefitsPercentage >= 80) {
+                    $('.list-group-item:contains("Quyền lợi & đãi ngộ") i').addClass('fa-check-circle text-success');
+                } else if (benefitsPercentage >= 40) {
+                    $('.list-group-item:contains("Quyền lợi & đãi ngộ") i').addClass('fa-exclamation-circle text-warning');
+                } else {
+                    $('.list-group-item:contains("Quyền lợi & đãi ngộ") i').addClass('fa-times-circle text-danger');
+                }
+            }
+
+            // Monitor form changes to update completion status
+            $('form :input').on('input change', function() {
+                updateFormCompletion();
+            });
+
+            quill.on('text-change', function() {
+                updateFormCompletion();
+            });
+
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+
+            // Initialize the form completion status
+            updateFormCompletion();
+
+            // Salary toggle
+            $('#negotiableSalary').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#salaryFrom, #salaryTo').prop('disabled', true);
+                } else {
+                    $('#salaryFrom, #salaryTo').prop('disabled', false);
+                }
             });
         });
     </script>
-}
+
+    <!-- SweetAlert2 for notifications -->
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.1.9/sweetalert2.min.js"></script> *@
+    @* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.1.9/sweetalert2.min.css"> *@
+    <!-- SweetAlert2 11.x – dùng jsDelivr (ổn định hơn) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.16.1/sweetalert2.min.css" integrity="sha512-WnmDqbbAeHb7Put2nIAp7KNlnMup0FXVviOctducz1omuXB/hHK3s2vd3QLffK/CvvFUKrpioxdo+/Jo3k/xIw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.16.1/sweetalert2.all.min.js" integrity="sha512-xY6WH58rPXt0+5LumlzGmgubLDO+SnuAqjBRO6i1B0VTFFSZR/aXszP6xjdT431rS24D8ztDPVjVPHb3Se9f6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</body>
+</html>

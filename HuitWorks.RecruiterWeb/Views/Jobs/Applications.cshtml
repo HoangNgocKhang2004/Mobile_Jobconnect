@@ -1,0 +1,1153 @@
+﻿@{
+    ViewData["Title"] = "Quản Lý Đơn Ứng Tuyển";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Đơn Ứng Tuyển</title>
+    @* <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous"> *@
+    @* <!-- Thêm Font Awesome từ CDN --> *@
+    @* <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"> *@
+    @* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script> *@
+
+    <!-- Giữ nguyên styles của bạn -->
+    <style>
+        /* === RESET BODY === */
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #212529;
+            line-height: 1.6;
+        }
+
+        /* === APPLICANT CARD === */
+        .applicant-card {
+            transition: all 0.2s ease;
+            border-left: 5px solid transparent;
+        }
+
+            .applicant-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+            }
+
+            .applicant-card.status-pending {
+                border-left-color: #ffc107;
+            }
+
+            .applicant-card.status-approved {
+                border-left-color: #198754;
+            }
+
+            .applicant-card.status-rejected {
+                border-left-color: #dc3545;
+            }
+
+        /* === BUTTONS === */
+        .btn {
+            transition: all 0.2s;
+        }
+
+            .btn:hover {
+                transform: translateY(-2px);
+            }
+
+        /* === MODAL-CONTENT === */
+        .modal-content {
+            border-radius: 10px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #094174;
+        }
+
+        .btn-close {
+            color: #777;
+            opacity: 1;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e9ecef;
+            gap: 10px;
+        }
+
+        /* === CANDIDATE PROFILE === */
+        .candidate-profile {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .candidate-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #e6f0fa;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #094174;
+        }
+
+            .candidate-avatar img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .candidate-info {
+            flex: 1;
+        }
+
+        .candidate-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #094174;
+        }
+
+        .candidate-role {
+            font-size: 1.1rem;
+            color: #444;
+            margin-bottom: 10px;
+        }
+
+        .candidate-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        /* === PROFILE SECTION === */
+        .profile-section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 8px;
+        }
+
+        .section-content {
+            color: #444;
+            line-height: 1.5;
+        }
+
+        /* === SKILL TAGS === */
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-tag {
+            background-color: #e6f0fa;
+            color: #094174;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        /* === TIMELINE === */
+        .timeline {
+            margin-left: 10px;
+            padding-left: 20px;
+            border-left: 2px solid #ddd;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+            .timeline-item:before {
+                content: '';
+                position: absolute;
+                left: -26px;
+                top: 0;
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background-color: #094174;
+            }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .timeline-content {
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        /* === FLOATING ACTION BUTTON === */
+        .fab-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .fab-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .fab-primary {
+            background-color: #094174;
+        }
+
+        .fab-secondary {
+            background-color: #2e7d32;
+        }
+
+        /* Đảm bảo z-index cho modal */
+        .modal {
+            z-index: 1050;
+        }
+
+        .modal-backdrop {
+            z-index: 1040;
+        }
+
+        /* Modal tùy chỉnh */
+        .custom-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1050;
+            overflow-y: auto;
+            padding: 30px 0;
+        }
+
+            .custom-modal.show {
+                display: block;
+            }
+
+        .custom-modal-dialog {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            pointer-events: none;
+        }
+
+        .custom-modal-content {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            pointer-events: auto;
+        }
+
+        .custom-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .custom-close-btn {
+            background: transparent;
+            border: 0;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .custom-modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .custom-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e9ecef;
+            gap: 10px;
+        }
+
+        /* Custom dropdown */
+        .custom-dropdown {
+            position: relative;
+            display: inline-flex;
+        }
+
+        .dropdown-toggle-custom {
+            border-radius: 0 4px 4px 0;
+            padding: 0.375rem 0.75rem;
+        }
+
+        .custom-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 1000;
+            min-width: 10rem;
+            padding: 0.5rem 0;
+            margin: 0.125rem 0 0;
+            font-size: 1rem;
+            color: #212529;
+            text-align: left;
+            list-style: none;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 0.25rem;
+        }
+
+            .custom-dropdown-menu.show {
+                display: block;
+            }
+
+            .custom-dropdown-menu a {
+                display: block;
+                width: 100%;
+                padding: 0.25rem 1.5rem;
+                clear: both;
+                font-weight: 400;
+                color: #212529;
+                text-align: inherit;
+                white-space: nowrap;
+                background-color: transparent;
+                border: 0;
+                text-decoration: none;
+            }
+
+                .custom-dropdown-menu a:hover {
+                    color: #16181b;
+                    text-decoration: none;
+                    background-color: #f8f9fa;
+                }
+
+        .dropdown-divider {
+            height: 0;
+            margin: 0.5rem 0;
+            overflow: hidden;
+            border-top: 1px solid #e9ecef;
+        }
+
+        /* Thêm class status badge */
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+
+        .status-new {
+            background-color: #e3f2fd;
+            color: #0d47a1;
+        }
+
+        .status-interview {
+            background-color: #fff3e0;
+            color: #e65100;
+        }
+
+        .status-hired {
+            background-color: #e8f5e9;
+            color: #1b5e20;
+        }
+
+        .status-rejected {
+            background-color: #ffebee;
+            color: #b71c1c;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container-fluid py-4 px-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0"><i class="fa-solid fa-users me-2" style="color: #094174"></i>Quản Lý Đơn Ứng Tuyển</h2>
+            <div>
+                <button class="btn btn-outline-secondary">
+                    <i class="fa-solid fa-file-export me-1"></i>Xuất Excel
+                </button>
+            </div>
+        </div>
+
+        <!-- Bộ lọc -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fa-solid fa-search text-muted"></i></span>
+                            <input type="text" class="form-control" placeholder="Tìm kiếm ứng viên...">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select">
+                            <option>Tất cả phòng ban</option>
+                            <option>Phòng Marketing</option>
+                            <option>Phòng Công nghệ</option>
+                            <option>Phòng Tài chính</option>
+                            <option>Phòng Sáng tạo</option>
+                            <option>Phòng Nhân sự</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select">
+                            <option>Tất cả trạng thái</option>
+                            <option>Chờ duyệt</option>
+                            <option>Đã duyệt</option>
+                            <option>Từ chối</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary w-100">
+                            <i class="fa-solid fa-filter me-1"></i>Lọc
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Danh sách ứng viên -->
+        <div class="row g-4">
+            <!-- Ứng viên 1 -->
+            <div class="col-lg-6 col-xl-4">
+                <div class="card h-100 shadow-sm border-0 rounded-3 applicant-card status-pending">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex gap-3">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Avatar" class="rounded-circle border"
+                                     style="width: 56px; height: 56px; object-fit: cover;">
+                                <div>
+                                    <h5 class="mb-0 fw-bold">Nguyễn Văn A</h5>
+                                    <div class="text-primary small">Chuyên viên Marketing</div>
+                                    <div class="text-muted small">Phòng Marketing</div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="badge bg-warning text-dark">Chờ duyệt</span>
+                            </div>
+                        </div>
+
+                        <hr class="my-3">
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-envelope text-muted me-2"></i>
+                                    <span>nguyenvana@gmail.com</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-phone text-muted me-2"></i>
+                                    <span>0987 654 321</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-calendar text-muted me-2"></i>
+                                    <span>Ngày ứng tuyển: 20/04/2025</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex mt-3 gap-2">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-outline-primary w-100 view-candidate" data-id="1001">
+                                <i class="fa-solid fa-eye me-1"></i>Chi tiết
+                            </a>
+                            <a href="#" target="_blank" class="btn btn-sm btn-outline-info w-100">
+                                <i class="fa-solid fa-file-lines me-1"></i>Xem CV
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ứng viên 2 -->
+            <div class="col-lg-6 col-xl-4">
+                <div class="card h-100 shadow-sm border-0 rounded-3 applicant-card status-approved">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex gap-3">
+                                <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Avatar" class="rounded-circle border"
+                                     style="width: 56px; height: 56px; object-fit: cover;">
+                                <div>
+                                    <h5 class="mb-0 fw-bold">Trần Thị B</h5>
+                                    <div class="text-primary small">Kỹ sư phần mềm</div>
+                                    <div class="text-muted small">Phòng Công nghệ</div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="badge bg-success">Đã duyệt</span>
+                            </div>
+                        </div>
+
+                        <hr class="my-3">
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-envelope text-muted me-2"></i>
+                                    <span>tranthib@gmail.com</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-phone text-muted me-2"></i>
+                                    <span>0912 345 678</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-calendar text-muted me-2"></i>
+                                    <span>Ngày ứng tuyển: 19/04/2025</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex mt-3 gap-2">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-outline-primary w-100 view-candidate" data-id="1002">
+                                <i class="fa-solid fa-eye me-1"></i>Chi tiết
+                            </a>
+                            <a href="#" target="_blank" class="btn btn-sm btn-outline-info w-100">
+                                <i class="fa-solid fa-file-lines me-1"></i>Xem CV
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ứng viên 3 -->
+            <div class="col-lg-6 col-xl-4">
+                <div class="card h-100 shadow-sm border-0 rounded-3 applicant-card status-rejected">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex gap-3">
+                                <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Avatar" class="rounded-circle border"
+                                     style="width: 56px; height: 56px; object-fit: cover;">
+                                <div>
+                                    <h5 class="mb-0 fw-bold">Lê Minh C</h5>
+                                    <div class="text-primary small">Nhân viên kế toán</div>
+                                    <div class="text-muted small">Phòng Tài chính</div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="badge bg-danger">Từ chối</span>
+                            </div>
+                        </div>
+
+                        <hr class="my-3">
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-envelope text-muted me-2"></i>
+                                    <span>leminhc@gmail.com</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-phone text-muted me-2"></i>
+                                    <span>0965 432 109</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-calendar text-muted me-2"></i>
+                                    <span>Ngày ứng tuyển: 17/04/2025</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex mt-3 gap-2">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-outline-primary w-100 view-candidate" data-id="1003">
+                                <i class="fa-solid fa-eye me-1"></i>Chi tiết
+                            </a>
+                            <a href="#" target="_blank" class="btn btn-sm btn-outline-info w-100">
+                                <i class="fa-solid fa-file-lines me-1"></i>Xem CV
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ứng viên 4 -->
+            <div class="col-lg-6 col-xl-4">
+                <div class="card h-100 shadow-sm border-0 rounded-3 applicant-card status-pending">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex gap-3">
+                                <img src="https://randomuser.me/api/portraits/women/22.jpg" alt="Avatar" class="rounded-circle border"
+                                     style="width: 56px; height: 56px; object-fit: cover;">
+                                <div>
+                                    <h5 class="mb-0 fw-bold">Phạm Thị D</h5>
+                                    <div class="text-primary small">Thiết kế đồ họa</div>
+                                    <div class="text-muted small">Phòng Sáng tạo</div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="badge bg-warning text-dark">Chờ duyệt</span>
+                            </div>
+                        </div>
+
+                        <hr class="my-3">
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-envelope text-muted me-2"></i>
+                                    <span>phamthid@gmail.com</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-phone text-muted me-2"></i>
+                                    <span>0932 123 456</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-calendar text-muted me-2"></i>
+                                    <span>Ngày ứng tuyển: 21/04/2025</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex mt-3 gap-2">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-outline-primary w-100 view-candidate" data-id="1004">
+                                <i class="fa-solid fa-eye me-1"></i>Chi tiết
+                            </a>
+                            <a href="#" target="_blank" class="btn btn-sm btn-outline-info w-100">
+                                <i class="fa-solid fa-file-lines me-1"></i>Xem CV
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ứng viên 5 -->
+            <div class="col-lg-6 col-xl-4">
+                <div class="card h-100 shadow-sm border-0 rounded-3 applicant-card status-approved">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex gap-3">
+                                <img src="https://randomuser.me/api/portraits/men/91.jpg" alt="Avatar" class="rounded-circle border"
+                                     style="width: 56px; height: 56px; object-fit: cover;">
+                                <div>
+                                    <h5 class="mb-0 fw-bold">Hoàng Văn E</h5>
+                                    <div class="text-primary small">Chuyên viên nhân sự</div>
+                                    <div class="text-muted small">Phòng Nhân sự</div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="badge bg-success">Đã duyệt</span>
+                            </div>
+                        </div>
+
+                        <hr class="my-3">
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-envelope text-muted me-2"></i>
+                                    <span>hoangvane@gmail.com</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-phone text-muted me-2"></i>
+                                    <span>0978 765 432</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-calendar text-muted me-2"></i>
+                                    <span>Ngày ứng tuyển: 15/04/2025</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex mt-3 gap-2">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-outline-primary w-100 view-candidate" data-id="1005">
+                                <i class="fa-solid fa-eye me-1"></i>Chi tiết
+                            </a>
+                            <a href="#" target="_blank" class="btn btn-sm btn-outline-info w-100">
+                                <i class="fa-solid fa-file-lines me-1"></i>Xem CV
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ứng viên 6 -->
+            <div class="col-lg-6 col-xl-4">
+                <div class="card h-100 shadow-sm border-0 rounded-3 applicant-card status-pending">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex gap-3">
+                                <img src="https://randomuser.me/api/portraits/women/29.jpg" alt="Avatar" class="rounded-circle border"
+                                     style="width: 56px; height: 56px; object-fit: cover;">
+                                <div>
+                                    <h5 class="mb-0 fw-bold">Vũ Thị F</h5>
+                                    <div class="text-primary small">Nhân viên bán hàng</div>
+                                    <div class="text-muted small">Phòng Kinh doanh</div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="badge bg-warning text-dark">Chờ duyệt</span>
+                            </div>
+                        </div>
+
+                        <hr class="my-3">
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-envelope text-muted me-2"></i>
+                                    <span>vuthif@gmail.com</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-phone text-muted me-2"></i>
+                                    <span>0901 234 567</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-calendar text-muted me-2"></i>
+                                    <span>Ngày ứng tuyển: 18/04/2025</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex mt-3 gap-2">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-outline-primary w-100 view-candidate" data-id="1006">
+                                <i class="fa-solid fa-eye me-1"></i>Chi tiết
+                            </a>
+                            <a href="#" target="_blank" class="btn btn-sm btn-outline-info w-100">
+                                <i class="fa-solid fa-file-lines me-1"></i>Xem CV
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phân trang -->
+        <div class="d-flex justify-content-center mt-4">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div id="customModal" class="custom-modal">
+        <div class="custom-modal-dialog">
+            <div class="custom-modal-content">
+                <div class="custom-modal-header bg-light">
+                    <h5 class="modal-title" id="applicantModalTitle">Chi tiết ứng viên</h5>
+                    <button type="button" class="custom-close-btn">&times;</button>
+                </div>
+                <div class="custom-modal-body">
+                    <div class="candidate-profile">
+                        <div class="candidate-avatar" id="applicantAvatar">
+                            <!-- Avatar sẽ được chèn bằng JavaScript -->
+                        </div>
+                        <div class="candidate-info">
+                            <h2 class="candidate-name" id="applicantName"></h2>
+                            <div class="candidate-role" id="applicantPosition"></div>
+                            <div class="candidate-meta" id="applicantMeta">
+                                <div class="meta-item" id="applicantEmail">
+                                    <i class="fa-solid fa-envelope me-2"></i>
+                                    <span></span>
+                                </div>
+                                <div class="meta-item" id="applicantPhone">
+                                    <i class="fa-solid fa-phone me-2"></i>
+                                    <span></span>
+                                </div>
+                                <div class="meta-item" id="applicantLocation">
+                                    <i class="fa-solid fa-location-dot me-2"></i>
+                                    <span>Hà Nội</span>
+                                </div>
+                            </div>
+                            <div class="status-badge status-new" id="applicantStatus">Mới</div>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3 class="section-title">Tóm tắt hồ sơ</h3>
+                        <p class="section-content">
+                            Frontend Developer với 3 năm kinh nghiệm, chuyên sâu về React, JavaScript và responsive design. Tôi có khả năng xây dựng giao diện người dùng hiệu quả và tương tác cao, tối ưu hóa hiệu suất trang web.
+                        </p>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3 class="section-title">Kỹ năng</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">JavaScript</span>
+                            <span class="skill-tag">React</span>
+                            <span class="skill-tag">HTML5</span>
+                            <span class="skill-tag">CSS3</span>
+                            <span class="skill-tag">Responsive Design</span>
+                            <span class="skill-tag">Git</span>
+                            <span class="skill-tag">Redux</span>
+                            <span class="skill-tag">Webpack</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3 class="section-title">Kinh nghiệm làm việc</h3>
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-date">2022 - Hiện tại</div>
+                                <div class="timeline-title">Frontend Developer - Công ty ABC Tech</div>
+                                <div class="timeline-content">
+                                    Phát triển và maintain các ứng dụng web sử dụng React, tối ưu hiệu suất và trải nghiệm người dùng.
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">2020 - 2022</div>
+                                <div class="timeline-title">Web Developer - Công ty XYZ Solutions</div>
+                                <div class="timeline-content">
+                                    Xây dựng website cho khách hàng, làm việc với HTML, CSS, JavaScript và jQuery.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3 class="section-title">Học vấn</h3>
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-date">2016 - 2020</div>
+                                <div class="timeline-title">Cử nhân Công nghệ thông tin - Đại học ABC</div>
+                                <div class="timeline-content">
+                                    Chuyên ngành Phát triển phần mềm, GPA: 3.6/4.0
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3 class="section-title">Hoạt động quá trình tuyển dụng</h3>
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-date" id="applicationDate"></div>
+                                <div class="timeline-title">Nhận hồ sơ ứng tuyển</div>
+                                <div class="timeline-content">
+                                    Ứng viên nộp CV qua website tuyển dụng.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="custom-modal-footer">
+                    <button type="button" class="btn btn-outline-secondary close-modal-btn">Đóng</button>
+                    <div class="btn-group custom-dropdown">
+                        <button type="button" class="btn btn-success" id="btnApprove">
+                            <i class="fa-solid fa-check me-1"></i>Duyệt hồ sơ
+                        </button>
+                        <button type="button" class="btn btn-success dropdown-toggle-custom">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <ul class="custom-dropdown-menu">
+                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-calendar-check me-2"></i>Lên lịch phỏng vấn</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-envelope me-2"></i>Gửi email</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="fa-solid fa-ban me-2"></i>Từ chối</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript để điều khiển modal tùy chỉnh -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dữ liệu ứng viên mẫu - trong thực tế, bạn sẽ lấy từ database
+            const applicantsData = {
+                '1001': {
+                    name: 'Nguyễn Văn A',
+                    position: 'Chuyên viên Marketing',
+                    department: 'Phòng Marketing',
+                    email: 'nguyenvana@gmail.com',
+                    phone: '0987 654 321',
+                    applicationDate: '20/04/2025',
+                    status: 'pending',
+                    avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                    location: 'Hà Nội'
+                },
+                '1002': {
+                    name: 'Trần Thị B',
+                    position: 'Kỹ sư phần mềm',
+                    department: 'Phòng Công nghệ',
+                    email: 'tranthib@gmail.com',
+                    phone: '0912 345 678',
+                    applicationDate: '19/04/2025',
+                    status: 'approved',
+                    avatar: 'https://randomuser.me/api/portraits/women/45.jpg',
+                    location: 'Hồ Chí Minh'
+                },
+                // Thêm dữ liệu cho các ứng viên khác ở đây...
+            };
+
+            // Lấy reference tới custom modal
+            const customModal = document.getElementById('customModal');
+            const closeButtons = document.querySelectorAll('.custom-close-btn, .close-modal-btn');
+
+            // Hàm mở modal
+            function openModal() {
+                customModal.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Ngăn scroll của body
+            }
+
+            // Hàm đóng modal
+            function closeModal() {
+                customModal.classList.remove('show');
+                document.body.style.overflow = ''; // Khôi phục scroll của body
+            }
+
+            // Thêm event listeners cho nút đóng
+            closeButtons.forEach(button => {
+                button.addEventListener('click', closeModal);
+            });
+
+            // Đóng modal khi click bên ngoài content
+            customModal.addEventListener('click', function(e) {
+                if (e.target === customModal) {
+                    closeModal();
+                }
+            });
+
+            // Custom dropdown
+            const dropdownToggle = document.querySelector('.dropdown-toggle-custom');
+            const dropdownMenu = document.querySelector('.custom-dropdown-menu');
+
+            dropdownToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('show');
+            });
+
+            // Đóng dropdown khi click bên ngoài
+            document.addEventListener('click', function() {
+                dropdownMenu.classList.remove('show');
+            });
+
+            // Ngăn đóng dropdown khi click vào menu
+            dropdownMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            // Bắt sự kiện click từ các nút xem chi tiết
+            document.querySelectorAll('.view-candidate').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    const applicantId = this.getAttribute('data-id');
+                    const applicantData = applicantsData[applicantId] || {};
+
+                    // Nếu không có dữ liệu chi tiết, lấy từ card hiện tại
+                    if (Object.keys(applicantData).length === 0) {
+                        const card = this.closest('.applicant-card');
+                        const name = card.querySelector('h5')?.textContent || 'Không có tên';
+                        const position = card.querySelector('.text-primary')?.textContent || 'Không có vị trí';
+                        const email = card.querySelector('.fa-envelope')?.nextElementSibling?.textContent || '';
+                        const phone = card.querySelector('.fa-phone')?.nextElementSibling?.textContent || '';
+                        const appDate = card.querySelector('.fa-calendar')?.nextElementSibling?.textContent || '';
+                        const avatar = card.querySelector('img')?.src || '';
+                        const statusBadge = card.querySelector('.badge')?.textContent || 'Chờ duyệt';
+
+                        updateModalContent({
+                            name: name,
+                            position: position,
+                            email: email,
+                            phone: phone,
+                            applicationDate: appDate.replace('Ngày ứng tuyển: ', ''),
+                            avatar: avatar,
+                            status: getStatusFromBadge(statusBadge),
+                            location: 'Việt Nam'
+                        });
+                    } else {
+                        // Sử dụng dữ liệu từ object
+                        updateModalContent(applicantData);
+                    }
+
+                    // Hiển thị modal
+                    openModal();
+                });
+            });
+
+            // Hàm cập nhật nội dung modal
+            function updateModalContent(data) {
+                // Cập nhật tiêu đề
+                document.getElementById('applicantModalTitle').textContent = `Chi tiết ứng viên - ${data.name}`;
+
+                // Cập nhật thông tin cơ bản
+                document.getElementById('applicantName').textContent = data.name;
+                document.getElementById('applicantPosition').textContent = `Ứng tuyển: ${data.position}`;
+
+                // Cập nhật thông tin liên hệ
+                document.querySelector('#applicantEmail span').textContent = data.email;
+                document.querySelector('#applicantPhone span').textContent = data.phone;
+                document.querySelector('#applicantLocation span').textContent = data.location || 'Việt Nam';
+
+                // Cập nhật ngày ứng tuyển
+                document.getElementById('applicationDate').textContent = data.applicationDate;
+
+                // Cập nhật avatar
+                const avatarElement = document.getElementById('applicantAvatar');
+                if (data.avatar) {
+                    avatarElement.innerHTML = `<img src="${data.avatar}" alt="${data.name}">`;
+                } else {
+                    // Tạo avatar từ chữ cái đầu
+                    const initial = data.name.charAt(0);
+                    avatarElement.innerHTML = `<span>${initial}</span>`;
+                }
+
+                // Cập nhật trạng thái
+                updateStatusBadge(data.status);
+            }
+
+            // Hàm cập nhật badge trạng thái
+            function updateStatusBadge(status) {
+                const statusElement = document.getElementById('applicantStatus');
+
+                // Xóa tất cả các class status hiện tại
+                statusElement.classList.remove('status-new', 'status-interview', 'status-hired', 'status-rejected');
+
+                // Thêm class và cập nhật nội dung phù hợp
+                switch(status) {
+                    case 'pending':
+                        statusElement.classList.add('status-new');
+                        statusElement.textContent = 'Chờ duyệt';
+                        break;
+                    case 'approved':
+                        statusElement.classList.add('status-hired');
+                        statusElement.textContent = 'Đã duyệt';
+                        break;
+                    case 'rejected':
+                        statusElement.classList.add('status-rejected');
+                        statusElement.textContent = 'Từ chối';
+                        break;
+                    case 'interview':
+                        statusElement.classList.add('status-interview');
+                        statusElement.textContent = 'Phỏng vấn';
+                        break;
+                    default:
+                        statusElement.classList.add('status-new');
+                        statusElement.textContent = 'Mới';
+                }
+            }
+
+            // Hàm chuyển đổi text trạng thái thành code
+            function getStatusFromBadge(badgeText) {
+                switch(badgeText.trim()) {
+                    case 'Chờ duyệt': return 'pending';
+                    case 'Đã duyệt': return 'approved';
+                    case 'Từ chối': return 'rejected';
+                    case 'Phỏng vấn': return 'interview';
+                    default: return 'pending';
+                }
+            }
+
+            // Xử lý nút Duyệt hồ sơ
+            document.getElementById('btnApprove').addEventListener('click', function() {
+                alert('Xác nhận duyệt hồ sơ ứng viên này?');
+                // Thực hiện logic duyệt hồ sơ ở đây
+                updateStatusBadge('approved');
+            });
+        });
+    </script>
+</body>
+</html>

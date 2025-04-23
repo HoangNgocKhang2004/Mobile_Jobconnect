@@ -186,5 +186,11 @@ namespace HuitWorks.RecruiterWeb.Controllers
 
             return Json(new { success = true, message = message, isActive = job.IsActive });
         }
+
+
+        public IActionResult Applications()
+        {
+            return View();
+        }
     }
 }

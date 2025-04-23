@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Quản lý tài khoản";
 }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
     .dashboard-container {
@@ -216,7 +217,6 @@
                                     </div>
 
                                     <div class="text-end">
-                                        <button type="button" class="btn btn-light me-2">Hủy</button>
                                         <button type="submit" class="btn btn-primary">Lưu thông tin</button>
                                     </div>
                                 </form>
@@ -314,69 +314,6 @@
                                             <h5 class="mb-3">10 lượt</h5>
                                             <div class="h3 mb-3">249.000đ</div>
                                             <button class="btn btn-outline-primary">Mua ngay</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <h5 class="mb-4">Phương thức thanh toán</h5>
-                                <div class="card mb-4">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between mb-4">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" checked>
-                                                <label class="form-check-label" for="creditCard">
-                                                    <i class="fab fa-cc-visa me-2"></i>Thẻ tín dụng/Ghi nợ
-                                                </label>
-                                            </div>
-                                            <div>
-                                                <img src="/api/placeholder/40/25" alt="Visa">
-                                                <img src="/api/placeholder/40/25" alt="Mastercard">
-                                            </div>
-                                        </div>
-
-                                        <div class="row g-3 mb-3">
-                                            <div class="col-md-12">
-                                                <label class="form-label">Số thẻ</label>
-                                                <input type="text" class="form-control" placeholder="xxxx xxxx xxxx xxxx">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label">Ngày hết hạn</label>
-                                                <input type="text" class="form-control" placeholder="MM/YY">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label">CVV</label>
-                                                <input type="text" class="form-control" placeholder="123">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label class="form-label">Tên chủ thẻ</label>
-                                                <input type="text" class="form-control" placeholder="Nguyễn Văn A">
-                                            </div>
-                                        </div>
-
-                                        <div class="d-flex justify-content-between align-items-center mb-4">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="paymentMethod" id="banking">
-                                                <label class="form-check-label" for="banking">
-                                                    <i class="fas fa-university me-2"></i>Chuyển khoản ngân hàng
-                                                </label>
-                                            </div>
-                                            <div>
-                                                <img src="/api/placeholder/40/25" alt="VCB">
-                                                <img src="/api/placeholder/40/25" alt="TPBank">
-                                            </div>
-                                        </div>
-
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="paymentMethod" id="eWallet">
-                                                <label class="form-check-label" for="eWallet">
-                                                    <i class="fas fa-wallet me-2"></i>Ví điện tử
-                                                </label>
-                                            </div>
-                                            <div>
-                                                <img src="/api/placeholder/40/25" alt="Momo">
-                                                <img src="/api/placeholder/40/25" alt="ZaloPay">
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

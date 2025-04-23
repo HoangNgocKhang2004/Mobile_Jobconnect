@@ -69,8 +69,8 @@ D:\LTDD\HuitWorks.AdminWeb\HuitWorks.AdminWeb\obj\Debug\net8.0\ref\HuitWorks.Adm
 D:\LTDD\HuitWorks.AdminWeb\HuitWorks.AdminWeb\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 D:\LTDD\HuitWorks.Web\HuitWorks.AdminWeb\bin\Debug\net8.0\appsettings.Development.json
 D:\LTDD\HuitWorks.Web\HuitWorks.AdminWeb\bin\Debug\net8.0\appsettings.json
-D:\LTDD\HuitWorks.Web\HuitWorks.AdminWeb\bin\Debug\net8.0\HuitWorks.AdminWeb.staticwebassets.endpoints.json
 D:\LTDD\HuitWorks.Web\HuitWorks.AdminWeb\bin\Debug\net8.0\HuitWorks.AdminWeb.staticwebassets.runtime.json
+D:\LTDD\HuitWorks.Web\HuitWorks.AdminWeb\bin\Debug\net8.0\HuitWorks.AdminWeb.staticwebassets.endpoints.json
 D:\LTDD\HuitWorks.Web\HuitWorks.AdminWeb\bin\Debug\net8.0\HuitWorks.AdminWeb.exe
 D:\LTDD\HuitWorks.Web\HuitWorks.AdminWeb\bin\Debug\net8.0\HuitWorks.AdminWeb.deps.json
 D:\LTDD\HuitWorks.Web\HuitWorks.AdminWeb\bin\Debug\net8.0\HuitWorks.AdminWeb.runtimeconfig.json

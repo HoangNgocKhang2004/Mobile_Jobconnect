@@ -8,5 +8,6 @@ namespace HuitWorks.AdminWeb.Controllers
         {
             return View();
         }
+
     }
 }

@@ -19,7 +19,7 @@
     <div class="wrapper d-flex flex-column min-vh-100">
         <header class="main-header">
             <div class="brand-logo">
-                <a class="navbar-brand logo-text" href="/">
+                <a class="navbar-brand logo-text" href="/home/index">
                     <i class="fas fa-briefcase me-2"></i>HuitWorks
                 </a>
             </div>
@@ -111,8 +111,14 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#" style="color: var(--danger-color);"><i
-                                        class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a></li>
+                            <li>
+                                <form asp-action="Logout" asp-controller="Auth" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="dropdown-item" style="color: var(--danger-color); border: none; background: none; padding: 0; width: 100%; text-align: left;">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
+                                    </button>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -122,7 +128,7 @@
         <aside class="sidebar">
             <!-- Logo Section -->
             <div class="brand-logo">
-                <a class="navbar-brand logo-text" href="/dashboard">
+                <a class="navbar-brand logo-text" href="/home/index">
                     <i class="fas fa-user-tie"></i>
                     <span>HuitWorks</span>
                 </a>
@@ -132,7 +138,7 @@
             <div class="sidebar-section">
                 <ul class="nav flex-column">
                     <li class="nav-item" style="margin-bottom: 1rem !important;">
-                        <a class="nav-link" href="/">
+                        <a class="nav-link" href="/home/index">
                             <i class="fas fa-th-large"></i>
                             <span class="nav-text">Dashboard</span>
                         </a>
@@ -169,13 +175,13 @@
                 <h5 class="sidebar-section-title">Quản lý doanh nghiệp</h5>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="/hr/">
+                        <a class="nav-link" href="/hr/index">
                             <i class="fas fa-building"></i>
                             <span class="nav-text">Nhà tuyển dụng</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/jobpost/">
+                        <a class="nav-link" href="/jobpost/index">
                             <i class="fas fa-bullhorn"></i>
                             <span class="nav-text">Tin tuyển dụng</span>
                         </a>
@@ -187,39 +193,39 @@
                 <h5 class="sidebar-section-title">Hệ thống</h5>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="/systemnotification/">
+                        <a class="nav-link" href="/systemnotification/index">
                             <i class="fas fa-bell"></i>
                             <span class="nav-text">Thông báo</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/reports">
+                        <a class="nav-link" href="/reports/index">
                             <i class="fas fa-chart-bar"></i>
                             <span class="nav-text">Báo cáo</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/payment/">
+                        <a class="nav-link" href="/payment/index">
                             <i class="fas fa-wallet"></i>
                             <span class="nav-text">Thanh toán</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/users">
+                        <a class="nav-link" href="/users/index">
                             <i class="fas fa-user-shield"></i>
                             <span class="nav-text">Người dùng</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/settings">
+                        <a class="nav-link" href="/settings/index">
                             <i class="fas fa-cog"></i>
                             <span class="nav-text">Cài đặt</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/dataanalysis/">
+                        <a class="nav-link" href="/dataanalysis/index">
                             <i class="fas fa-brain"></i>
                             <span class="nav-text">Quản lý dữ liệu</span>
                         </a>
