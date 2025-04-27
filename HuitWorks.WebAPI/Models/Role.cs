@@ -2,10 +2,9 @@
 {
     public class Role
     {
-        public string IdRole { get; set; }
-        public string RoleName { get; set; }
-        public string Description { get; set; }
-
-        public ICollection<User> Users { get; set; }
+        public required string IdRole { get; set; }
+        public required string RoleName { get; set; }
+        public string? Description { get; set; }
+        //public ICollection<User> Users { get; set; }
     }
 }

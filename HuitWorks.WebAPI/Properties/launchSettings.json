@@ -42,3 +42,11 @@
     }
   }
 }
+
+// Chạy này bên API
+// cd D:\HK2_Nam3\LapTrinhDiDong\DOAN_MOBILE\project\Mobile_Jobconnect_api\HuitWorks.WebAPI
+// dotnet run --launch-profile http
+// http://localhost:5281/swagger/index.html
+
+// Bên máy ảo 
+// static const String baseUrl  = 'http://10.0.2.2:5281';

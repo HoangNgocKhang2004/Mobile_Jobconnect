@@ -31,61 +31,75 @@ namespace HuitWorks.WebAPI.Data
             mb.Entity<Resume>().HasKey(r => r.IdResume);
             mb.Entity<ResumeSkill>().HasKey(rs => new { rs.IdResume, rs.Skill });
 
-            // Relations
+            // Quan hệ User -> Role
             mb.Entity<User>()
                 .HasOne(u => u.Role)
-                .WithMany(r => r.Users)
+                .WithMany()
                 .HasForeignKey(u => u.IdRole)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Ánh xạ rõ ràng cột IdRole trong bảng Users
+            mb.Entity<User>()
+                .Property(u => u.IdRole)
+                .HasColumnName("idRole"); // Khớp với tên cột trong schema
+
+            // Quan hệ CandidateInfo -> User
             mb.Entity<CandidateInfo>()
                 .HasOne(ci => ci.User)
-                .WithOne(u => u.CandidateInfo)
+                .WithOne()
                 .HasForeignKey<CandidateInfo>(ci => ci.IdUser)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Quan hệ RecruiterInfo -> User
             mb.Entity<RecruiterInfo>()
                 .HasOne(ri => ri.User)
-                .WithOne(u => u.RecruiterInfo)
+                .WithOne()
                 .HasForeignKey<RecruiterInfo>(ri => ri.IdUser)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Quan hệ RecruiterInfo -> Company
             mb.Entity<RecruiterInfo>()
                 .HasOne(ri => ri.Company)
                 .WithMany(c => c.Recruiters)
                 .HasForeignKey(ri => ri.IdCompany)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            // Quan hệ JobPosting -> Company
             mb.Entity<JobPosting>()
                 .HasOne(jp => jp.Company)
                 .WithMany(c => c.JobPostings)
                 .HasForeignKey(jp => jp.IdCompany)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Quan hệ JobPostingRequiredSkill -> JobPosting
             mb.Entity<JobPostingRequiredSkill>()
                 .HasOne(js => js.JobPosting)
                 .WithMany(jp => jp.RequiredSkills)
                 .HasForeignKey(js => js.IdJobPost)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Quan hệ JobApplication -> User
             mb.Entity<JobApplication>()
                 .HasOne(ja => ja.User)
-                .WithMany(u => u.JobApplications)
+                .WithMany()
                 .HasForeignKey(ja => ja.IdUser)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Quan hệ JobApplication -> JobPosting
             mb.Entity<JobApplication>()
                 .HasOne(ja => ja.JobPosting)
                 .WithMany(jp => jp.Applications)
                 .HasForeignKey(ja => ja.IdJobPost)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Quan hệ Resume -> User
             mb.Entity<Resume>()
                 .HasOne(r => r.User)
-                .WithMany(u => u.Resumes)
+                .WithMany()
                 .HasForeignKey(r => r.IdUser)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Quan hệ ResumeSkill -> Resume
             mb.Entity<ResumeSkill>()
                 .HasOne(rs => rs.Resume)
                 .WithMany(r => r.Skills)
