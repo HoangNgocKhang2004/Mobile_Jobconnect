@@ -1,25 +1,72 @@
-﻿namespace HuitWorks.WebAPI.Models
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace HuitWorks.WebAPI.Models
 {
+    [Table("jobPosting")]
     public class JobPosting
     {
-        public string IdJobPost { get; set; } = null!;
-        public string Title { get; set; } = null!;
-        public string Description { get; set; } = null!;
-        public string Requirements { get; set; } = null!;
-        public decimal? Salary { get; set; }   // NULLable
-        public string Location { get; set; } = null!;
-        public string JobType { get; set; } = null!;
-        public string ExperienceLevel { get; set; } = null!;
-        public string IdCompany { get; set; } = null!;
+        [Key]
+        [Column("idJobPost")]
+        [StringLength(64)]
+        public required string IdJobPost { get; set; }
+
+        [Required]
+        [Column("title")]
+        [StringLength(100)]
+        public required string Title { get; set; }
+
+        [Required]
+        [Column("description")]
+        public required string Description { get; set; }
+
+        [Required]
+        [Column("requirements")]
+        public required string Requirements { get; set; }
+
+        [Column("salary")]
+        public decimal? Salary { get; set; }
+
+        [Required]
+        [Column("location")]
+        [StringLength(255)]
+        public required string Location { get; set; }
+
+        [Required]
+        [Column("workType")]
+        public required string WorkType { get; set; }
+
+        [Required]
+        [Column("experienceLevel")]
+        [StringLength(50)]
+        public required string ExperienceLevel { get; set; }
+
+        [Required]
+        [Column("idCompany")]
+        [StringLength(64)]
+        public required string IdCompany { get; set; }
+
+        [Column("applicationDeadline")]
         public DateTime? ApplicationDeadline { get; set; }
+
+        [Column("benefits")]
         public string? Benefits { get; set; }
 
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        public string JobPostStatus { get; set; } = null!;
+        [Required]
+        [Column("createdAt")]
+        public required DateTime CreatedAt { get; set; }
 
-        public Company Company { get; set; } = null!;
-        public List<JobPostingRequiredSkill> RequiredSkills { get; set; } = new();
-        public List<JobApplication> Applications { get; set; } = new();
+        [Required]
+        [Column("updatedAt")]
+        public required DateTime UpdatedAt { get; set; }
+
+        [Required]
+        [Column("postStatus")]
+        public required string PostStatus { get; set; }
+
+        // Navigation property to Company
+        [ForeignKey(nameof(IdCompany))]
+        public Company? Company { get; set; }
     }
 }

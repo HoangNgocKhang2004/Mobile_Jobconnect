@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
 using HuitWorks.WebAPI.Data;
 using HuitWorks.WebAPI.Models;
 using HuitWorks.WebAPI.DTOs;
@@ -16,44 +16,24 @@ namespace HuitWorks.WebAPI.Controllers
     {
         private readonly JobConnectDbContext _context;
         private readonly IConfiguration _configuration;
-        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(
-            JobConnectDbContext context,
-            IConfiguration configuration,
-            ILogger<AuthController> logger)
+        public AuthController(JobConnectDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
-            _logger = logger;
         }
 
         /// <summary>
-        /// Endpoint kiểm thử logger (chỉ dùng debug)
-        /// </summary>
-        [HttpGet("logger")]
-        public IActionResult GetLogger()
-        {
-            return Ok(_logger);
-        }
-
-        /// <summary>
-        /// Đăng ký người dùng mới
+        /// Đăng ký tài khoản mới
         /// </summary>
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto model)
         {
             if (!ModelState.IsValid)
-            {
-                _logger.LogWarning("Invalid model state for register: {Errors}", ModelState);
                 return BadRequest(ModelState);
-            }
 
             if (await _context.Users.AnyAsync(u => u.Email == model.Email))
-            {
-                _logger.LogWarning("Registration failed: Email {Email} already exists", model.Email);
-                return BadRequest("Email đã tồn tại");
-            }
+                return BadRequest(new { message = "Email đã tồn tại" });
 
             var role = await _context.Roles.FirstOrDefaultAsync(r => r.RoleName == model.RoleName);
             if (role == null)
@@ -62,7 +42,7 @@ namespace HuitWorks.WebAPI.Controllers
                 {
                     IdRole = Guid.NewGuid().ToString(),
                     RoleName = model.RoleName,
-                    Description = $"Auto-created role {model.RoleName}"
+                    Description = $"Auto-created role: {model.RoleName}"
                 };
                 _context.Roles.Add(role);
                 await _context.SaveChangesAsync();
@@ -70,26 +50,28 @@ namespace HuitWorks.WebAPI.Controllers
 
             var user = new User
             {
-                IdUser = Guid.NewGuid().ToString(),
+                IdUser = "user" + Guid.NewGuid().ToString(),
                 UserName = model.UserName,
                 Email = model.Email,
-                PhoneNumber = model.PhoneNumber,
+                PhoneNumber = model.PhoneNumber ?? string.Empty, 
                 Password = BCrypt.Net.BCrypt.HashPassword(model.Password),
                 IdRole = role.IdRole,
                 AccountStatus = "active",
                 CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                UpdatedAt = DateTime.UtcNow,
+                Gender = "other",
+                Address = null,
+                DateOfBirth = null
             };
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-            _logger.LogInformation("User {Email} registered", model.Email);
 
             return Ok(new { message = "Đăng ký thành công" });
         }
 
         /// <summary>
-        /// Đăng nhập và trả về JWT
+        /// Đăng nhập và nhận JWT
         /// </summary>
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
@@ -102,35 +84,65 @@ namespace HuitWorks.WebAPI.Controllers
                 .FirstOrDefaultAsync(u => u.Email == model.Email);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
-                return Unauthorized("Thông tin đăng nhập không hợp lệ");
+                return Unauthorized(new { message = "Thông tin đăng nhập không hợp lệ" });
 
             var token = GenerateJwtToken(user);
-            return Ok(new AuthResponse { Token = token, User = user });
+
+            var response = new AuthResponse
+            {
+                Token = token,
+                User = new User
+                {
+                    IdUser = user.IdUser,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    Password = user.Password,
+                    IdRole = user.IdRole,
+                    AccountStatus = user.AccountStatus,
+                    AvatarUrl = user.AvatarUrl,
+                    SocialLogin = user.SocialLogin,
+                    CreatedAt = user.CreatedAt,
+                    UpdatedAt = user.UpdatedAt,
+                    Gender = user.Gender,
+                    Address = user.Address,
+                    DateOfBirth = user.DateOfBirth,
+                    Role = user.Role
+                }
+            };
+
+            return Ok(response);
         }
 
-        // Helper method để sinh JWT
+        // Helper: Generate JWT Token
         private string GenerateJwtToken(User user)
         {
-            var jwt = _configuration.GetSection("JwtSettings");
-            var key = Encoding.UTF8.GetBytes(jwt["Key"]!);
+            var jwtSettings = _configuration.GetSection("JwtSettings");
+            var secretKey = jwtSettings["Key"];
+            var issuer = jwtSettings["Issuer"];
+            var audience = jwtSettings["Audience"];
+            var expiryMinutes = int.Parse(jwtSettings["ExpiryInMinutes"]);
+
+            if (string.IsNullOrEmpty(secretKey) || string.IsNullOrEmpty(issuer) || string.IsNullOrEmpty(audience))
+                throw new Exception("JWT Settings are not properly configured.");
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.IdUser),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role.RoleName)
+                new Claim(JwtRegisteredClaimNames.Sub, user.IdUser),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role?.RoleName ?? "Candidate")
             };
 
-            var creds = new SigningCredentials(
-                new SymmetricSecurityKey(key),
-                SecurityAlgorithms.HmacSha256);
-
             var token = new JwtSecurityToken(
-                issuer: jwt["Issuer"],
-                audience: jwt["Audience"],
+                issuer: issuer,
+                audience: audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(int.Parse(jwt["ExpiryInMinutes"]!)),
-                signingCredentials: creds);
+                expires: DateTime.UtcNow.AddMinutes(expiryMinutes),
+                signingCredentials: creds
+            );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

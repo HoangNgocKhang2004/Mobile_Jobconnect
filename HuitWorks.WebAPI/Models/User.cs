@@ -1,21 +1,75 @@
-﻿namespace HuitWorks.WebAPI.Models
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace HuitWorks.WebAPI.Models
 {
+    [Table("users")]
     public class User
     {
-        public string IdUser { get; set; } = null!;
-        public string UserName { get; set; } = null!;
-        public string Email { get; set; } = null!;
-        public string? PhoneNumber { get; set; }
-        public string Password { get; set; } = null!;
-        public string IdRole { get; set; } = null!;
-        public string AccountStatus { get; set; } = null!;
+        [Key]
+        [Column("idUser")]
+        [StringLength(64)]
+        public required string IdUser { get; set; }
+
+        [Required]
+        [Column("userName")]
+        [StringLength(100)]
+        public required string UserName { get; set; }
+
+        [Required]
+        [Column("email")]
+        [StringLength(255)]
+        public required string Email { get; set; }
+
+        [Required]
+        [Column("phoneNumber")]
+        [StringLength(20)]
+        public required string PhoneNumber { get; set; }
+
+        [Required]
+        [Column("password")]
+        [StringLength(255)]
+        public required string Password { get; set; }
+
+        [Required]
+        [Column("idRole")]
+        [StringLength(64)]
+        public required string IdRole { get; set; }
+
+        [Required]
+        [Column("accountStatus")]
+        public required string AccountStatus { get; set; }
+
+        [Column("avatarUrl")]
+        [StringLength(255)]
         public string? AvatarUrl { get; set; }
+
+        [Column("socialLogin")]
+        [StringLength(255)]
         public string? SocialLogin { get; set; }
 
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        [Required]
+        [Column("createdAt")]
+        public required DateTime CreatedAt { get; set; }
 
-        public Role Role { get; set; } = null!;
+        [Required]
+        [Column("updatedAt")]
+        public required DateTime UpdatedAt { get; set; }
 
+        [Required]
+        [Column("gender")]
+        public required string Gender { get; set; }
+
+        [Column("address")]
+        [StringLength(255)]
+        public string? Address { get; set; }
+
+        [Column("dateOfBirth")]
+        public DateTime? DateOfBirth { get; set; }
+
+        // Navigation property
+        [ForeignKey(nameof(IdRole))]
+        public Role? Role { get; set; }
     }
 }

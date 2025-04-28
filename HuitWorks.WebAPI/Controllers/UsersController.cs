@@ -1,104 +1,29 @@
-﻿using HuitWorks.WebAPI.Data;
-using HuitWorks.WebAPI.Models;
-using Microsoft.AspNetCore.Mvc;
-using System;
-
-//namespace HuitWorks.WebAPI.Controllers
-//{
-//    [ApiController]
-//    [Route("api/[controller]")]
-//    public class UsersController : GenericController<User>
-//    {
-//        public UsersController(JobConnectDbContext ctx) : base(ctx) { }
-//    }
-//}
-
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
+using HuitWorks.WebAPI.Data;
+using HuitWorks.WebAPI.Models;
 using HuitWorks.WebAPI.DTOs;
-
-//namespace HuitWorks.WebAPI.Controllers
-//{
-//    //[Authorize]
-//    [Route("api/[controller]")]
-//    [ApiController]
-//    public class UsersController : ControllerBase
-//    {
-//        private readonly JobConnectDbContext _context; // Thay AppDbContext bằng tên DbContext của bạn
-
-//        public UsersController(JobConnectDbContext context)
-//        {
-//            _context = context;
-//        }
-
-//        // GET: api/users
-//        [HttpGet]
-//        public async Task<ActionResult<IEnumerable<UserDtoo>>> GetUsers()
-//        {
-//            try
-//            {
-//                var users = await _context.Users
-//                    .Include(u => u.Role) // Tải thông tin Role
-//                    .ToListAsync();
-
-//                return Ok(users);
-//            }
-//            catch (Exception ex)
-//            {
-//                return StatusCode(500, $"Internal server error: {ex.Message}");
-//            }
-//        }
-
-//        // GET: api/users/{id}
-//        [HttpGet("{id}")]
-//        public async Task<ActionResult<User>> GetUser(string id)
-//        {
-//            try
-//            {
-//                var user = await _context.Users
-//                    .Include(u => u.Role) // Tải thông tin Role
-//                    .FirstOrDefaultAsync(u => u.IdUser == id);
-
-//                if (user == null)
-//                {
-//                    return NotFound($"User with ID {id} not found.");
-//                }
-
-//                return Ok(user);
-//            }
-//            catch (Exception ex)
-//            {
-//                return StatusCode(500, $"Internal server error: {ex.Message}");
-//            }
-//        }
-//    }
-//}
-
 
 namespace HuitWorks.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly JobConnectDbContext _context;
 
-        public UsersController(JobConnectDbContext context)
+        public UserController(JobConnectDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/users
+        // GET: api/user
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
-            try
-            {
-                var users = await _context.Users
-                    .Include(u => u.Role)
-                    .ToListAsync();
-
-                var userDtos = users.Select(u => new UserDto
+            var users = await _context.Users
+                .Include(u => u.Role)
+                .Select(u => new UserDto
                 {
                     IdUser = u.IdUser,
                     UserName = u.UserName,
@@ -110,124 +35,166 @@ namespace HuitWorks.WebAPI.Controllers
                     SocialLogin = u.SocialLogin,
                     CreatedAt = u.CreatedAt,
                     UpdatedAt = u.UpdatedAt,
-                    Role = u.Role
-                }).ToList();
+                    Role = u.Role != null
+                        ? new Role
+                        {
+                            IdRole = u.Role.IdRole,
+                            RoleName = u.Role.RoleName,
+                            Description = u.Role.Description
+                        }
+                        : new Role
+                        {
+                            IdRole = "",
+                            RoleName = "",
+                            Description = ""
+                        }
+                })
+                .ToListAsync();
 
-                return Ok(userDtos);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return Ok(users);
         }
 
-        // GET: api/users/{id}
+        // GET: api/user/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetUser(string id)
         {
-            try
+            var user = await _context.Users
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.IdUser == id);
+
+            if (user == null)
             {
-                var user = await _context.Users
-                    .Include(u => u.Role)
-                    .FirstOrDefaultAsync(u => u.IdUser == id);
-
-                if (user == null)
-                {
-                    return NotFound($"User with ID {id} not found.");
-                }
-
-                var userDto = new UserDto
-                {
-                    IdUser = user.IdUser,
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    PhoneNumber = user.PhoneNumber,
-                    IdRole = user.IdRole,
-                    AccountStatus = user.AccountStatus,
-                    AvatarUrl = user.AvatarUrl,
-                    SocialLogin = user.SocialLogin,
-                    CreatedAt = user.CreatedAt,
-                    UpdatedAt = user.UpdatedAt,
-                    Role = user.Role
-                };
-
-                return Ok(userDto);
+                return NotFound(new { message = "User not found." });
             }
-            catch (Exception ex)
+
+            var userDto = new UserDto
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+                IdUser = user.IdUser,
+                UserName = user.UserName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                IdRole = user.IdRole,
+                AccountStatus = user.AccountStatus,
+                AvatarUrl = user.AvatarUrl,
+                SocialLogin = user.SocialLogin,
+                CreatedAt = user.CreatedAt,
+                UpdatedAt = user.UpdatedAt,
+                Role = user.Role != null
+                    ? new Role
+                    {
+                        IdRole = user.Role.IdRole,
+                        RoleName = user.Role.RoleName,
+                        Description = user.Role.Description
+                    }
+                    : new Role
+                    {
+                        IdRole = "",
+                        RoleName = "",
+                        Description = ""
+                    }
+            };
+
+            return Ok(userDto);
         }
 
-    // POST: api/users
+        // POST: api/user
         [HttpPost]
-        public async Task<ActionResult<UserDto>> CreateUser([FromBody] CreateUserDto createUserDto)
+        public async Task<ActionResult<UserDto>> CreateUser(CreateUserDto dto)
         {
-            try
+            var user = new User
             {
-                // Kiểm tra dữ liệu đầu vào
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
+                IdUser = Guid.NewGuid().ToString(),
+                UserName = dto.UserName,
+                Email = dto.Email,
+                PhoneNumber = dto.PhoneNumber ?? "",
+                Password = dto.Password,
+                IdRole = dto.IdRole,
+                AccountStatus = "active",
+                AvatarUrl = dto.AvatarUrl,
+                SocialLogin = dto.SocialLogin,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                Gender = "other",
+                Address = null,
+                DateOfBirth = null
+            };
 
-                // Kiểm tra vai trò tồn tại
-                var role = await _context.Roles.FirstOrDefaultAsync(r => r.IdRole == createUserDto.IdRole);
-                if (role == null)
-                {
-                    return BadRequest($"Role with ID {createUserDto.IdRole} not found.");
-                }
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
 
-                // Kiểm tra email đã tồn tại
-                if (await _context.Users.AnyAsync(u => u.Email == createUserDto.Email))
-                {
-                    return BadRequest("Email is already in use.");
-                }
+            var role = await _context.Roles.FindAsync(user.IdRole);
 
-                // Tạo User mới
-                var user = new User
-                {
-                    IdUser = Guid.NewGuid().ToString(), // Tạo ID ngẫu nhiên
-                    UserName = createUserDto.UserName,
-                    Email = createUserDto.Email,
-                    PhoneNumber = createUserDto.PhoneNumber,
-                    IdRole = createUserDto.IdRole,
-                    // Lưu ý: Nên mã hóa mật khẩu trước khi lưu
-                    Password = BCrypt.Net.BCrypt.HashPassword(createUserDto.Password), // Mã hóa mật khẩu 
-                    AccountStatus = "Active", // Mặc định
-                    AvatarUrl = createUserDto.AvatarUrl,
-                    SocialLogin = createUserDto.SocialLogin,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                    Role = role
-                };
-
-                // Lưu vào cơ sở dữ liệu
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-
-                // Tạo UserDto để trả về
-                var userDto = new UserDto
-                {
-                    IdUser = user.IdUser,
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    PhoneNumber = user.PhoneNumber,
-                    IdRole = user.IdRole,
-                    AccountStatus = user.AccountStatus,
-                    AvatarUrl = user.AvatarUrl,
-                    SocialLogin = user.SocialLogin,
-                    CreatedAt = user.CreatedAt,
-                    UpdatedAt = user.UpdatedAt,
-                    Role = user.Role
-                };
-
-                return CreatedAtAction(nameof(GetUser), new { id = user.IdUser }, userDto);
-            }
-            catch (Exception ex)
+            var createdUserDto = new UserDto
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                IdUser = user.IdUser,
+                UserName = user.UserName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                IdRole = user.IdRole,
+                AccountStatus = user.AccountStatus,
+                AvatarUrl = user.AvatarUrl,
+                SocialLogin = user.SocialLogin,
+                CreatedAt = user.CreatedAt,
+                UpdatedAt = user.UpdatedAt,
+                Role = role != null
+                    ? new Role
+                    {
+                        IdRole = role.IdRole,
+                        RoleName = role.RoleName,
+                        Description = role.Description
+                    }
+                    : new Role
+                    {
+                        IdRole = "",
+                        RoleName = "",
+                        Description = ""
+                    }
+            };
+
+            return CreatedAtAction(nameof(GetUser), new { id = user.IdUser }, createdUserDto);
+        }
+
+        // PUT: api/user/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(string id, CreateUserDto dto)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found." });
             }
+
+            user.UserName = dto.UserName ?? user.UserName;
+            user.Email = dto.Email ?? user.Email;
+            user.PhoneNumber = dto.PhoneNumber ?? user.PhoneNumber;
+            user.Address = dto.Address ?? user.Address;
+            user.DateOfBirth = dto.DateOfBirth ?? user.DateOfBirth;
+            user.Gender = dto.Gender ?? user.Gender;
+            user.AvatarUrl = dto.AvatarUrl ?? user.AvatarUrl; 
+            user.UpdatedAt = DateTime.UtcNow;
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // DELETE: api/user/{id}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found." });
+            }
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

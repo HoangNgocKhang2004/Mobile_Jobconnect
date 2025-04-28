@@ -117,12 +117,14 @@ namespace HuitWorks.WebAPI.Controllers
 
         private string GetKey(TEntity entity)
         {
+            #pragma warning disable CS8602 
             var keyName = _context.Model
                 .FindEntityType(typeof(TEntity))
                 .FindPrimaryKey()
                 .Properties
                 .Select(p => p.Name)
                 .Single();
+            #pragma warning restore CS8602
 
             var keyValue = entity.GetType()
                 .GetProperty(keyName)

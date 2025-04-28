@@ -1,10 +1,26 @@
-﻿namespace HuitWorks.WebAPI.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace HuitWorks.WebAPI.Models
 {
+    [Table("resumeSkill")]
     public class ResumeSkill
     {
-        public string IdResume { get; set; } = null!;
-        public string Skill { get; set; } = null!;
+        [Key]
+        [Column("idResume")]
+        [StringLength(64)]
+        public required string IdResume { get; set; }
 
-        public Resume Resume { get; set; } = null!;
+        [Key]
+        [Column("skills")]
+        [StringLength(255)]
+        public required string Skill { get; set; }
+
+        [Column("proficiency")]
+        [StringLength(64)]
+        public string? Proficiency { get; set; }
+
+        [ForeignKey(nameof(IdResume))]
+        public Resume? Resume { get; set; }
     }
 }

@@ -1,21 +1,52 @@
-﻿namespace HuitWorks.WebAPI.Models
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace HuitWorks.WebAPI.Models
 {
+    [Table("resumes")]
     public class Resume
     {
-        public string IdResume { get; set; } = null!;
-        public string IdUser { get; set; } = null!;
-        public string Experience { get; set; } = null!;
-        public string Education { get; set; } = null!;
-        public string? Portfolio { get; set; }
-        public string? CvFileUrl { get; set; }
-        public bool IsPublic { get; set; }
-        public decimal? SuitabilityScore { get; set; }
-        public string? PreferredJobType { get; set; }
-        public decimal? SalaryExpectation { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        [Key]
+        [Column("idResume")]
+        [StringLength(64)]
+        public required string IdResume { get; set; }
 
-        public User User { get; set; } = null!;
-        public List<ResumeSkill> Skills { get; set; } = new();
+        [Required]
+        [Column("idUser")]
+        [StringLength(64)]
+        public required string IdUser { get; set; }
+
+        [Required]
+        [Column("fileUrl")]
+        [StringLength(255)]
+        public required string FileUrl { get; set; }
+
+        [Required]
+        [Column("fileName")]
+        [StringLength(255)]
+        public required string FileName { get; set; }
+
+        [Column("fileSizeKB")]
+        public int? FileSizeKB { get; set; }
+
+        [Required]
+        [Column("isDefault")]
+        public required int IsDefault { get; set; }
+
+        [Required]
+        [Column("createdAt")]
+        public required DateTime CreatedAt { get; set; }
+
+        [Required]
+        [Column("updatedAt")]
+        public required DateTime UpdatedAt { get; set; }
+
+        [ForeignKey(nameof(IdUser))]
+        public User? User { get; set; }
+
+        // Collection of extracted skills
+        public ICollection<ResumeSkill>? ResumeSkills { get; set; }
     }
 }

@@ -12,99 +12,94 @@ namespace HuitWorks.WebAPI.Data
         public DbSet<User> Users { get; set; }
         public DbSet<CandidateInfo> CandidateInfo { get; set; }
         public DbSet<RecruiterInfo> RecruiterInfo { get; set; }
-        public DbSet<JobPosting> JobPosting { get; set; }
-        public DbSet<JobPostingRequiredSkill> JobPostingRequiredSkills { get; set; }
-        public DbSet<JobApplication> JobApplication { get; set; }
+        public DbSet<JobPosting> JobPostings { get; set; }
+        public DbSet<JobApplication> JobApplications { get; set; }
         public DbSet<Resume> Resumes { get; set; }
         public DbSet<ResumeSkill> ResumeSkills { get; set; }
+        public DbSet<Podcast> Podcasts { get; set; }
+        public DbSet<Website> Websites { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder mb)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            mb.Entity<Role>().HasKey(r => r.IdRole);
-            mb.Entity<Company>().HasKey(c => c.IdCompany);
-            mb.Entity<User>().HasKey(u => u.IdUser);
-            mb.Entity<CandidateInfo>().HasKey(ci => ci.IdUser);
-            mb.Entity<RecruiterInfo>().HasKey(ri => ri.IdUser);
-            mb.Entity<JobPosting>().HasKey(jp => jp.IdJobPost);
-            mb.Entity<JobPostingRequiredSkill>().HasKey(js => new { js.IdJobPost, js.Skill });
-            mb.Entity<JobApplication>().HasKey(ja => ja.IdJobApp);
-            mb.Entity<Resume>().HasKey(r => r.IdResume);
-            mb.Entity<ResumeSkill>().HasKey(rs => new { rs.IdResume, rs.Skill });
+            // Primary keys
+            modelBuilder.Entity<Role>().HasKey(r => r.IdRole);
+            modelBuilder.Entity<Company>().HasKey(c => c.IdCompany);
+            modelBuilder.Entity<User>().HasKey(u => u.IdUser);
+            modelBuilder.Entity<CandidateInfo>().HasKey(ci => ci.IdUser);
+            modelBuilder.Entity<RecruiterInfo>().HasKey(ri => ri.IdUser);
+            modelBuilder.Entity<JobPosting>().HasKey(jp => jp.IdJobPost);
+            modelBuilder.Entity<JobApplication>().HasKey(ja => ja.IdJobApp);
+            modelBuilder.Entity<Resume>().HasKey(r => r.IdResume);
+            modelBuilder.Entity<ResumeSkill>().HasKey(rs => new { rs.IdResume, rs.Skill });
+            modelBuilder.Entity<Podcast>().HasKey(p => p.IdPodcast);
+            modelBuilder.Entity<Website>().HasKey(w => w.IdWebsite);
 
-            // Quan hệ User -> Role
-            mb.Entity<User>()
+            // User -> Role
+            modelBuilder.Entity<User>()
                 .HasOne(u => u.Role)
                 .WithMany()
                 .HasForeignKey(u => u.IdRole)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Ánh xạ rõ ràng cột IdRole trong bảng Users
-            mb.Entity<User>()
-                .Property(u => u.IdRole)
-                .HasColumnName("idRole"); // Khớp với tên cột trong schema
-
-            // Quan hệ CandidateInfo -> User
-            mb.Entity<CandidateInfo>()
+            // CandidateInfo -> User (1:1)
+            modelBuilder.Entity<CandidateInfo>()
                 .HasOne(ci => ci.User)
                 .WithOne()
                 .HasForeignKey<CandidateInfo>(ci => ci.IdUser)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Quan hệ RecruiterInfo -> User
-            mb.Entity<RecruiterInfo>()
+            // RecruiterInfo -> User (1:1)
+            modelBuilder.Entity<RecruiterInfo>()
                 .HasOne(ri => ri.User)
                 .WithOne()
                 .HasForeignKey<RecruiterInfo>(ri => ri.IdUser)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Quan hệ RecruiterInfo -> Company
-            mb.Entity<RecruiterInfo>()
+            // RecruiterInfo -> Company (M:1)
+            modelBuilder.Entity<RecruiterInfo>()
                 .HasOne(ri => ri.Company)
-                .WithMany(c => c.Recruiters)
+                .WithMany()
                 .HasForeignKey(ri => ri.IdCompany)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            // Quan hệ JobPosting -> Company
-            mb.Entity<JobPosting>()
+            // JobPosting -> Company (M:1)
+            modelBuilder.Entity<JobPosting>()
                 .HasOne(jp => jp.Company)
-                .WithMany(c => c.JobPostings)
+                .WithMany()
                 .HasForeignKey(jp => jp.IdCompany)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Quan hệ JobPostingRequiredSkill -> JobPosting
-            mb.Entity<JobPostingRequiredSkill>()
-                .HasOne(js => js.JobPosting)
-                .WithMany(jp => jp.RequiredSkills)
-                .HasForeignKey(js => js.IdJobPost)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // Quan hệ JobApplication -> User
-            mb.Entity<JobApplication>()
+            // JobApplication -> User (M:1)
+            modelBuilder.Entity<JobApplication>()
                 .HasOne(ja => ja.User)
                 .WithMany()
                 .HasForeignKey(ja => ja.IdUser)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Quan hệ JobApplication -> JobPosting
-            mb.Entity<JobApplication>()
+            // JobApplication -> JobPosting (M:1)
+            modelBuilder.Entity<JobApplication>()
                 .HasOne(ja => ja.JobPosting)
-                .WithMany(jp => jp.Applications)
+                .WithMany()
                 .HasForeignKey(ja => ja.IdJobPost)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Quan hệ Resume -> User
-            mb.Entity<Resume>()
+            // Resume -> User (M:1)
+            modelBuilder.Entity<Resume>()
                 .HasOne(r => r.User)
                 .WithMany()
                 .HasForeignKey(r => r.IdUser)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Quan hệ ResumeSkill -> Resume
-            mb.Entity<ResumeSkill>()
+            // ResumeSkill -> Resume (M:1)
+            modelBuilder.Entity<ResumeSkill>()
                 .HasOne(rs => rs.Resume)
-                .WithMany(r => r.Skills)
+                .WithMany(r => r.ResumeSkills)
                 .HasForeignKey(rs => rs.IdResume)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Podcast and Website have no relations
+            modelBuilder.Entity<Podcast>();
+            modelBuilder.Entity<Website>();
         }
     }
 }
