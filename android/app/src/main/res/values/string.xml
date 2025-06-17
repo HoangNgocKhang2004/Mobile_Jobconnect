@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Job Connect</string>
+    <string name="welcome_message">Welcome to Job Connect!</string>
+    <string name="login_button">Login</string>
+    <string name="signup_button">Sign Up</string>
+    <string name="error_message">An error occurred. Please try again.</string>
+
+    
+    <string name="facebook_app_id">1648794659106277</string>
+    <string name="fb_login_protocol_scheme">fb1648794659106277</string>
+    <string name="facebook_client_token">705fd5af836dc4e57b877baf168f757c</string>
+</resources>

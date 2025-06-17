@@ -1,0 +1,71 @@
+{
+  "project_info": {
+    "project_number": "189359785129",
+    "firebase_url": "https://huit-mobile-recruit-app-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "huit-mobile-recruit-app",
+    "storage_bucket": "huit-mobile-recruit-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189359785129:android:b80a14d5fbfef8486d15b8",
+        "android_client_info": {
+          "package_name": "com.example.job_connect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "189359785129-l48bvct9eeoehj513pqdr4qm9m24b8a2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.job_connect",
+            "certificate_hash": "328f9db8eb5283f52c4cfa341bea517fa3b1f3a1"
+          }
+        },
+        {
+          "client_id": "189359785129-qd83qqt91ga43t3gav5hcbs5ip9ga973.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.job_connect",
+            "certificate_hash": "8f00b9e339d0d5d7aacaf11b195da060c425af97"
+          }
+        },
+        {
+          "client_id": "189359785129-u1l6dtch14ebn8580i7dsoh36ih03j6i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.job_connect",
+            "certificate_hash": "0ff04acb80d5fba71defce5b33511c5f8bdfe924"
+          }
+        },
+        {
+          "client_id": "189359785129-31itoom5cnir65jri1tbpm366jdf8u2g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJV2HzqpNBFSuqRLyxHX9ZBjOkjY65Dic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "189359785129-31itoom5cnir65jri1tbpm366jdf8u2g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "189359785129-2u6oeqaci6r1kddd5n7ael1tvv2of7tp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.testAppFireAuth"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
