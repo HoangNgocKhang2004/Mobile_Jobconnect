@@ -1,0 +1,34 @@
+# Build results
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.suo
+
+# VS Code
+.vscode/
+
+# Visual Studio
+.vs/
+*.dbmdl
+*.bak
+*.log
+
+# ASP.NET stuff
+wwwroot/node_modules/
+wwwroot/lib/
+
+# System files
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Others
+*.swp
+*.tmp
+serviceAccountKey.json
+firebase-credentials.json
