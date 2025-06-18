@@ -1,0 +1,134 @@
+﻿@model HuitWorks.AdminWeb.Models.ViewModels.HRCompanyViewModel
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết công ty - @Model.CompanyName</title>
+    <link href="~/css/hr/details.css" rel="stylesheet" />
+    
+</head>
+<body>
+    <div class="company-profile">
+        <div class="card-container">
+            <div class="company-header d-flex align-items-center">
+                <img src="@(string.IsNullOrEmpty(Model.LogoCompany) ? "/images/default-company.png" : Model.LogoCompany)"
+                     alt="@Model.CompanyName Logo"
+                     class="company-logo me-4"
+                     onerror="this.src='/images/default-company.png'; this.onerror=null;" />
+
+                <div>
+                    <h1 class="company-name">@Model.CompanyName</h1>
+                    @if (!string.IsNullOrEmpty(Model.WebsiteUrl))
+                    {
+                        <a href="@Model.WebsiteUrl" target="_blank" class="company-website">
+                            <i class="fas fa-globe"></i>
+                            @Model.WebsiteUrl
+                        </a>
+                    }
+
+                    <div class="company-meta">
+                        @if (!string.IsNullOrEmpty(Model.Address))
+                        {
+                            <div class="meta-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>@Model.Address</span>
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.Scale))
+                        {
+                            <div class="meta-item">
+                                <i class="fas fa-users"></i>
+                                <span>@Model.Scale nhân viên</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="company-details">
+                @if (!string.IsNullOrEmpty(Model.Description))
+                {
+                    <div class="info-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-building"></i>
+                            Giới thiệu công ty
+                        </h3>
+                        <div class="info-content description-content">@Model.Description</div>
+                    </div>
+                }
+
+                <div class="info-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-user-tie"></i>
+                        Người quản lý tuyển dụng
+                    </h3>
+
+                    <div class="hr-contact">
+                        <div class="contact-title">
+                            <i class="fas fa-id-card"></i>
+                            Thông tin liên hệ
+                        </div>
+
+                        <div class="contact-grid">
+                            @if (Model.User != null)
+                            {
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="contact-info">
+                                        <div class="contact-label">Tên người dùng</div>
+                                        <div class="contact-value">@Model.User.UserName</div>
+                                    </div>
+                                </div>
+
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="contact-info">
+                                        <div class="contact-label">Email</div>
+                                        <div class="contact-value">@Model.User.Email</div>
+                                    </div>
+                                </div>
+                            }
+
+                            @if (Model.Recruiter != null)
+                            {
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-sitemap"></i>
+                                    </div>
+                                    <div class="contact-info">
+                                        <div class="contact-label">Phòng ban</div>
+                                        <div class="contact-value">@Model.Recruiter.Department</div>
+                                    </div>
+                                </div>
+
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-id-badge"></i>
+                                    </div>
+                                    <div class="contact-info">
+                                        <div class="contact-label">Chức danh</div>
+                                        <div class="contact-value">@Model.Recruiter.Title</div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="/HR/index" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Quay lại danh sách
+        </a>
+    </div>
+
+</body>
+</html>

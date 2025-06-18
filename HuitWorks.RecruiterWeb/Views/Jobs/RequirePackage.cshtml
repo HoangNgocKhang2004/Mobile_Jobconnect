@@ -1,0 +1,99 @@
+﻿@{
+    ViewData["Title"] = "Bạn chưa có gói dịch vụ";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - HuitWorks</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          integrity="sha384-ENjdO4Dr2bkBIFxQpeoIpu5U82nQhKfvoPRq6MlqU0JuKKCLYqH2jhAt6Y1uNSZ"
+          crossorigin="anonymous">
+
+    <style>
+        body {
+            background-color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+        }
+
+        .wrapper {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .notify-card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 2rem 2.5rem;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .notify-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #094174;
+            margin-bottom: 1rem;
+        }
+
+        .notify-msg {
+            font-size: 1.05rem;
+            color: #555555;
+            margin-bottom: 1.75rem;
+        }
+
+        .btn-primary-lg {
+            background: #094174;
+            border-color: #094174;
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+            .btn-primary-lg:hover {
+                background: #0a4d85;
+                border-color: #0a4d85;
+            }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="notify-card">
+            <h2 class="notify-title">Bạn chưa mua gói dịch vụ</h2>
+            <p class="notify-msg">
+                Hiện tại hệ thống chưa tìm thấy gói dịch vụ mà bạn đã đăng ký. <br />
+                Vui lòng chọn một gói phù hợp để tiếp tục sử dụng tính năng.
+            </p>
+            <a href="@Url.Action("Create", "Service")"
+               class="btn btn-primary-lg">
+                <i class="fas fa-shopping-cart me-2"></i> Mua gói ngay
+            </a>
+        </div>
+    </div>
+
+    <!-- FontAwesome (để hiện icon shopping cart) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
+            integrity="sha512-uPSwmhjfJGtHPyyHcw09FS5QA1QVCZ/AttiK2+UnnE+K3mO7X5O43rTbM0UIDd3X8DRE4qS5Xcv8qa0bZhyHgQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+
+    <!-- Bootstrap 5 JS + Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.11.7/dist/umd/popper.min.js"
+            integrity="sha384-7+F4h8WuestuJmN0qI2peP4dRhD78oM1IF0zhjZB/6UVCVGN8hdLD/EW1VlDXu1V"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+            integrity="sha384-qQ9tFJ1N+qVmlQljmp/a3u/gKBMrr6O3Q1iwAE1SO6o37uFOuSbDTnQkP6KdlbBu"
+            crossorigin="anonymous"></script>
+</body>
+</html>

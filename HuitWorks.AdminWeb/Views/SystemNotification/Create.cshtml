@@ -1,0 +1,114 @@
+﻿@model HuitWorks.AdminWeb.Models.ViewModels.NotificationViewModel
+@{
+    ViewData["Title"] = "Tạo mới thông báo";
+    var users = ViewBag.Users as List<HuitWorks.AdminWeb.Models.ViewModels.UserViewModel>
+                ?? new List<HuitWorks.AdminWeb.Models.ViewModels.UserViewModel>();
+}
+
+<link href="~/css/systemnotification/create.css" rel="stylesheet" />
+
+<div class="admin-form-container">
+    <div class="admin-form-header">
+        <h2>@ViewData["Title"]</h2>
+    </div>
+
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="All" class="text-danger validation-summary"></div>
+
+        <!-- Hidden fields -->
+        <input type="hidden" asp-for="CreatedAt" />
+        <input type="hidden" asp-for="IsRead" />
+
+        <div class="form-grid">
+            <div class="form-group required-field">
+                <label asp-for="IdUser">Người nhận</label>
+                <select asp-for="IdUser" class="form-control">
+                    <option value="">-- Chọn người dùng --</option>
+                    @foreach (var u in users)
+                    {
+                        if (u.IdUser == Model.IdUser)
+                        {
+                            <option value="@u.IdUser" selected="selected">
+                                @u.UserName (@u.IdUser)
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@u.IdUser">
+                                @u.UserName (@u.IdUser)
+                            </option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="IdUser" class="text-danger"></span>
+            </div>
+
+            <div class="form-group required-field">
+                <label asp-for="Type">Loại thông báo</label>
+                <select asp-for="Type" class="form-control">
+                    <option value="">-- Chọn loại thông báo --</option>
+                    <option value="Việc làm mới" selected="@(Model.Type == "Việc làm mới")">🔔 Việc làm mới</option>
+                    <option value="Phỏng vấn" selected="@(Model.Type == "Phỏng vấn")">💼 Phỏng vấn</option>
+                    <option value="Cập nhật ứng tuyển" selected="@(Model.Type == "Cập nhật ứng tuyển")">📋 Cập nhật ứng tuyển</option>
+                </select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <div class="form-group required-field full-width">
+                <label asp-for="Title">Tiêu đề thông báo</label>
+                <input asp-for="Title" class="form-control" placeholder="Nhập tiêu đề thông báo..." />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group required-field">
+                <label asp-for="DateTime">Thời gian thông báo</label>
+                <input asp-for="DateTime" class="form-control"
+                       type="datetime-local"
+                       value="@(Model.DateTime.ToString("yyyy-MM-ddTHH:mm"))" />
+                <div class="form-hint">Chọn thời gian gửi thông báo</div>
+                <span asp-validation-for="DateTime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group required-field">
+                <label asp-for="Status">Trạng thái</label>
+                <select asp-for="Status" class="form-control">
+                    <option value="">-- Chọn trạng thái --</option>
+                    @foreach (var st in new[] { "Lên lịch", "Đã gửi", "Chờ xử lý" })
+                    {
+                        if (st == Model.Status)
+                        {
+                            <option value="@st" selected="selected">@st</option>
+                        }
+                        else
+                        {
+                            <option value="@st">@st</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <div class="form-group full-width">
+                <label asp-for="ActionUrl">URL hành động</label>
+                <input asp-for="ActionUrl" class="form-control" placeholder="https://example.com/action" />
+                <div class="form-hint">URL sẽ được chuyển đến khi người dùng click vào thông báo (tùy chọn)</div>
+                <span asp-validation-for="ActionUrl" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                ✅ Tạo thông báo
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                ❌ Hủy bỏ
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

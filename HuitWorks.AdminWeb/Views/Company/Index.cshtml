@@ -1,0 +1,238 @@
+﻿@model List<HuitWorks.AdminWeb.Models.ViewModels.CompanyViewModel>
+@{
+    ViewData["Title"] = "Danh sách nhà tuyển dụng";
+}
+
+<link href="~/css/company/index.css" rel="stylesheet" />
+
+<div class="row mb-4">
+    <!-- Tổng số tài khoản -->
+    <div class="col-md-3">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                        Tổng số tài khoản
+                    </div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        @ViewBag.TotalAccounts
+                    </div>
+                    <p class="mb-0 text-muted"><i class="fas fa-arrow-up me-1"></i>12% trong tháng này</p>
+                </div>
+                <i class="fas fa-users fa-2x text-gray-300"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tài khoản chờ xác thực -->
+    <div class="col-md-3">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                        Tài khoản chờ xác thực
+                    </div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        @ViewBag.PendingAccounts
+                    </div>
+                    <p class="mb-0 text-muted"><i class="fas fa-arrow-down me-1"></i>5% so với tuần trước</p>
+                </div>
+                <i class="fas fa-user-clock fa-2x text-gray-300"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nhà tuyển dụng -->
+    <div class="col-md-3">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                        Nhà tuyển dụng
+                    </div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        @ViewBag.EmployersCount
+                    </div>
+                    <p class="mb-0 text-muted"><i class="fas fa-arrow-up me-1"></i>8% trong tháng này</p>
+                </div>
+                <i class="fas fa-building fa-2x text-gray-300"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dịch vụ đã sử dụng -->
+    <div class="col-md-3">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                        Dịch vụ đã sử dụng
+                    </div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        @ViewBag.ServicesUsedCount
+                    </div>
+                    <p class="mb-0 text-muted"><i class="fas fa-arrow-up me-1"></i>8% trong tháng này</p>
+                </div>
+                <i class="fas fa-concierge-bell fa-2x text-gray-300"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<div class="table-responsive">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5>Danh sách công ty</h5>
+            <div>
+                <button class="btn btn-sm btn-outline-secondary me-2">
+                    <i class="fas fa-filter me-1"></i>Lọc
+                </button>
+                <button class="btn btn-sm btn-outline-secondary">
+                    <i class="fas fa-download me-1"></i>Xuất
+                </button>
+            </div>
+        </div>
+    </div>
+    <table class="table table-hover align-middle shadow-sm rounded bg-white company-table">
+        <thead class="table-light">
+            <tr>
+                <th>Logo</th>
+                <th>Tên công ty</th>
+                <th>Địa chỉ</th>
+                <th>Quy mô</th>
+                <th>Lĩnh vực</th>
+                <th>Website</th>
+                <th class="text-center">Nổi bật</th>
+                <th class="text-center">Trạng thái</th>
+                <th class="text-center">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="@c.LogoCompany" class="company-logo" alt="Logo">
+                    </td>
+                    <td>
+                        <div class="company-name">@c.CompanyName</div>
+                        <div class="company-desc">@c.Description</div>
+                    </td>
+                    <td>
+                        <span class="d-block"><i class="fas fa-map-marker-alt text-muted me-1"></i> @c.Address</span>
+                    </td>
+                    <td class="text-center">@c.Scale</td>
+                    <td>
+                        <span class="badge badge-industry">@c.Industry</span>
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(c.WebsiteUrl))
+                        {
+                            <a href="@c.WebsiteUrl" target="_blank" class="text-primary fw-semibold">
+                                <i class="fas fa-external-link-alt"></i> Trang web
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+                    </td>
+                    <td class="text-center">
+                        @if (c.IsFeatured == 1)
+                        {
+                            <span class="badge badge-featured"><i class="fas fa-star me-1"></i> Nổi bật</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Thường</span>
+                        }
+                    </td>
+                    <td class="text-center">
+                        <span class="badge badge-status @(c.Status?.ToLower())">
+                            @if (c.Status == "active")
+                            {
+                                @:Đang hoạt động
+                            }
+                            else if (c.Status == "inactive")
+                            {
+                                @:Ngừng hoạt động
+                            }
+                            else if (c.Status == "suspended")
+                            {
+                                @:Tạm ngưng
+                            }
+                            else
+                            {
+                                @:Chưa rõ
+                            }
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <div class="btn-group" role="group">
+                            <a asp-action="Edit" asp-route-id="@c.IdCompany" class="btn btn-outline-success btn-sm" title="Chỉnh sửa">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            @if (c.Status == "active")
+                            {
+                                <form asp-action="Suspend" asp-route-id="@c.IdCompany" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-outline-warning btn-sm" title="Tạm ngưng" onclick="return confirm('Tạm ngưng hoạt động công ty này?');">
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-action="Activate" asp-route-id="@c.IdCompany" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-outline-primary btn-sm" title="Kích hoạt lại" onclick="return confirm('Kích hoạt lại công ty này?');">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="pagination">
+        <div class="page-info">
+            Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
+        </div>
+
+        <div class="page-buttons">
+            @if ((int)ViewBag.CurrentPage > 1)
+            {
+                <a href="?page=@((int)ViewBag.CurrentPage - 1)" class="page-btn">
+                    <i class="fas fa-angle-left"></i>
+                </a>
+            }
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                if (i == 1 || i == ViewBag.TotalPages || (i >= ViewBag.CurrentPage - 1 && i <= ViewBag.CurrentPage + 1))
+                {
+                    <a href="?page=@i" class="page-btn @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                }
+                else if (i == 2 || i == ViewBag.TotalPages - 1)
+                {
+                    <span class="page-btn">...</span>
+                }
+            }
+
+            @if ((int)ViewBag.CurrentPage < (int)ViewBag.TotalPages)
+            {
+                <a href="?page=@((int)ViewBag.CurrentPage + 1)" class="page-btn">
+                    <i class="fas fa-angle-right"></i>
+                </a>
+            }
+        </div>
+    </div>
+
+</div>

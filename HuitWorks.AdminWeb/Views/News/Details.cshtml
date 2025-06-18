@@ -1,0 +1,29 @@
+﻿@model News
+
+<div class="card mb-4 shadow">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">@Model.Title</h4>
+    </div>
+    <div class="card-body">
+        <img src="@Model.ImageUrl" class="img-fluid rounded mb-3" style="max-width:200px;">
+        <div class="mb-2 text-muted">
+            <i class="fas fa-calendar-alt"></i> @Model.PublishDate.ToString("dd/MM/yyyy HH:mm")
+            &nbsp;|&nbsp;
+            <i class="fas fa-user"></i> @Model.Author
+            &nbsp;|&nbsp;
+            <span class="badge bg-info">@Model.CategoryName</span>
+        </div>
+        <div class="mb-3">
+            <span class="badge @(Model.IsPublished ? "bg-success" : "bg-secondary")">
+                @(Model.IsPublished ? "Đã xuất bản" : "Bản nháp")
+            </span>
+        </div>
+        <p class="lead">@Model.Summary</p>
+        <hr>
+        <div>@Html.Raw(Model.Content)</div>
+    </div>
+    <div class="card-footer text-end">
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+        <a asp-action="Edit" asp-route-id="@Model.idNews" class="btn btn-primary">Chỉnh sửa</a>
+    </div>
+</div>

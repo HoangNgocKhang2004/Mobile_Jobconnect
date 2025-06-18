@@ -1,0 +1,88 @@
+﻿@model HuitWorks.RecruiterWeb.Models.EvaluateCandidateViewModel
+@{
+    ViewData["Title"] = "Đánh giá ứng viên";
+}
+
+<style>
+    .page-title {
+        color: #094174;
+        margin-bottom: 30px;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 15px;
+        font-size: 28px;
+    }
+
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: #094174;
+            border-radius: 2px;
+        }
+</style>
+
+<h2 class="page-title">@ViewData["Title"]</h2>
+
+<form asp-action="Evaluate" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="EvaluationId" />
+    <input type="hidden" asp-for="IdJobPost" />
+    <input type="hidden" asp-for="IdCandidate" />
+    <input type="hidden" asp-for="IdRecruiter" />
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        @for (int i = 0; i < Model.Items.Count; i++)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title mb-1">@Model.Items[i].Name</h5>
+                        <p class="card-subtitle text-muted mb-3 flex-grow-1">
+                            @Model.Items[i].Description
+                        </p>
+
+                        <div class="row gx-2 align-items-start">
+                            <!-- Nhận xét -->
+                            <div class="col-8">
+                                <label asp-for="Items[@i].Comments" class="form-label small">Nhận xét</label>
+                                <textarea asp-for="Items[@i].Comments"
+                                          class="form-control"
+                                          placeholder="Nhập nhận xét..."
+                                          rows="3"></textarea>
+                                <span asp-validation-for="Items[@i].Comments" class="text-danger small"></span>
+                            </div>
+
+                            <!-- Điểm -->
+                            <div class="col-4">
+                                <label asp-for="Items[@i].Score" class="form-label small">Điểm (1–10)</label>
+                                <input name="Items[@i].Score"
+                                       id="Items_@(i)__Score"
+                                       type="number"
+                                       min="1" max="10"
+                                       class="form-control text-end"
+                                       placeholder="Nhập điểm..."
+                                       value="@(Model.Items[i].Score > 0 ? Model.Items[i].Score.ToString() : String.Empty)" />
+                                <span asp-validation-for="Items[@i].Score" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" asp-for="Items[@i].CriterionId" />
+                <input type="hidden" asp-for="Items[@i].EvaluationDetailId" />
+            </div>
+        }
+    </div>
+
+    <div class="mt-4 text-end">
+        <button type="submit" class="btn btn-success px-4">
+            <i class="fas fa-save me-1"></i> Lưu đánh giá
+        </button>
+        <a asp-action="Index" class="btn btn-outline-secondary px-4 ms-2">
+            <i class="fas fa-arrow-left me-1"></i> Quay lại
+        </a>
+    </div>
+</form>

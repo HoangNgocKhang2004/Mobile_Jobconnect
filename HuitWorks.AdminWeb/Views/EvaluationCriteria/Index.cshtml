@@ -1,0 +1,254 @@
+﻿@model IEnumerable<HuitWorks.AdminWeb.Models.EvaluationCriteriaDto>
+@{
+    ViewData["Title"] = "Quản lý tiêu chí đánh giá";
+}
+
+<style>
+    #dataTableInterviews {
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 3px 16px rgba(30,41,59,0.04);
+    }
+
+        #dataTableInterviews th, #dataTableInterviews td {
+            vertical-align: middle !important;
+        }
+
+        #dataTableInterviews thead th {
+            background: #f8fafc;
+            border-bottom: 2px solid #e5e7eb;
+            text-transform: uppercase;
+            font-size: 0.97rem;
+            font-weight: 600;
+            color: #334155;
+            letter-spacing: 1px;
+        }
+
+        #dataTableInterviews tbody tr:hover {
+            background: #f3f4f6;
+            transition: background 0.18s;
+        }
+
+    .badge-mode {
+        font-size: 0.95rem;
+        border-radius: 8px;
+        padding: 0.3em 1em;
+        font-weight: 600;
+        display: inline-block;
+        margin-right: 2px;
+    }
+
+    .badge-online {
+        background: #dbeafe;
+        color: #2563eb;
+    }
+
+    .badge-offline {
+        background: #fef9c3;
+        color: #b45309;
+    }
+
+    .badge-default {
+        background: #e5e7eb;
+        color: #64748b;
+    }
+
+    .btn-action {
+        border-radius: 7px !important;
+        margin-right: 2px;
+        min-width: 34px;
+        min-height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .note-cell {
+        max-width: 220px;
+        white-space: pre-wrap;
+        word-break: break-word;
+        color: #495057;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        padding: 15px 20px;
+        background-color: var(--white);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+    }
+
+    .page-info {
+        color: #6c757d;
+        font-size: 14px;
+    }
+
+    .page-buttons {
+        display: flex;
+        gap: 5px;
+    }
+
+    .page-btn {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        background-color: var(--white);
+        color: #495057;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+        .page-btn.active {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .page-btn:hover:not(.active) {
+            background-color: #f5f5f5;
+        }
+</style>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Tổng số tiêu chí</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count()</div>
+                </div>
+                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">...</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">...</div>
+                </div>
+                <i class="fas fa-search fa-2x text-gray-300"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">...</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">...</div>
+                </div>
+                <i class="fas fa-check fa-2x text-gray-300"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Bị từ chối</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">...</div>
+                </div>
+                <i class="fas fa-times fa-2x text-gray-300"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Danh sách gói dịch vụ</h6>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Thêm tiêu chí
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover shadow-sm rounded" id="dataTableInterviews" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th class="text-center">ID</th>
+                        <th class="text-center">Tên tiêu chí</th>
+                        <th class="text-center">Mô tả</th>
+                        <th>Ngày tạo</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in Model)
+                    {
+                        <tr>
+                            <td>@c.CriterionId</td>
+                            <td>@c.Name</td>
+                            <td>@c.Description</td>
+                            <td>@c.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a asp-action="Edit"
+                                       asp-route-id="@c.CriterionId"
+                                       class="btn btn-sm btn-warning">
+                                        Sửa
+                                    </a>
+                                    @* <form asp-action="Delete" *@
+                                    @*       asp-route-id="@c.CriterionId" *@
+                                    @*       method="post" *@
+                                    @*       onsubmit="return confirm('Xác nhận xoá tiêu chí này?');" *@
+                                    @*       style="display:inline"> *@
+                                    @*     @Html.AntiForgeryToken() *@
+                                    @*     <button type="submit" class="btn btn-sm btn-danger">Xoá</button> *@
+                                    @* </form> *@
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                <div class="page-info">
+                    Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
+                </div>
+
+                <div class="page-buttons">
+                    @if ((int)ViewBag.CurrentPage > 1)
+                    {
+                        <a href="?page=@((int)ViewBag.CurrentPage - 1)" class="page-btn">
+                            <i class="fas fa-angle-left"></i>
+                        </a>
+                    }
+
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        if (i == 1 || i == ViewBag.TotalPages || (i >= ViewBag.CurrentPage - 1 && i <= ViewBag.CurrentPage + 1))
+                        {
+                            <a href="?page=@i" class="page-btn @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                        }
+                        else if (i == 2 || i == ViewBag.TotalPages - 1)
+                        {
+                            <span class="page-btn">...</span>
+                        }
+                    }
+
+                    @if ((int)ViewBag.CurrentPage < (int)ViewBag.TotalPages)
+                    {
+                        <a href="?page=@((int)ViewBag.CurrentPage + 1)" class="page-btn">
+                            <i class="fas fa-angle-right"></i>
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

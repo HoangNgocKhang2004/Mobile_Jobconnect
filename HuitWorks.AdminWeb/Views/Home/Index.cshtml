@@ -1,0 +1,364 @@
+﻿@model List<HuitWorks.AdminWeb.Models.ViewModels.JobPostingViewModel>
+
+@{
+    var interviews = ViewBag.UpcomingInterviews as List<HuitWorks.AdminWeb.Models.ViewModels.InterviewScheduleViewModel>;
+}
+
+<link href="~/css/home/index.css" rel="stylesheet" />
+
+<div class="row dashboard-stats mb-4">
+    <div class="col-md-3">
+        <div class="card h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <h5 class="card-title">Active Jobs</h5>
+                    <h2 class="card-stats-number">24</h2>
+                    <p class="card-stats-text mb-0"><i class="fas fa-arrow-up text-success"></i> 12% từ tháng trước</p>
+                </div>
+                <div class="card-stats-icon">
+                    <i class="fas fa-briefcase text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <h5 class="card-title">Ứng viên mới</h5>
+                    <h2 class="card-stats-number">86</h2>
+                    <p class="card-stats-text mb-0"><i class="fas fa-arrow-up text-success"></i> 8% từ tháng trước</p>
+                </div>
+                <div class="card-stats-icon">
+                    <i class="fas fa-users text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <h5 class="card-title">Phỏng vấn</h5>
+                    <h2 class="card-stats-number">35</h2>
+                    <p class="card-stats-text mb-0"><i class="fas fa-arrow-down text-danger"></i> 5% từ tháng trước</p>
+                </div>
+                <div class="card-stats-icon">
+                    <i class="fas fa-calendar-check text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <h5 class="card-title">Tuyển dụng</h5>
+                    <h2 class="card-stats-number">17</h2>
+                    <p class="card-stats-text mb-0"><i class="fas fa-arrow-up text-success"></i> 15% từ tháng trước</p>
+                </div>
+                <div class="card-stats-icon">
+                    <i class="fas fa-user-check text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-lg-8">
+        <div class="card h-100">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Tin tuyển dụng gần đây</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered align-middle shadow-sm rounded bg-white">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Tiêu đề</th>
+                                <th>Vị trí</th>
+                                <th class="text-center">Lương</th>
+                                <th class="text-center">Trạng thái</th>
+                                <th>Đăng ngày</th>
+                                <th>Công ty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <span class="fw-bold">@item.Title</span>
+                                        <div class="text-muted small">@item.JobType</div>
+                                    </td>
+                                    <td>@item.Location</td>
+                                    <td class="text-center">
+                                        <span class="badge bg-success bg-opacity-75 px-3 py-2">
+                                            @String.Format("{0:N0} VNĐ", item.Salary)
+                                        </span>
+                                    </td>
+
+                                    <td class="text-center">
+                                        @if (item.postStatus == "Đã duyệt")
+                                        {
+                                            <span class="badge bg-success">Đã duyệt</span>
+                                        }
+                                        else if (item.postStatus == "Chờ duyệt")
+                                        {
+                                            <span class="badge bg-warning text-dark">Chờ duyệt</span>
+                                        }
+                                        else if (item.postStatus == "Từ chối")
+                                        {
+                                            <span class="badge bg-danger">Từ chối</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@item.postStatus</span>
+                                        }
+                                    </td>
+                                    <td>@item.CreatedAt.ToString("dd/MM/yyyy")</td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            @if (!string.IsNullOrEmpty(item.Company.LogoCompany))
+                                            {
+                                                <img src="@item.Company.LogoCompany" alt="Logo" style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:1px solid #eee;">
+                                            }
+                                            <span class="fw-semibold">@item.Company.CompanyName</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+
+                    <div class="pagination">
+                        <div class="page-info">
+                            Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
+                        </div>
+
+                        <div class="page-buttons">
+                            @if ((int)ViewBag.CurrentPage > 1)
+                            {
+                                <a href="?page=@((int)ViewBag.CurrentPage - 1)" class="page-btn">
+                                    <i class="fas fa-angle-left"></i>
+                                </a>
+                            }
+
+                            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                            {
+                                if (i == 1 || i == ViewBag.TotalPages || (i >= ViewBag.CurrentPage - 1 && i <= ViewBag.CurrentPage + 1))
+                                {
+                                    <a href="?page=@i" class="page-btn @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                                }
+                                else if (i == 2 || i == ViewBag.TotalPages - 1)
+                                {
+                                    <span class="page-btn">...</span>
+                                }
+                            }
+
+                            @if ((int)ViewBag.CurrentPage < (int)ViewBag.TotalPages)
+                            {
+                                <a href="?page=@((int)ViewBag.CurrentPage + 1)" class="page-btn">
+                                    <i class="fas fa-angle-right"></i>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Thống kê ứng viên</h5>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Tháng này
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#">Tuần này</a></li>
+                        <li><a class="dropdown-item" href="#">Tháng này</a></li>
+                        <li><a class="dropdown-item" href="#">Quý này</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas id="applicationsChart" height="250"></canvas>
+                <hr>
+                <h6 class="text-muted mb-3">Top vị trí tuyển dụng</h6>
+                <div class="position-item d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h6 class="mb-0">Lập trình viên</h6>
+                        <small class="text-muted">42 ứng viên</small>
+                    </div>
+                    <div class="progress" style="width: 50%; height: 8px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+                <div class="position-item d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h6 class="mb-0">UI/UX Designer</h6>
+                        <small class="text-muted">28 ứng viên</small>
+                    </div>
+                    <div class="progress" style="width: 50%; height: 8px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+                <div class="position-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-0">Product Manager</h6>
+                        <small class="text-muted">16 ứng viên</small>
+                    </div>
+                    <div class="progress" style="width: 50%; height: 8px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Phỏng vấn sắp tới</h5>
+            </div>
+            <div class="card-body">
+                @if (interviews != null && interviews.Any())
+                {
+                    foreach (var intv in interviews)
+                    {
+                        <div class="upcoming-interview p-3 mb-3 border-start border-primary border-3 rounded bg-light">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="mb-1">
+                                        <i class="fas fa-user-tie me-2 text-primary"></i>
+                                        @intv.Interviewer -
+                                        <span class="text-dark">@intv.Note</span>
+                                    </h6>
+                                    <p class="mb-0 text-muted">
+                                        <i class="fas fa-calendar me-2"></i>
+                                        @intv.InterviewDate.ToString("dd/MM/yyyy, HH:mm")
+                                        @if (!string.IsNullOrEmpty(intv.Location))
+                                        {
+                                            <span> | <i class="fas fa-map-marker-alt"></i> @intv.Location</span>
+                                        }
+                                    </p>
+                                </div>
+                                <div>
+                                    <span class="badge @(intv.InterviewMode == "Online" ? "bg-success" : "bg-info")">
+                                        @intv.InterviewMode
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="alert alert-info mb-0">Không có lịch phỏng vấn sắp tới.</div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Hoạt động gần đây</h5>
+                <a href="#" class="text-primary">Xem tất cả</a>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex align-items-center p-3">
+                        <div class="activity-icon me-3 bg-soft-primary rounded-circle p-2">
+                            <i class="fas fa-plus-circle text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0">Bạn đã tạo tin tuyển dụng mới <strong>Full-stack Developer</strong></p>
+                            <small class="text-muted">30 phút trước</small>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center p-3">
+                        <div class="activity-icon me-3 bg-soft-success rounded-circle p-2">
+                            <i class="fas fa-check-circle text-success"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0"><strong>Phạm Văn D</strong> được tuyển cho vị trí <strong>UI/UX Designer</strong></p>
+                            <small class="text-muted">2 giờ trước</small>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center p-3">
+                        <div class="activity-icon me-3 bg-soft-info rounded-circle p-2">
+                            <i class="fas fa-user-circle text-info"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0"><strong>12 ứng viên mới</strong> đã ứng tuyển vào các vị trí khác nhau</p>
+                            <small class="text-muted">Hôm nay</small>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center p-3">
+                        <div class="activity-icon me-3 bg-soft-warning rounded-circle p-2">
+                            <i class="fas fa-clock text-warning"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0">Tin tuyển dụng <strong>Marketing Manager</strong> sắp hết hạn</p>
+                            <small class="text-muted">Còn 2 ngày</small>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center p-3">
+                        <div class="activity-icon me-3 bg-soft-danger rounded-circle p-2">
+                            <i class="fas fa-trash-alt text-danger"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0">Bạn đã xóa tin tuyển dụng <strong>Content Writer</strong></p>
+                            <small class="text-muted">Hôm qua</small>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts for Charts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Application Statistics Chart
+        var ctx = document.getElementById('applicationsChart').getContext('2d');
+        var applicationsChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Chưa duyệt', 'Sàng lọc', 'Phỏng vấn', 'Đánh giá', 'Đã nhận'],
+                datasets: [{
+                    data: [42, 28, 16, 12, 8],
+                    backgroundColor: [
+                        '#e9ecef',
+                        '#adb5bd',
+                        '#6c757d',
+                        '#4263eb',
+                        '#2b8a3e'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 20
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+    });
+</script>

@@ -1,0 +1,112 @@
+﻿@model HuitWorks.AdminWeb.Models.ViewModels.JobPostingViewModel
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link href="~/css/jobpost/details.css" rel="stylesheet" />
+</head>
+<body>
+    @{
+        string statusClass = "status-active";
+        if (Model.postStatus == "Đã đóng")
+        {
+            statusClass = "status-closed";
+        }
+        else if (Model.postStatus == "Bản nháp")
+        {
+            statusClass = "status-draft";
+        }
+
+        // Function to split benefits by line break
+        string[] GetBenefitsList(string benefits)
+        {
+            if (string.IsNullOrEmpty(benefits)) return new string[0];
+            return benefits.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+        }
+    }
+
+    <div class="container py-4">
+        <div class="job-header">
+            <div class="job-status @statusClass">@Model.postStatus</div>
+            <h1 class="job-title">@Model.Title</h1>
+
+            <div class="job-meta">
+                <div class="meta-item">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>@Model.Salary.ToString("N0") VNĐ</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>@Model.Location</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-briefcase"></i>
+                    <span>@Model.JobType</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>@Model.ExperienceLevel</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Hạn: @Model.ApplicationDeadline.ToString("dd/MM/yyyy")</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Đăng: @Model.CreatedAt.ToString("dd/MM/yyyy")</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="job-content">
+            <div class="section">
+                <h3 class="section-title">
+                    <i class="fas fa-tasks"></i>
+                    Mô tả công việc
+                </h3>
+                <div class="section-content">@Model.Description</div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">
+                    <i class="fas fa-clipboard-list"></i>
+                    Yêu cầu
+                </h3>
+                <div class="section-content">@Model.Requirements</div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">
+                    <i class="fas fa-gift"></i>
+                    Quyền lợi
+                </h3>
+                <div class="benefits-list">
+                    @foreach (var benefit in GetBenefitsList(Model.Benefits))
+                    {
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="benefit-text">@benefit</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex gap-3">
+            <a href="/jobpost/index" class="action-btn btn-light">
+                <i class="fas fa-arrow-left"></i>
+                Quay lại danh sách
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

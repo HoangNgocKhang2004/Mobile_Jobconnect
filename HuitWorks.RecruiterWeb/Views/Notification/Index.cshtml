@@ -1,0 +1,378 @@
+﻿@model IEnumerable<HuitWorks.RecruiterWeb.Models.ViewModel.NotificationViewModel>
+
+<style>
+    :root {
+        --primary-color: #094174;
+        --secondary-color: #125590;
+        --accent-color: #1e6cb4;
+        --success-color: #0d9268;
+        --warning-color: #e59113;
+        --danger-color: #d23c3c;
+        --info-color: #0c87c1;
+        --text-color: #1e293b;
+        --light-text: #64748b;
+        --background: #f8fafc;
+        --card-bg: #ffffff;
+        --border-color: #e2e8f0;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    body {
+        background-color: var(--background);
+        color: var(--text-color);
+        line-height: 1.6;
+    }
+
+    main {
+    }
+
+    .notification-filters {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .filter-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        background-color: var(--card-bg);
+        color: var(--light-text);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 0.85rem;
+    }
+
+        .filter-btn:hover {
+            background-color: rgba(9, 65, 116, 0.05);
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+    .notification-container {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .notification-card {
+        background-color: var(--card-bg);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        padding: 1.25rem;
+        display: flex;
+        gap: 1rem;
+        transition: transform 0.2s ease;
+        border-left: 4px solid transparent;
+    }
+
+        .notification-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .notification-card:nth-child(1) {
+            border-left-color: var(--info-color);
+        }
+
+        .notification-card:nth-child(2) {
+            border-left-color: var(--success-color);
+        }
+
+        .notification-card:nth-child(3) {
+            border-left-color: var(--warning-color);
+        }
+
+        .notification-card:nth-child(4) {
+            border-left-color: var(--danger-color);
+        }
+
+    .notification-icon {
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+    }
+
+        .notification-icon.system {
+            background-color: var(--info-color);
+        }
+
+        .notification-icon.success {
+            background-color: var(--success-color);
+        }
+
+        .notification-icon.warning {
+            background-color: var(--warning-color);
+        }
+
+        .notification-icon.danger {
+            background-color: var(--danger-color);
+        }
+
+    .notification-content {
+        flex-grow: 1;
+    }
+
+    .notification-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+
+    .notification-title {
+        font-weight: 600;
+        font-size: 1.05rem;
+        color: var(--primary-color);
+    }
+
+    .notification-time {
+        font-size: 0.8rem;
+        color: var(--light-text);
+    }
+
+    .notification-message {
+        color: var(--light-text);
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .notification-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .action-btn {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .primary-btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+    }
+
+        .primary-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+    .secondary-btn {
+        background-color: transparent;
+        color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+    }
+
+        .secondary-btn:hover {
+            background-color: rgba(9, 65, 116, 0.05);
+        }
+
+    .pagination .page-link {
+        color: #094174;
+        border-color: #dee2e6;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #094174;
+        border-color: #094174;
+        color: white;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+    }
+
+    .pagination .page-link:hover {
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+        color: #094174;
+    }
+
+    .pagination .page-link:focus {
+        box-shadow: 0 0 0 0.2rem rgba(9, 65, 116, 0.25);
+    }
+
+    .no-notifications {
+        padding: 3rem;
+        text-align: center;
+        background-color: var(--card-bg);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+    }
+
+    .no-data-icon {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .no-data-text {
+        font-size: 1.1rem;
+        color: var(--light-text);
+        margin-bottom: 1.5rem;
+    }
+
+    .empty-action-btn {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border-radius: 4px;
+        display: inline-block;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+        .empty-action-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+    .container {
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    .page-title {
+        color: #094174;
+        margin-bottom: 30px;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 15px;
+        font-size: 28px;
+    }
+
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: #094174;
+            border-radius: 2px;
+        }
+</style>
+
+<main>
+    <div class="container">
+        <h2 class="page-title">Thông báo hệ thống</h2>
+
+        <div class="notification-container">
+            @if (!Model.Any())
+            {
+                <div class="no-notifications">
+                    <div class="no-data-icon">🔔</div>
+                    <div class="no-data-text">Bạn chưa có thông báo nào</div>
+                    <a href="/Home/Index" class="empty-action-btn">Quay lại trang chủ</a>
+                </div>
+            }
+            else
+            {
+                var typeColors = new Dictionary<string, string> {
+                    { "Cập nhật", "info" },
+                    { "Phỏng vấn", "success" },
+                    { "Thanh toán", "danger" },
+                    { "Ứng tuyển", "warning" }
+                };
+
+                int index = 1;
+                foreach (var noti in Model)
+                {
+                    var colorClass = typeColors.FirstOrDefault(kv => noti.Type.Contains(kv.Key)).Value ?? "system";
+                    <div class="notification-card">
+                        <div class="notification-icon @colorClass">
+                            <i>🔔</i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-header">
+                                <div class="notification-title">@noti.Title</div>
+                                <div class="notification-time">@noti.CreatedAt.ToString("dd/MM/yyyy HH:mm")</div>
+                            </div>
+                            <div class="notification-message">
+                                Loại: @noti.Type - Trạng thái: @noti.Status
+                            </div>
+                            @* <div class="notification-actions"> *@
+                            @*     <a href="@noti.ActionUrl" class="action-btn primary-btn">Xem chi tiết</a> *@
+                            @* </div> *@
+                        </div>
+                    </div>
+                    index++;
+                }
+            }
+        </div>
+        <nav aria-label="Page navigation" style="margin-bottom: -130px;">
+            <ul class="pagination justify-content-center mt-4">
+                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                    <a class="page-link"
+                       href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1 })"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                        <a class="page-link"
+                           href="@Url.Action("Index", new { page = i })">
+                            @i
+                        </a>
+                    </li>
+                }
+
+                <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                    <a class="page-link"
+                       href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1 })"
+                       aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                this.classList.add('active');
+
+            });
+        });
+
+        const pageItems = document.querySelectorAll('.page-item');
+
+        pageItems.forEach(item => {
+            item.addEventListener('click', function() {
+                if (!this.classList.contains('active')) {
+                    pageItems.forEach(page => page.classList.remove('active'));
+                    if (this.textContent !== '«' && this.textContent !== '»') {
+                        this.classList.add('active');
+                    }
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,285 @@
+﻿@model HuitWorks.RecruiterWeb.Models.ViewModel.CompanyAccountViewModel
+
+@{
+    ViewData["Title"] = "Quản lý tài khoản";
+    var company = Model?.Company;
+    var logoUrl = string.IsNullOrWhiteSpace(company?.LogoCompany)
+        ? Url.Content("~/images/logo.png")
+        : company.LogoCompany;
+}
+
+<style>
+    :root {
+        --bg-light: #F9FBFD;
+        --primary-color: #094174;
+        --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        --border-radius: 10px;
+    }
+
+    body {
+        background-color: var(--bg-light);
+    }
+
+    .page-title {
+        color: var(--primary-color);
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 0.5rem;
+        font-size: 2rem;
+    }
+    .page-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 6rem;
+        height: 4px;
+        background-color: var(--primary-color);
+        border-radius: 2px;
+    }
+
+    .company-card {
+        border: none;
+        border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    .company-card-body {
+        padding: 2rem 1.5rem;
+        background-color: #fff;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #333;
+    }
+
+    .btn-primary,
+    .btn-success {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover,
+    .btn-success:hover {
+        background-color: #073256;
+        border-color: #073256;
+    }
+
+    .pdf-embed-container {
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .pdf-embed-container object {
+        width: 100%;
+        height: 400px;
+        border: none;
+    }
+
+    .logo-preview {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        margin-bottom: 0.5rem;
+    }
+</style>
+
+<div class="container">
+    <div class="mb-4">
+        <h2 class="page-title">@ViewData["Title"]</h2>
+    </div>
+
+    <div class="card company-card">
+        <div class="company-card-body">
+            <form asp-action="Edit" asp-controller="Company" method="post" enctype="multipart/form-data" class="row g-4">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Company.IdCompany" />
+                <input type="hidden" asp-for="Company.LogoCompany" />
+                <input type="hidden" asp-for="Company.Status" />
+                <input type="hidden" asp-for="Company.CurrentPackageId" />
+
+                <!-- Cột trái: Thông tin cơ bản -->
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label asp-for="Company.CompanyName" class="form-label">Tên công ty</label>
+                        <input asp-for="Company.CompanyName" class="form-control  " />
+                        <span asp-validation-for="Company.CompanyName" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Company.TaxCode" class="form-label">Mã số thuế</label>
+                        <input asp-for="Company.TaxCode" class="form-control  " />
+                        <span asp-validation-for="Company.TaxCode" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Company.Industry" class="form-label">Lĩnh vực</label>
+                        <input asp-for="Company.Industry" class="form-control  " />
+                        <span asp-validation-for="Company.Industry" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Company.WebsiteUrl" class="form-label">Website</label>
+                        <input asp-for="Company.WebsiteUrl" class="form-control  " />
+                        <span asp-validation-for="Company.WebsiteUrl" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Company.Scale" class="form-label">Quy mô</label>
+                        <select asp-for="Company.Scale" class="form-select">
+                            <option value="">-- Chọn quy mô --</option>
+                            <option value="1-9">Dưới 10</option>
+                            <option value="10-19">Từ 10 đến 19</option>
+                            <option value="20-49">Từ 20 đến 49</option>
+                            <option value="50-99">Từ 50 đến 99</option>
+                            <option value="100-199">Từ 100 đến 199</option>
+                            <option value="200-499">Từ 200 đến 499</option>
+                            <option value="500-999">Từ 500 đến 999</option>
+                            <option value="1000+">Trên 1000</option>
+                        </select>
+                        <span asp-validation-for="Company.Scale" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Company.Address" class="form-label">Địa chỉ</label>
+                        <input asp-for="Company.Address" class="form-control  " />
+                        <span asp-validation-for="Company.Address" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Company.Description" class="form-label">Giới thiệu</label>
+                        <textarea asp-for="Company.Description" class="form-control  " rows="4"></textarea>
+                        <span asp-validation-for="Company.Description" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <!-- Cột phải: Upload Logo & Giấy phép -->
+                <div class="col-lg-6">
+                    <!-- Upload Logo -->
+                    <div class="mb-4">
+                        <label class="form-label">Logo công ty</label>
+                        <div class="d-flex align-items-center mb-2">
+                            <img id="newLogoPreview" src="@logoUrl" alt="Logo mới" class="logo-preview me-2" />
+                            <div>
+                                <input asp-for="LogoFile" id="logoFileInput" type="file" class="form-control" accept=".png,.jpg,.jpeg" />
+                                <span asp-validation-for="LogoFile" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <small class="text-muted">Chọn file ảnh (PNG/JPG) để thay đổi logo. Kích thước đề xuất: 200×200 px.</small>
+                    </div>
+
+                    <!-- Upload & Preview Giấy phép -->
+                    <div class="mb-4">
+                        <label class="form-label">Giấy phép kinh doanh</label>
+
+                        <div id="pdfContainer">
+                            @if (!string.IsNullOrEmpty(company?.BusinessLicenseUrl))
+                            {
+                                <div class="pdf-embed-container mb-3" id="existingPdf">
+                                    <object data="@company.BusinessLicenseUrl" type="application/pdf">
+                                        <p class="p-3">
+                                            Trình duyệt không hỗ trợ hiển thị PDF.
+                                            <a href="@company.BusinessLicenseUrl" target="_blank" class="text-primary">
+                                                Tải xuống giấy phép
+                                            </a>.
+                                        </p>
+                                    </object>
+                                </div>
+                            }
+                        </div>
+
+                        <input asp-for="LicenseFile" id="licenseFileInput" type="file" class="form-control" accept=".pdf,.png,.jpg" />
+                        <span asp-validation-for="LicenseFile" class="text-danger small"></span>
+                        <small class="text-muted">Chọn file PDF/PNG/JPG để upload giấy phép mới.</small>
+                    </div>
+                </div>
+
+                <!-- Nút Lưu -->
+                <div class="col-12 text-end">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-save me-2"></i> Lưu thay đổi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Preview logo khi chọn file mới
+        var logoInput = document.getElementById("logoFileInput");
+        var newLogoPreview = document.getElementById("newLogoPreview");
+
+        logoInput.addEventListener("change", function () {
+            var file = logoInput.files[0];
+            if (file && file.type.startsWith("image/")) {
+                var reader = new FileReader();
+                reader.onload = function (evt) {
+                    newLogoPreview.src = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Preview PDF hoặc hình giấy phép khi chọn file mới
+        var licenseInput = document.getElementById("licenseFileInput");
+        var pdfContainer = document.getElementById("pdfContainer");
+
+        licenseInput.addEventListener("change", function () {
+            var file = licenseInput.files[0];
+            // Xóa preview cũ (nếu có)
+            var existingPdf = document.getElementById("existingPdf");
+            if (existingPdf) {
+                existingPdf.remove();
+            }
+
+            if (file) {
+                var fileType = file.type;
+                if (fileType === "application/pdf") {
+                    // Tạo Blob URL cho PDF
+                    var blobUrl = URL.createObjectURL(file);
+                    var container = document.createElement("div");
+                    container.className = "pdf-embed-container mb-3";
+
+                    var obj = document.createElement("object");
+                    obj.setAttribute("data", blobUrl);
+                    obj.setAttribute("type", "application/pdf");
+                    container.appendChild(obj);
+
+                    var fallback = document.createElement("p");
+                    fallback.className = "p-3";
+                    fallback.innerHTML =
+                        'Trình duyệt không hỗ trợ hiển thị PDF. <a href="' +
+                        blobUrl +
+                        '" target="_blank" class="text-primary">Tải xuống giấy phép</a>.';
+                    obj.appendChild(fallback);
+
+                    pdfContainer.appendChild(container);
+                } else if (fileType.startsWith("image/")) {
+                    // Tạo Blob URL cho hình ảnh
+                    var imgUrl = URL.createObjectURL(file);
+                    var container = document.createElement("div");
+                    container.className = "mb-3";
+
+                    var img = document.createElement("img");
+                    img.src = imgUrl;
+                    img.alt = "Preview giấy phép";
+                    img.style.width = "100%";
+                    img.style.maxHeight = "400px";
+                    img.style.objectFit = "contain";
+                    container.appendChild(img);
+
+                    pdfContainer.appendChild(container);
+                }
+            }
+        });
+    });
+</script>

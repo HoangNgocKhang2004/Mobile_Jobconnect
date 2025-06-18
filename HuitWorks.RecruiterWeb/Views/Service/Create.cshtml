@@ -1,0 +1,672 @@
+﻿@using System.Security.Claims
+@model HuitWorks.RecruiterWeb.Models.ViewModel.SubscriptionPackagesViewModel
+
+@{
+    ViewData["Title"] = "Chọn gói dịch vụ";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - HuitWorks</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          integrity="sha384-ENjdO4Dr2bkBIFxQpeoIpu5U82nQhKfvoPRq6MlqU0JuKKCLYqH2jhAt6Y1uNSZ"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-pzwg6jyFpdHG+gL5tr//UvYU7mur7ti0KqzMk1PJ0i4YjE+Pa1aG6H1MJBZz0lbZa/7HsbwTrLmdphV8Rk85BQ=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+
+    <style>
+        :root {
+            --primary-color: #094174;
+            --primary-light: #0a4d85;
+            --success-color: #28a745;
+            --text-dark: #2d3748;
+            --text-muted: #718096;
+            --light-bg: #f8fafc;
+            --white: #ffffff;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            --gradient-success: linear-gradient(135deg, var(--success-color), #20c997);
+        }
+
+        body {
+            background: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin-top: 20px;
+        }
+
+        .subscription-container {
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .subscription-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .package-card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .package-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 6px;
+                background: var(--gradient-primary);
+                transform: scaleX(0);
+                transition: transform 0.3s ease;
+            }
+
+            .package-card:hover {
+                transform: translateY(-8px);
+                box-shadow: var(--shadow-lg);
+            }
+
+                .package-card:hover::before {
+                    transform: scaleX(1);
+                }
+
+            .package-card.selected {
+                border-color: var(--primary-color);
+                box-shadow: 0 10px 40px rgba(9, 65, 116, 0.2);
+            }
+
+                .package-card.selected::before {
+                    transform: scaleX(1);
+                    background: var(--gradient-success);
+                }
+
+        .package-radio {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .package-header {
+            padding: 2rem 1.5rem 1rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .package-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .package-icon {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .package-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .package-currency {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-left: 0.25rem;
+        }
+
+        .package-duration {
+            color: var(--text-muted);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .package-description {
+            padding: 0 1.5rem 1rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            text-align: center;
+            background: rgba(248, 250, 252, 0.5);
+            margin: 1rem;
+            border-radius: 12px;
+        }
+
+        .package-features {
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+            .feature-item i {
+                color: var(--primary-color);
+                width: 20px;
+            }
+
+        .selected-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--success-color);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+
+        .package-card.selected .selected-indicator {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .submit-section {
+            text-align: center;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+            color: var(--white);
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(9, 65, 116, 0.3);
+        }
+
+            .btn-primary:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(9, 65, 116, 0.4);
+            }
+
+            .btn-primary:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+        .no-packages {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+            .no-packages i {
+                font-size: 4rem;
+                color: var(--text-muted);
+                margin-bottom: 1rem;
+            }
+
+            .no-packages p {
+                color: var(--text-muted);
+                font-size: 1.1rem;
+                margin: 0;
+            }
+
+        .modal {
+            z-index: 9999 !important;
+        }
+
+        .modal-backdrop {
+            z-index: 9998 !important;
+        }
+
+        .modal-content {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            background: var(--gradient-primary) !important;
+            border-radius: 16px 16px 0 0;
+            padding: 1.5rem 2rem;
+            border-bottom: none;
+        }
+
+        .modal-title {
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .qr-info-box {
+            background: var(--light-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .qr-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+            .qr-info-row:last-child {
+                border-bottom: none;
+            }
+
+        .qr-info-label {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .qr-info-value {
+            color: var(--text-muted);
+            font-family: 'Courier New', monospace;
+        }
+
+        .amount-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--success-color) !important;
+        }
+
+        .btn-success {
+            background: var(--gradient-success);
+            border: none;
+            font-weight: 600;
+            padding: 1rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+            .btn-success:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+            }
+
+        .btn-outline-secondary {
+            border: 2px solid var(--border-color);
+            color: var(--text-muted);
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+            .btn-outline-secondary:hover {
+                background: var(--text-muted);
+                border-color: var(--text-muted);
+                color: var(--white);
+            }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+            .page-title::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                bottom: -8px;
+                width: 80px;
+                height: 4px;
+                background: var(--primary-color);
+                border-radius: 2px;
+            }
+    </style>
+</head>
+<body>
+    <h2 class="page-title">@ViewData["Title"]</h2>
+    <div class="subscription-container">
+        @if (Model.Packages == null || !Model.Packages.Any())
+        {
+            <div class="no-packages">
+                <i class="fas fa-inbox"></i>
+                <p>Hiện không có gói dịch vụ nào khả dụng.</p>
+            </div>
+        }
+        else
+        {
+            <form id="choose-package-form">
+                <div class="packages-grid">
+                    @foreach (var pkg in Model.Packages)
+                    {
+                        var iconClass = "fas fa-box";
+                        if (pkg.PackageName.Contains("Cơ Bản")) iconClass = "fas fa-rocket";
+                        else if (pkg.PackageName.Contains("Chuyên Nghiệp")) iconClass = "fas fa-star";
+                        else if (pkg.PackageName.Contains("Doanh Nghiệp")) iconClass = "fas fa-crown";
+
+                        // Kiểm tra gói này có phải đang dùng không
+                        var isActive = !string.IsNullOrEmpty(Model.ActivePackageId)
+                        && pkg.IdPackage == Model.ActivePackageId;
+                        <div class="package-card @(isActive ? "selected" : "")"
+                             data-id="@pkg.IdPackage"
+                             data-name="@pkg.PackageName"
+                             data-price="@pkg.Price"
+                             onclick="selectPackage(this)">
+                            @* Nếu đang dùng, hiển thị badge “ĐANG SỬ DỤNG” *@
+                            @if (isActive)
+                            {
+                                <div class="position-absolute top-0 end-0 m-2">
+                                    <span class="badge bg-success">ĐANG SỬ DỤNG</span>
+                                </div>
+                            }
+
+                            <div class="selected-indicator">
+                                <i class="fas fa-check"></i>
+                            </div>
+
+                            <input type="radio"
+                                   name="selectedPackageId"
+                                   value="@pkg.IdPackage"
+                                   class="package-radio"
+                            @(isActive ? "checked disabled" : "") />
+
+                            <div class="package-header">
+                                <div class="package-name">
+                                    <i class="package-icon @iconClass"></i>
+                                    @pkg.PackageName
+                                </div>
+                                <div class="package-price">
+                                    @pkg.Price.ToString("N0")<span class="package-currency">₫</span>
+                                </div>
+                                <div class="package-duration">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    @pkg.DurationDays ngày
+                                </div>
+                            </div>
+
+                            <div class="package-description">
+                                @pkg.Description
+                            </div>
+
+                            <div class="package-features">
+                                <div class="feature-item">
+                                    <i class="fas fa-file-alt me-2"></i>
+                                    @($"{pkg.CvViewLimit} CV được xem")
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-briefcase me-2"></i>
+                                    @($"{pkg.JobPostLimit} tin tuyển dụng")
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="submit-section">
+                    <button type="button"
+                            id="open-qr-btn"
+                            class="btn btn-primary"
+                    @(string.IsNullOrEmpty(Model.ActivePackageId) ? "" : "disabled")>
+                        <i class="fas fa-credit-card me-2"></i>
+                        @if (string.IsNullOrEmpty(Model.ActivePackageId))
+                        {
+                            @:Thanh toán
+                        }
+                        else
+                        {
+                            @:Bạn đang có gói
+                        }
+                    </button>
+                </div>
+            </form>
+        }
+    </div>
+
+    <!-- Modal QR -->
+    <div class="modal fade" id="qrModal" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="qrModalLabel">
+                        <i class="fas fa-qrcode me-2"></i>Thanh toán nâng cấp gói dịch vụ
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-6 text-center mb-4 mb-md-0">
+                            <div id="qr-loading" class="qr-loading" style="display: none;">
+                                <i class="fas fa-spinner"></i>
+                            </div>
+                            <img id="qr-img"
+                                 src=""
+                                 alt="QR chuyển khoản"
+                                 class="img-fluid"
+                                 style="max-width:280px; display: none;"
+                                 onload="hideQRLoading()"
+                                 onerror="showQRError()" />
+                            <div class="mt-3 text-muted">
+                                <i class="fas fa-mobile-alt me-2"></i>
+                                <strong>Quét mã QR bằng app ngân hàng/MoMo</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 id="modal-package-name" class="mb-3 text-primary"></h5>
+                            <div class="qr-info-box">
+                                <div class="qr-info-row">
+                                    <span class="qr-info-label">
+                                        <i class="fas fa-university me-2"></i>Ngân hàng:
+                                    </span>
+                                    <span class="qr-info-value">MB Bank</span>
+                                </div>
+                                <div class="qr-info-row">
+                                    <span class="qr-info-label">
+                                        <i class="fas fa-credit-card me-2"></i>Số tài khoản:
+                                    </span>
+                                    <span class="qr-info-value">0334297551</span>
+                                </div>
+                                <div class="qr-info-row">
+                                    <span class="qr-info-label">
+                                        <i class="fas fa-user me-2"></i>Chủ tài khoản:
+                                    </span>
+                                    <span class="qr-info-value">HOANG NGOC KHANG</span>
+                                </div>
+                                <div class="qr-info-row">
+                                    <span class="qr-info-label">
+                                        <i class="fas fa-comment me-2"></i>Nội dung:
+                                    </span>
+                                    <span class="qr-info-value" id="qr-content"></span>
+                                </div>
+                                <div class="qr-info-row">
+                                    <span class="qr-info-label">
+                                        <i class="fas fa-money-bill-wave me-2"></i>Số tiền:
+                                    </span>
+                                    <span class="amount-value" id="modal-price"></span>
+                                </div>
+                            </div>
+
+                            <form asp-action="Pay"
+                                  asp-controller="Service"
+                                  method="post"
+                                  id="pay-form-modal">
+                                <input type="hidden" name="packageId" id="modal-package-id" />
+                                <input type="hidden" name="paymentMethod" value="QR" />
+                                <input type="hidden" name="confirmed" value="true" />
+                                <button type="submit" class="btn btn-success w-100 mb-3">
+                                    <i class="fas fa-check-circle me-2"></i> Tôi đã chuyển khoản xong
+                                </button>
+                            </form>
+
+                            <button type="button" class="btn btn-outline-secondary w-100" data-bs-dismiss="modal">
+                                <i class="fas fa-times me-2"></i>Đóng
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS + Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.11.7/dist/umd/popper.min.js"
+            integrity="sha384-7+F4h8WuestuJmN0qI2peP4dRhD78oM1IF0zhjZB/6UVCVGN8hdLD/EW1VlDXu1V"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+            integrity="sha384-qQ9tFJ1N+qVmlQljmp/a3u/gKBMrr6O3Q1iwAE1SO6o37uFOuSbDTnQkP6KdlbBu"
+            crossorigin="anonymous"></script>
+
+    <script>
+        // Hàm chọn package
+        function selectPackage(card) {
+            // Nếu gói đó đang hiển thị "Đang sử dụng", không cho đổi
+            if (card.classList.contains('selected')) {
+                return;
+            }
+
+            // Remove class selected của tất cả
+            document.querySelectorAll('.package-card').forEach(c => {
+                c.classList.remove('selected');
+                c.querySelector('.package-radio').checked = false;
+            });
+
+            // Add class selected cho thẻ vừa click
+            card.classList.add('selected');
+            card.querySelector('.package-radio').checked = true;
+
+            // Bật nút Thanh toán
+            document.getElementById('open-qr-btn').disabled = false;
+        }
+
+        // Tạo URL QR (ví dụ dùng VietQR)
+        function generateQRUrl(amount, info) {
+            return `https://img.vietqr.io/image/970422-0334297551-print.png?amount=${amount}&addInfo=${encodeURIComponent(info)}`;
+        }
+
+        function showQRLoading() {
+            document.getElementById('qr-loading').style.display = 'flex';
+            document.getElementById('qr-img').style.display = 'none';
+        }
+        function hideQRLoading() {
+            document.getElementById('qr-loading').style.display = 'none';
+            document.getElementById('qr-img').style.display = 'block';
+        }
+        function showQRError() {
+            document.getElementById('qr-loading').style.display = 'none';
+            document.getElementById('qr-img').style.display = 'none';
+            console.error('Failed to load QR code');
+        }
+
+        // Khi nhấn Thanh toán => hiện Modal QR
+        document.getElementById('open-qr-btn').addEventListener('click', function () {
+            var card = document.querySelector('.package-card.selected');
+            if (!card) return;
+
+            var pkgId = card.getAttribute('data-id');
+            var name = card.getAttribute('data-name');
+            var pkgPrice = parseInt(card.getAttribute('data-price'));
+            var priceFormatted = pkgPrice.toLocaleString('vi-VN') + ' ₫';
+
+            // Lấy userId từ Claim
+            var userId = '@User.FindFirstValue(ClaimTypes.NameIdentifier)';
+            var info = userId + '-' + pkgId;
+
+            // Tạo URL QR
+            var qrUrl = generateQRUrl(pkgPrice, info);
+
+            // Hiển thị loading trước
+            showQRLoading();
+
+            // Đổ dữ liệu vào Modal
+            document.getElementById('modal-package-name').textContent = name;
+            document.getElementById('modal-price').textContent = priceFormatted;
+            document.getElementById('qr-content').textContent = info;
+            document.getElementById('modal-package-id').value = pkgId;
+
+            document.getElementById('qr-img').src = qrUrl;
+
+            // Show modal
+            var modal = new bootstrap.Modal(document.getElementById('qrModal'), {
+                backdrop: false,
+                keyboard: false
+            });
+            modal.show();
+
+            // Đảm bảo modal và backdrop luôn ở z-index cao nhất
+            setTimeout(() => {
+                document.getElementById('qrModal').style.zIndex = '9999';
+                var backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.style.zIndex = '9998';
+                }
+            }, 100);
+        });
+
+        // Khi modal show/hide
+        document.getElementById('qrModal').addEventListener('show.bs.modal', function () {
+            document.body.style.overflow = 'hidden';
+        });
+        document.getElementById('qrModal').addEventListener('hidden.bs.modal', function () {
+            document.body.style.overflow = 'auto';
+            document.getElementById('qr-img').src = '';
+        });
+
+        // Animation fade-in cho card
+        document.addEventListener('DOMContentLoaded', function () {
+            const cards = document.querySelectorAll('.package-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${0.1 + (index * 0.1)}s`;
+            });
+        });
+    </script>
+</body>
+</html>

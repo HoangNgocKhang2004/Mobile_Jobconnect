@@ -1,0 +1,151 @@
+﻿@model List<HuitWorks.RecruiterWeb.Models.ViewModel.MyServiceViewModel>
+@{
+    ViewData["Title"] = "Dịch vụ của tôi";
+}
+
+<style>
+    :root {
+        --bg-light: #F9FBFD;
+        --card-bg: #FFFFFF;
+        --primary-color: #094174;
+        --text-color: #2D3748;
+        --muted-color: #718096;
+        --shadow-soft: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    body {
+        background-color: var(--bg-light);
+        color: var(--text-color);
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 80px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+    .card-service {
+        background: var(--card-bg);
+        border: none;
+        border-radius: 12px;
+        box-shadow: var(--shadow-soft);
+        transition: transform .2s, box-shadow .2s;
+    }
+
+        .card-service:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .card-service .card-header {
+            background: transparent;
+            border-bottom: none;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            padding-bottom: 0;
+        }
+
+        .card-service .card-body {
+            padding-top: .5rem;
+        }
+
+    .service-info p {
+        margin-bottom: .4rem;
+    }
+
+    .service-info strong {
+        color: var(--primary-color);
+    }
+
+    .detail-title {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-top: 1rem;
+        margin-bottom: .5rem;
+        color: var(--text-color);
+    }
+
+    .badge-status {
+        display: inline-block;
+        padding: .35em .75em;
+        font-size: .85rem;
+        border-radius: .375rem;
+        font-weight: 500;
+    }
+
+    .badge-completed {
+        background: #D1FAE5;
+        color: #047857;
+    }
+
+    .badge-pending {
+        background: #FEF3C7;
+        color: #92400E;
+    }
+
+    .badge-cancelled {
+        background: #FEE2E2;
+        color: #B91C1C;
+    }
+</style>
+
+<div class="container">
+    <h2 class="page-title">@ViewData["Title"]</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Bạn chưa có gói dịch vụ nào.
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var svc in Model)
+            {
+                var badgeClass = svc.Status == "Completed" ? "badge-completed"
+                : svc.Status == "Pending" ? "badge-pending"
+                : svc.Status == "Cancelled" ? "badge-cancelled"
+                : "badge-secondary";
+                <div class="col-md-6">
+                    <div class="card card-service h-100">
+                        <div class="card-header">
+                            @svc.PackageName
+                            <span class="float-end badge-status @badgeClass">@svc.Status</span>
+                        </div>
+                        <div class="card-body service-info">
+                            <p><strong>Bắt đầu:</strong> @svc.StartDate.ToString("dd/MM/yyyy")</p>
+                            @if (svc.ExpireDate.HasValue)
+                            {
+                                <p><strong>Hết hạn:</strong> @svc.ExpireDate.Value.ToString("dd/MM/yyyy")</p>
+                            }
+                            <p><strong>Giá:</strong> @svc.Price.ToString("N0") ₫</p>
+                            <p><strong>Phương thức:</strong> @svc.PaymentMethod</p>
+
+                            <div class="detail-title">Chi tiết giao dịch</div>
+                            <p><strong>Số tiền:</strong> @svc.Details.AmountFormatted (@svc.Details.AmountInWords)</p>
+                            <p><strong>Người gửi:</strong> @svc.Details.SenderName (@svc.Details.SenderBank)</p>
+                            <p><strong>Người nhận:</strong> @svc.Details.ReceiverName (@svc.Details.ReceiverBank)</p>
+                            <p><strong>Nội dung:</strong> @svc.Details.Content</p>
+                            <p><strong>Phí:</strong> @svc.Details.Fee</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

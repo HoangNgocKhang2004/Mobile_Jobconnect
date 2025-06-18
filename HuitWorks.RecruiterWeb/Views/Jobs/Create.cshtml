@@ -1,0 +1,570 @@
+﻿@model HuitWorks.RecruiterWeb.Models.ViewModel.JobPostViewModel
+@{
+    ViewData["Title"] = "Tạo mới tin tuyển dụng";
+}
+<link href="~/css/jobs/create.css" rel="stylesheet" />
+
+<div class="container">
+    <h2 class="page-title">Tạo mới tin tuyển dụng</h2>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            @foreach (var err in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <div>@err.ErrorMessage</div>
+            }
+        </div>
+    }
+
+    <form asp-controller="Jobs" asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="IdJobPost" />
+        <input type="hidden" asp-for="IdCompany" />
+        <input type="hidden" asp-for="PostStatus" />
+
+        <div class="form-card">
+            <h4 class="section-title">Thông tin cơ bản</h4>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Title" class="form-label required-field">Tiêu đề công việc</label>
+                    <input asp-for="Title" class="form-control" placeholder="Ví dụ: Kỹ sư phần mềm" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label required-field">Địa điểm làm việc</label>
+                    <div class="input-group">
+                        <input asp-for="Location"
+                               class="form-control"
+                               placeholder="Chọn vị trí trên bản đồ"
+                               readonly />
+                        <button type="button" id="btnOpenMap" class="btn btn-outline-secondary">
+                            <i class="bi bi-geo-alt"></i> Chọn trên bản đồ
+                        </button>
+                    </div>
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+            </div>
+
+            @* Hai ô hiển thị Latitude & Longitude *@
+            @* <div class="row g-3 mt-3"> *@
+            @*     <div class="col-md-6"> *@
+            @*         <label asp-for="Latitude" class="form-label required-field">Vĩ độ</label> *@
+            @*         <input asp-for="Latitude" *@
+            @*                class="form-control" *@
+            @*                placeholder="Vĩ độ" *@
+            @*                readonly /> *@
+            @*         <span asp-validation-for="Latitude" class="text-danger"></span> *@
+            @*     </div> *@
+            @*     <div class="col-md-6"> *@
+            @*         <label asp-for="Longitude" class="form-label required-field">Kinh độ</label> *@
+            @*         <input asp-for="Longitude" *@
+            @*                class="form-control" *@
+            @*                placeholder="Kinh độ" *@
+            @*                readonly /> *@
+            @*         <span asp-validation-for="Longitude" class="text-danger"></span> *@
+            @*     </div> *@
+            @* </div> *@
+            <div class="d-none">
+                <input asp-for="Latitude" />
+                <input asp-for="Longitude" />
+            </div>
+
+        </div>
+
+        <div class="form-card">
+            <h4 class="section-title">Mô tả chi tiết</h4>
+            <div class="row g-3">
+                <div class="col-12">
+                    <label asp-for="Description" class="form-label required-field">Mô tả công việc</label>
+                    <textarea asp-for="Description"
+                              class="form-control"
+                              rows="5"
+                              placeholder="Mô tả chi tiết về công việc..."></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="col-12">
+                    <label asp-for="Requirements" class="form-label">Yêu cầu ứng viên</label>
+                    <textarea asp-for="Requirements"
+                              class="form-control"
+                              rows="4"
+                              placeholder="Kỹ năng/kinh nghiệm..."></textarea>
+                </div>
+                <div class="col-12">
+                    <label asp-for="Benefits" class="form-label">Phúc lợi</label>
+                    <textarea asp-for="Benefits"
+                              class="form-control"
+                              rows="3"
+                              placeholder="Các phúc lợi..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <h4 class="section-title">Điều kiện và yêu cầu</h4>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label asp-for="Salary" class="form-label">Mức lương (VNĐ)</label>
+                    <div class="input-group">
+                        <input asp-for="Salary"
+                               class="form-control"
+                               type="number"
+                               placeholder="Nhập mức lương" />
+                        <span class="input-group-text">VNĐ</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="WorkType" class="form-label required-field">Hình thức làm việc</label>
+                    <select asp-for="WorkType" class="form-select">
+                        <option value="">— Chọn hình thức —</option>
+                        <option value="fulltime">Toàn thời gian</option>
+                        <option value="parttime">Bán thời gian</option>
+                        <option value="remote">Từ xa</option>
+                    </select>
+                    <span asp-validation-for="WorkType" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="ExperienceLevel" class="form-label required-field">Cấp độ kinh nghiệm</label>
+                    <select asp-for="ExperienceLevel" class="form-select">
+                        <option value="">— Chọn cấp độ —</option>
+                        <option value="internship">Intern</option>
+                        <option value="fresher">Fresher</option>
+                    </select>
+                    <span asp-validation-for="ExperienceLevel" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="ApplicationDeadline" class="form-label required-field">Hạn nộp hồ sơ</label>
+                    <input asp-for="ApplicationDeadline"
+                           class="form-control"
+                           type="date" />
+                    <span asp-validation-for="ApplicationDeadline" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <div class="form-check custom-checkbox mt-4 ms-3">
+                        <input asp-for="IsFeatured"
+                               class="form-check-input"
+                               type="checkbox"
+                               id="isFeatured" />
+                        <label asp-for="IsFeatured" class="form-check-label ms-1">
+                            <span class="fw-medium">Đánh dấu là tin nổi bật</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end mt-4 mb-5">
+            <a asp-controller="Jobs" asp-action="Index" class="btn btn-secondary me-2">
+                <i class="bi bi-x-circle me-1"></i> Hủy
+            </a>
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-1"></i> Tạo tin tuyển dụng
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Modal bản đồ (ẩn ban đầu) -->
+<div id="mapBackdrop" class="modal-backdrop">
+    <div class="map-modal">
+        <div class="map-header">
+            <h5>Chọn vị trí trên bản đồ</h5>
+            <button type="button" id="btnCloseMap">&times;</button>
+        </div>
+        <div id="mapid"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+        {{-- Leaflet CSS + JS --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+
+        {{-- Leaflet Control Geocoder CSS + JS --}}
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const btnOpenMap = document.getElementById('btnOpenMap');
+            const btnCloseMap = document.getElementById('btnCloseMap');
+            const mapBackdrop = document.getElementById('mapBackdrop');
+            const mapContainer = document.getElementById('mapid');
+            const inputLocation = document.querySelector('input[name="Location"]');
+            const inputLat = document.querySelector('input[name="Latitude"]');
+            const inputLng = document.querySelector('input[name="Longitude"]');
+
+            let map, marker, geocoderControl;
+            let isMapInitialized = false;
+
+            function normalizeString(str) {
+                return str ? str.trim() : '';
+            }
+
+            function showModal() {
+                mapBackdrop.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    mapBackdrop.classList.add('show');
+                });
+                document.body.style.overflow = 'hidden'; // Ngăn scroll body
+            }
+
+            function hideModal() {
+                mapBackdrop.classList.remove('show');
+                // Chờ animation hoàn thành rồi mới ẩn
+                setTimeout(() => {
+                    mapBackdrop.style.display = 'none';
+                    document.body.style.overflow = ''; // Khôi phục scroll
+                }, 300);
+            }
+
+            function showNotification(message, type = 'info') {
+                // Tạo notification
+                const notification = document.createElement('div');
+                notification.className = `map-notification ${type}`;
+                notification.innerHTML = `
+                    <div class="notification-content">
+                        <i class="notification-icon">${type === 'success' ? '✓' : 'ℹ'}</i>
+                        <span>${message}</span>
+                    </div>
+                `;
+
+                // CSS cho notification
+                if (!document.querySelector('#notification-styles')) {
+                    const style = document.createElement('style');
+                    style.id = 'notification-styles';
+                    style.textContent = `
+                        .map-notification {
+                            position: fixed;
+                            top: 20px;
+                            right: 20px;
+                            background: #fff;
+                            padding: 16px 20px;
+                            border-radius: 12px;
+                            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+                            z-index: 2000;
+                            transform: translateX(400px);
+                            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                            max-width: 300px;
+                            border-left: 4px solid var(--primary-color);
+                        }
+                        .map-notification.show {
+                            transform: translateX(0);
+                        }
+                        .map-notification.success {
+                            border-left-color: #28a745;
+                        }
+                        .notification-content {
+                            display: flex;
+                            align-items: center;
+                            gap: 12px;
+                            font-size: 14px;
+                            color: #333;
+                        }
+                        .notification-icon {
+                            width: 20px;
+                            height: 20px;
+                            border-radius: 50%;
+                            background: var(--primary-color);
+                            color: white;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 12px;
+                            font-weight: bold;
+                        }
+                        .success .notification-icon {
+                            background: #28a745;
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+
+                document.body.appendChild(notification);
+
+                requestAnimationFrame(() => {
+                    notification.classList.add('show');
+                });
+
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 400);
+                }, 3000);
+            }
+
+            function waitForLeaflet(callback, maxTries = 15) {
+                if (typeof L !== 'undefined' && typeof L.Control.Geocoder !== 'undefined') {
+                    callback();
+                } else if (maxTries > 0) {
+                    setTimeout(() => waitForLeaflet(callback, maxTries - 1), 200);
+                } else {
+                    showNotification('Không thể tải thư viện bản đồ. Vui lòng thử lại.', 'error');
+                }
+            }
+
+            function initializeMap() {
+                if (isMapInitialized) return;
+
+                // Tọa độ mặc định (TP.HCM)
+                const defaultLat = normalizeString(inputLat.value) !== ''
+                    ? parseFloat(inputLat.value) : 10.8231;
+                const defaultLng = normalizeString(inputLng.value) !== ''
+                    ? parseFloat(inputLng.value) : 106.6297;
+
+                try {
+                    map = L.map('mapid', {
+                        zoomControl: false,
+                        fadeAnimation: true,
+                        zoomAnimation: true,
+                        markerZoomAnimation: true
+                    }).setView([defaultLat, defaultLng], 14);
+
+                    // Thêm zoom control với vị trí tùy chỉnh
+                    L.control.zoom({
+                        position: 'topright'
+                    }).addTo(map);
+
+                    // Tile layer với error handling
+                    const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                        errorTileUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSI+Không tải được</text></svg>'
+                    });
+
+                    tileLayer.on('tileerror', function() {
+                        console.warn('Lỗi tải tile map');
+                    });
+
+                    tileLayer.addTo(map);
+
+                    // Geocoder với cấu hình nâng cao
+                    geocoderControl = L.Control.geocoder({
+                        defaultMarkGeocode: false,
+                        placeholder: 'Tìm kiếm địa điểm...',
+                        errorMessage: 'Không tìm thấy địa điểm',
+                        showResultIcons: true,
+                        suggestMinLength: 3,
+                        suggestTimeout: 250,
+                        position: 'topleft'
+                    })
+                    .on('markgeocode', function(e) {
+                        const center = e.geocode.center;
+                        updateLocation(center.lat, center.lng, e.geocode.name);
+                        showNotification('Đã chọn vị trí: ' + e.geocode.name, 'success');
+                    })
+                    .addTo(map);
+
+                    // Xử lý click trên bản đồ với debounce
+                    let clickTimeout;
+                    map.on('click', function(e) {
+                        clearTimeout(clickTimeout);
+                        clickTimeout = setTimeout(async () => {
+                            const { lat, lng } = e.latlng;
+
+                            // Hiện loading indicator
+                            showNotification('Đang tìm địa chỉ...', 'info');
+
+                            try {
+                                const address = await reverseGeocode(lat, lng);
+                                updateLocation(lat, lng, address);
+                                showNotification('Đã cập nhật vị trí', 'success');
+                            } catch (error) {
+                                console.error('Lỗi reverse geocoding:', error);
+                                updateLocation(lat, lng, `${lat.toFixed(6)}, ${lng.toFixed(6)}`);
+                                showNotification('Đã chọn vị trí (không tìm được địa chỉ)', 'info');
+                            }
+                        }, 300);
+                    });
+
+                    // Khởi tạo marker nếu có tọa độ sẵn
+                    if (normalizeString(inputLat.value) !== '' && normalizeString(inputLng.value) !== '') {
+                        const lat = parseFloat(inputLat.value);
+                        const lng = parseFloat(inputLng.value);
+                        updateLocation(lat, lng, inputLocation.value, false);
+                    } else if (normalizeString(inputLocation.value) !== '') {
+                        // Forward geocode nếu chỉ có địa chỉ text
+                        forwardGeocode(inputLocation.value);
+                    }
+
+                    isMapInitialized = true;
+
+                    // Invalidate size để đảm bảo render đúng
+                    setTimeout(() => {
+                        map.invalidateSize();
+                    }, 300);
+
+                } catch (error) {
+                    console.error('Lỗi khởi tạo bản đồ:', error);
+                    showNotification('Lỗi khởi tạo bản đồ', 'error');
+                }
+            }
+
+            function updateLocation(lat, lng, address, panTo = true) {
+                // Xóa marker cũ
+                if (marker) {
+                    map.removeLayer(marker);
+                }
+
+                // Tạo marker mới với icon tùy chỉnh
+                const customIcon = L.divIcon({
+                    className: 'custom-marker',
+                    html: `
+                        <div style="
+                            background: var(--primary-color);
+                            width: 30px;
+                            height: 30px;
+                            border-radius: 50% 50% 50% 0;
+                            transform: rotate(-45deg);
+                            border: 3px solid white;
+                            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        ">
+                            <div style="
+                                color: white;
+                                transform: rotate(45deg);
+                                font-size: 14px;
+                                font-weight: bold;
+                            ">📍</div>
+                        </div>
+                    `,
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 30]
+                });
+
+                marker = L.marker([lat, lng], {
+                    icon: customIcon,
+                    draggable: true
+                }).addTo(map);
+
+                // Xử lý kéo thả marker
+                marker.on('dragend', async function(e) {
+                    const position = e.target.getLatLng();
+                    try {
+                        const address = await reverseGeocode(position.lat, position.lng);
+                        updateLocation(position.lat, position.lng, address, false);
+                        showNotification('Đã cập nhật vị trí', 'success');
+                    } catch (error) {
+                        updateLocation(position.lat, position.lng,
+                            `${position.lat.toFixed(6)}, ${position.lng.toFixed(6)}`, false);
+                    }
+                });
+
+                // Pan đến vị trí mới với animation
+                if (panTo) {
+                    map.flyTo([lat, lng], Math.max(map.getZoom(), 15), {
+                        duration: 1.5,
+                        easeLinearity: 0.1
+                    });
+                }
+
+                // Cập nhật form
+                inputLat.value = lat.toFixed(6);
+                inputLng.value = lng.toFixed(6);
+                inputLocation.value = address || `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            }
+
+            async function reverseGeocode(lat, lng) {
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=vi,en`
+                );
+
+                if (!response.ok) {
+                    throw new Error('Network error');
+                }
+
+                const data = await response.json();
+                return data.display_name || `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            }
+
+            async function forwardGeocode(address) {
+                try {
+                    const response = await fetch(
+                        `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(address)}&accept-language=vi,en&limit=1`
+                    );
+
+                    if (!response.ok) throw new Error('Network error');
+
+                    const data = await response.json();
+                    if (data && data.length > 0) {
+                        const result = data[0];
+                        updateLocation(parseFloat(result.lat), parseFloat(result.lon), result.display_name);
+                    }
+                } catch (error) {
+                    console.error('Forward geocoding failed:', error);
+                }
+            }
+
+            // Event listeners
+            btnOpenMap.addEventListener('click', function (e) {
+                e.preventDefault();
+                showModal();
+
+                waitForLeaflet(() => {
+                    if (!isMapInitialized) {
+                        initializeMap();
+                    } else {
+                        // Refresh map nếu đã khởi tạo
+                        setTimeout(() => {
+                            map.invalidateSize();
+
+                            // Pan đến vị trí hiện tại nếu có
+                            if (normalizeString(inputLat.value) !== '' && normalizeString(inputLng.value) !== '') {
+                                const lat = parseFloat(inputLat.value);
+                                const lng = parseFloat(inputLng.value);
+                                map.flyTo([lat, lng], 14);
+                            }
+                        }, 300);
+                    }
+                });
+            });
+
+            // Đóng modal
+            btnCloseMap.addEventListener('click', hideModal);
+
+            mapBackdrop.addEventListener('click', function(e) {
+                if (e.target === mapBackdrop) {
+                    hideModal();
+                }
+            });
+
+            // Đóng bằng phím ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && mapBackdrop.classList.contains('show')) {
+                    hideModal();
+                }
+            });
+
+            // Đánh dấu các trường required
+            const requiredFields = document.querySelectorAll(
+                '.required-field + input, .required-field + textarea, .required-field + select'
+            );
+            requiredFields.forEach(field => {
+                field.setAttribute('required', 'required');
+            });
+
+            // Load Bootstrap Icons nếu cần
+            if (!document.querySelector('link[href*="bootstrap-icons"]')) {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css';
+                link.onerror = () => console.warn('Không thể tải Bootstrap Icons');
+                document.head.appendChild(link);
+            }
+        });
+    </script>
+}

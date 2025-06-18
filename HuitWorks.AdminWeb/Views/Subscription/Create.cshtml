@@ -1,0 +1,128 @@
+﻿@model HuitWorks.AdminWeb.Models.ServicePackage
+@{
+    ViewData["Title"] = "Thêm gói dịch vụ mới";
+}
+
+<div class="container py-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i>@ViewData["Title"]</h5>
+            <a asp-action="Index" class="btn btn-light btn-sm">
+                <i class="fas fa-arrow-left me-1"></i>Quay lại
+            </a>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Create" method="post" class="needs-validation" novalidate>
+                <input type="hidden" name="Id" value="@ViewBag.GeneratedId" />
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Name" class="form-label fw-bold">Tên gói dịch vụ</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-tag"></i></span>
+                            <input asp-for="Name" class="form-control" placeholder="Nhập tên gói dịch vụ" required />
+                        </div>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Price" class="form-label fw-bold">Giá (VNĐ)</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            <input asp-for="Price" class="form-control" placeholder="Nhập giá" required type="number" />
+                            <span class="input-group-text">VNĐ</span>
+                        </div>
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label fw-bold">Mô tả</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-align-left"></i></span>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Nhập mô tả chi tiết về gói dịch vụ"></textarea>
+                    </div>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Duration" class="form-label fw-bold">Thời hạn (ngày)</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                            <input asp-for="Duration" class="form-control" placeholder="Số ngày" required type="number" min="1" />
+                            <span class="input-group-text">ngày</span>
+                        </div>
+                        <span asp-validation-for="Duration" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="JobPostLimit" class="form-label fw-bold">Giới hạn đăng tin</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
+                            <input asp-for="JobPostLimit" class="form-control" placeholder="Số tin đăng tối đa" required type="number" min="0" />
+                            <span class="input-group-text">tin</span>
+                        </div>
+                        <span asp-validation-for="JobPostLimit" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="CVViewLimit" class="form-label fw-bold">Giới hạn xem CV</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-file-alt"></i></span>
+                            <input asp-for="CVViewLimit" class="form-control" placeholder="Số CV xem tối đa" required type="number" min="0" />
+                            <span class="input-group-text">CV</span>
+                        </div>
+                        <span asp-validation-for="CVViewLimit" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-4 mt-2">
+                    <div class="form-check form-switch">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                        <label asp-for="IsActive" class="form-check-label fw-bold">Kích hoạt gói dịch vụ</label>
+                    </div>
+                    <small class="text-muted">Gói dịch vụ sẽ được hiển thị cho khách hàng nếu được kích hoạt</small>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4 gap-2">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="fas fa-times me-1"></i>Hủy
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i>Lưu gói dịch vụ
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Custom form validation
+        (function() {
+            'use strict';
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // Fetch all forms that need validation
+                var forms = document.querySelectorAll('.needs-validation');
+
+                // Loop and prevent submission
+                Array.prototype.slice.call(forms).forEach(function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            });
+        })();
+    </script>
+}

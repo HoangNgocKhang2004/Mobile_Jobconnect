@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\layout.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\css\Settings\" />
+    <Folder Include="wwwroot\js\auth\" />
+    <Folder Include="wwwroot\js\Candidates\" />
+    <Folder Include="wwwroot\js\Company\" />
+    <Folder Include="wwwroot\js\Home\" />
+    <Folder Include="wwwroot\js\HR\" />
+    <Folder Include="wwwroot\js\Interview\" />
+    <Folder Include="wwwroot\js\JobPost\" />
+    <Folder Include="wwwroot\js\News\" />
+    <Folder Include="wwwroot\js\Payment\" />
+    <Folder Include="wwwroot\js\Podcast\" />
+    <Folder Include="wwwroot\js\Reports\" />
+    <Folder Include="wwwroot\js\Settings\" />
+    <Folder Include="wwwroot\js\Subscription\" />
+    <Folder Include="wwwroot\js\SystemNotification\" />
+    <Folder Include="wwwroot\js\Users\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
+    <PackageReference Include="Google.Cloud.Storage.V1" Version="4.13.0" />
+    <PackageReference Include="MailKit" Version="4.12.0" />
+    <PackageReference Include="MimeKit" Version="4.12.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\images\default.png">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\images\logo.png">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,509 @@
+﻿
+<link href="~/css/reports/index.css" rel="stylesheet" />
+
+
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col">
+            <h1><i class="fas fa-chart-bar" style="font-size: 1.8rem !important; color: var(--dark-color);"></i> Báo cáo tổng quan</h1>            <p class="text-muted">Dữ liệu được cập nhật đến ngày 12/04/2025 09:30</p>
+        </div>
+        <div class="col-auto">
+            <div class="dropdown me-2">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="reportPeriodDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-calendar3"></i> Tháng hiện tại
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="reportPeriodDropdown">
+                    <li><a class="dropdown-item" href="#">Tháng hiện tại</a></li>
+                    <li><a class="dropdown-item" href="#">Quý hiện tại</a></li>
+                    <li><a class="dropdown-item" href="#">Năm hiện tại</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Tùy chỉnh...</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-primary" id="exportReport">
+                <i class="bi bi-download"></i> Xuất báo cáo
+            </button>
+        </div>
+    </div>
+
+    <!-- Thẻ thống kê tổng quan -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2 dashboard-card">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Người dùng
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold">12,457</div>
+                            <div class="text-xs mt-2">
+                                <span class="text-success">
+                                    <i class="bi bi-arrow-up"></i>
+                                    8.5%
+                                </span>
+                                <span class="text-muted ms-1">so với tháng trước</span>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-people-fill stat-icon text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2 dashboard-card">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Bài đăng
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold">32,685</div>
+                            <div class="text-xs mt-2">
+                                <span class="text-info">
+                                    <i class="bi bi-graph-up"></i>
+                                    1,245
+                                </span>
+                                <span class="text-muted ms-1">bài đăng mới trong tháng</span>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-file-earmark-text stat-icon text-success"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2 dashboard-card">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Giao dịch
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold">2,345,670,000 ₫</div>
+                            <div class="text-xs mt-2">
+                                <span class="text-info">
+                                    <i class="bi bi-credit-card"></i>
+                                    5,487
+                                </span>
+                                <span class="text-muted ms-1">tổng số giao dịch</span>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-currency-exchange stat-icon text-info"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2 dashboard-card">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Tuyển dụng
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold">857</div>
+                            <div class="text-xs mt-2">
+                                <span class="text-warning">
+                                    <i class="bi bi-briefcase"></i>
+                                    1,254
+                                </span>
+                                <span class="text-muted ms-1">tổng số tin tuyển dụng</span>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-person-workspace stat-icon text-warning"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Biểu đồ và dữ liệu chi tiết -->
+    <div class="row mb-4">
+        <!-- Biểu đồ đăng ký người dùng -->
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Thống kê người dùng đăng ký theo tháng</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="userChartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userChartDropdown">
+                            <a class="dropdown-item" href="#">Xuất dữ liệu</a>
+                            <a class="dropdown-item" href="#">Chuyển đổi biểu đồ</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Chi tiết thống kê</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="userRegistrationChart" style="height: 300px;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top người dùng hoạt động -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Top người dùng hoạt động</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Người dùng</th>
+                                    <th>Bài đăng</th>
+                                    <th>Tương tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Nguyễn Văn A</td>
+                                    <td>124</td>
+                                    <td>3,452</td>
+                                </tr>
+                                <tr>
+                                    <td>Trần Thị B</td>
+                                    <td>98</td>
+                                    <td>2,845</td>
+                                </tr>
+                                <tr>
+                                    <td>Lê Văn C</td>
+                                    <td>87</td>
+                                    <td>2,321</td>
+                                </tr>
+                                <tr>
+                                    <td>Phạm Văn D</td>
+                                    <td>76</td>
+                                    <td>1,987</td>
+                                </tr>
+                                <tr>
+                                    <td>Hoàng Thị E</td>
+                                    <td>65</td>
+                                    <td>1,752</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <!-- Biểu đồ giao dịch -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-info">Giá trị giao dịch theo tháng</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="transactionChart" style="height: 300px;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Biểu đồ phân bố công việc -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-warning">Phân bố tin tuyển dụng theo ngành nghề</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="jobCategoryChart" style="height: 300px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <!-- Bài đăng gần đây -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-success">Bài đăng gần đây</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Tiêu đề</th>
+                                    <th>Người đăng</th>
+                                    <th>Ngày đăng</th>
+                                    <th>Lượt xem</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Tuyển dụng lập trình viên ASP.NET</td>
+                                    <td>Công ty ABC</td>
+                                    <td>12/04/2025</td>
+                                    <td>245</td>
+                                </tr>
+                                <tr>
+                                    <td>Cần thuê freelancer React Native</td>
+                                    <td>Công ty XYZ</td>
+                                    <td>11/04/2025</td>
+                                    <td>187</td>
+                                </tr>
+                                <tr>
+                                    <td>Tìm đối tác phát triển ứng dụng</td>
+                                    <td>Startup DEF</td>
+                                    <td>10/04/2025</td>
+                                    <td>156</td>
+                                </tr>
+                                <tr>
+                                    <td>Giới thiệu công nghệ mới</td>
+                                    <td>Nguyễn Văn A</td>
+                                    <td>09/04/2025</td>
+                                    <td>289</td>
+                                </tr>
+                                <tr>
+                                    <td>Hướng dẫn cài đặt Docker</td>
+                                    <td>Trần Thị B</td>
+                                    <td>08/04/2025</td>
+                                    <td>321</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Giao dịch gần đây -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-info">Giao dịch gần đây</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Mã giao dịch</th>
+                                    <th>Người dùng</th>
+                                    <th>Ngày</th>
+                                    <th>Số tiền</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#TX123456</td>
+                                    <td>Nguyễn Văn A</td>
+                                    <td>12/04/2025</td>
+                                    <td>5,000,000 ₫</td>
+                                    <td><span class="badge bg-success">Thành công</span></td>
+                                </tr>
+                                <tr>
+                                    <td>#TX123455</td>
+                                    <td>Trần Thị B</td>
+                                    <td>12/04/2025</td>
+                                    <td>3,500,000 ₫</td>
+                                    <td><span class="badge bg-success">Thành công</span></td>
+                                </tr>
+                                <tr>
+                                    <td>#TX123454</td>
+                                    <td>Lê Văn C</td>
+                                    <td>11/04/2025</td>
+                                    <td>4,200,000 ₫</td>
+                                    <td><span class="badge bg-warning">Đang xử lý</span></td>
+                                </tr>
+                                <tr>
+                                    <td>#TX123453</td>
+                                    <td>Phạm Văn D</td>
+                                    <td>11/04/2025</td>
+                                    <td>2,800,000 ₫</td>
+                                    <td><span class="badge bg-success">Thành công</span></td>
+                                </tr>
+                                <tr>
+                                    <td>#TX123452</td>
+                                    <td>Hoàng Thị E</td>
+                                    <td>10/04/2025</td>
+                                    <td>1,500,000 ₫</td>
+                                    <td><span class="badge bg-danger">Thất bại</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+    // Dữ liệu giả định cho biểu đồ đăng ký người dùng
+    const userRegistrationCtx = document.getElementById('userRegistrationChart').getContext('2d');
+    const userRegistrationChart = new Chart(userRegistrationCtx, {
+        type: 'line',
+        data: {
+            labels: ['05/2024', '06/2024', '07/2024', '08/2024', '09/2024', '10/2024', '11/2024', '12/2024', '01/2025', '02/2025', '03/2025', '04/2025'],
+            datasets: [{
+                label: 'Số lượng người dùng mới',
+                data: [542, 687, 735, 802, 865, 943, 1025, 1187, 1245, 1298, 1345, 1421],
+                backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                pointRadius: 3,
+                pointBackgroundColor: 'rgba(78, 115, 223, 1)',
+                pointBorderColor: 'rgba(78, 115, 223, 1)',
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: 'rgba(78, 115, 223, 1)',
+                pointHoverBorderColor: 'rgba(78, 115, 223, 1)',
+                pointHitRadius: 10,
+                pointBorderWidth: 2,
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    bodyFont: {
+                        size: 14
+                    },
+                    titleFont: {
+                        size: 16
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        }
+    });
+
+    // Dữ liệu giả định cho biểu đồ giao dịch
+    const transactionCtx = document.getElementById('transactionChart').getContext('2d');
+    const transactionChart = new Chart(transactionCtx, {
+        type: 'bar',
+        data: {
+            labels: ['11/2024', '12/2024', '01/2025', '02/2025', '03/2025', '04/2025'],
+            datasets: [{
+                label: 'Giá trị giao dịch (triệu VNĐ)',
+                data: [1850, 2150, 1950, 2300, 2450, 2650],
+                backgroundColor: 'rgba(54, 185, 204, 0.7)',
+                borderColor: 'rgba(54, 185, 204, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(value) {
+                            return value.toLocaleString() + ' tr';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Dữ liệu giả định cho biểu đồ phân bố công việc
+    const jobCategoryCtx = document.getElementById('jobCategoryChart').getContext('2d');
+    const jobCategoryChart = new Chart(jobCategoryCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Công nghệ thông tin', 'Marketing', 'Kế toán', 'Kinh doanh', 'Giáo dục', 'Khác'],
+            datasets: [{
+                data: [35, 20, 15, 12, 10, 8],
+                backgroundColor: [
+                    'rgba(78, 115, 223, 0.8)',
+                    'rgba(28, 200, 138, 0.8)',
+                    'rgba(54, 185, 204, 0.8)',
+                    'rgba(246, 194, 62, 0.8)',
+                    'rgba(231, 74, 59, 0.8)',
+                    'rgba(133, 135, 150, 0.8)'
+                ],
+                borderColor: '#ffffff',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right'
+                }
+            },
+            cutout: '65%'
+        }
+    });
+
+    // Dữ liệu giả định cho biểu đồ khu vực
+    const regionCharts = ['hanoiJobChart', 'hcmJobChart', 'danangJobChart', 'otherJobChart'];
+    const regionData = [
+        [45, 25, 15, 15], // Hà Nội
+        [40, 30, 10, 20], // TP.HCM
+        [35, 30, 20, 15], // Đà Nẵng
+        [25, 35, 20, 20]  // Khác
+    ];
+
+    regionCharts.forEach((chartId, index) => {
+        const ctx = document.getElementById(chartId).getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['IT', 'Marketing/Du lịch/Sản xuất', 'Kế toán/Giáo dục', 'Khác'],
+                datasets: [{
+                    data: regionData[index],
+                    backgroundColor: [
+                        'rgba(78, 115, 223, 0.8)',
+                        'rgba(28, 200, 138, 0.8)',
+                        'rgba(54, 185, 204, 0.8)',
+                        'rgba(133, 135, 150, 0.8)'
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    });
+</script>

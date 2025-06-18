@@ -1,0 +1,120 @@
+﻿@model HuitWorks.AdminWeb.Models.ViewModels.CandidateInfoUpdateViewModel
+@{
+    ViewData["Title"] = "Cập nhật hồ sơ ứng viên";
+}
+
+
+<div class="container">
+    <div class="card shadow-sm mb-4 border-0">
+        <div class="card-header bg-primary text-white text-center rounded-top">
+            <h4 class="mb-0">
+                <i class="fa-solid fa-user-pen me-2"></i> @ViewData["Title"]
+            </h4>
+        </div>
+        <div class="card-body">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <form asp-action="Update" method="post" class="px-2">
+                <!-- Hidden User fields -->
+                <input type="hidden" asp-for="User.IdUser" />
+                <input type="hidden" asp-for="User.IdRole" />
+                <input type="hidden" asp-for="User.AccountStatus" />
+                <input type="hidden" asp-for="User.AvatarUrl" />
+                <input type="hidden" asp-for="User.CreatedAt" />
+                <input type="hidden" asp-for="User.RoleName" />
+                <input type="hidden" asp-for="IdUser" />
+                <input type="hidden" asp-for="RatingScore" />
+
+                <!-- Thông tin cá nhân -->
+                <div class="mb-4 border-bottom pb-2">
+                    <h6 class="fw-bold text-primary mb-3"><i class="fa-solid fa-user me-1"></i> Thông tin cá nhân</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="User.UserName" class="form-label">Họ và tên</label>
+                            <input asp-for="User.UserName" class="form-control" required />
+                            <span asp-validation-for="User.UserName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="User.Email" class="form-label">Email</label>
+                            <input asp-for="User.Email" class="form-control" required />
+                            <span asp-validation-for="User.Email" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="User.PhoneNumber" class="form-label">Số điện thoại</label>
+                            <input asp-for="User.PhoneNumber" class="form-control" required />
+                            <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="User.Address" class="form-label">Địa chỉ</label>
+                            <input asp-for="User.Address" class="form-control" />
+                            <span asp-validation-for="User.Address" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thông tin nghề nghiệp -->
+                <div>
+                    <h6 class="fw-bold text-primary mb-3"><i class="fa-solid fa-briefcase me-1"></i> Thông tin nghề nghiệp</h6>
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label asp-for="WorkPosition" class="form-label">Vị trí ứng tuyển</label>
+                            <input asp-for="WorkPosition" class="form-control" />
+                            <span asp-validation-for="WorkPosition" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="UniversityName" class="form-label">Trường Đại học</label>
+                            <input asp-for="UniversityName" class="form-control" />
+                            <span asp-validation-for="UniversityName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="EducationLevel" class="form-label">Trình độ học vấn</label>
+                            <select asp-for="EducationLevel" class="form-select">
+                                <option value="">-- Chọn trình độ --</option>
+                                <option value="Cử nhân">Cử nhân</option>
+                                <option value="Kỹ sư">Kỹ sư</option>
+                                <option value="Thạc sĩ">Thạc sĩ</option>
+                                <option value="Tiến sĩ">Tiến sĩ</option>
+                            </select>
+                            <span asp-validation-for="EducationLevel" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="ExperienceYears" class="form-label">Số năm kinh nghiệm</label>
+                            <input asp-for="ExperienceYears" type="number" class="form-control" min="0" max="50" />
+                            <span asp-validation-for="ExperienceYears" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Skills" class="form-label">Kỹ năng</label>
+                            <textarea asp-for="Skills" class="form-control" rows="2" placeholder="VD: Java, C#, SQL..."></textarea>
+                            <span asp-validation-for="Skills" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fa-solid fa-floppy-disk me-1"></i> Lưu thay đổi
+                    </button>
+                    <a asp-action="ListCandidate" class="btn btn-secondary px-4">
+                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

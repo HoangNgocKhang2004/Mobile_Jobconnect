@@ -1,0 +1,333 @@
+﻿@model HuitWorks.RecruiterWeb.Models.ViewModel.RegisterRecruiterViewModel
+@using Newtonsoft.Json
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký Nhà Tuyển Dụng</title>
+    <link href="~/css/auth/registerrecruiter.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="main-container">
+        <!-- Left Side - Form -->
+        <div class="form-section">
+            <div class="logo-header">
+                <a href="/Auth/RegisterRecruiter">
+                    <img src="~/images/sv_logo_dashboard.png" alt="Logo" />
+                </a>
+            </div>
+            <div class="form-header">
+                <h1>Đăng ký tài khoản Nhà Tuyển Dụng</h1>
+                <p>Tạo tài khoản để bắt đầu tuyển dụng nhân tài</p>
+            </div>
+
+            <!-- Alert Messages -->
+            <div class="alert alert-danger" style="display: none;" id="errorAlert">
+                <span id="errorMessage"></span>
+            </div>
+            <div class="alert alert-success" style="display: none;" id="successAlert">
+                <span id="successMessage"></span>
+            </div>
+
+            <form asp-action="RegisterRecruiter" method="post" enctype="multipart/form-data" class="row g-3">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="Address" name="Address" />
+                <!-- Thông tin tài khoản -->
+                <div class="section">
+                    <h3 class="section-title">Thông tin tài khoản</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="UserName">Tên đăng nhập *</label>
+                            <input type="text" id="UserName" name="UserName" class="form-control" required />
+                            <span class="text-danger" id="UserName-error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Email">Email *</label>
+                            <input type="email" id="Email" name="Email" class="form-control" required />
+                            <span class="text-danger" id="Email-error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="PhoneNumber">Số điện thoại *</label>
+                            <input type="tel" id="PhoneNumber" name="PhoneNumber" class="form-control" required value="+84" />
+                            <span class="text-danger" id="PhoneNumber-error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Gender">Giới tính</label>
+                            <select id="Gender" name="Gender" class="form-control">
+                                <option value="">-- Chọn giới tính --</option>
+                                <option value="male">Nam</option>
+                                <option value="female">Nữ</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Password">Mật khẩu *</label>
+                            <input type="password" id="Password" name="Password" class="form-control" required />
+                            <span class="text-danger" id="Password-error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ConfirmPassword">Xác nhận mật khẩu *</label>
+                            <input type="password" id="ConfirmPassword" name="ConfirmPassword" class="form-control" required />
+                            <span class="text-danger" id="ConfirmPassword-error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="DateOfBirth">Ngày sinh</label>
+                            <input type="date" id="DateOfBirth" name="DateOfBirth" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thông tin công ty -->
+                <div class="section">
+                    <h3 class="section-title">Thông tin công ty</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="CompanyName">Tên công ty *</label>
+                            <input type="text" id="CompanyName" name="CompanyName" class="form-control" required />
+                            <span class="text-danger" id="CompanyName-error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ProvinceSelect">Địa điểm làm việc *</label>
+                            <select id="ProvinceSelect" class="form-control" required>
+                                <option value="">— Chọn tỉnh/thành phố —</option>
+                                @foreach (var p in Model.Provinces)
+                                {
+                                    <option value="@p.code">@p.name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="DistrictSelect">Quận/Huyện *</label>
+                            <select id="DistrictSelect" class="form-control" required disabled>
+                                <option value="">— Chọn quận/huyện —</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="WardSelect">Phường/Xã *</label>
+                            <select id="WardSelect" class="form-control" required disabled>
+                                <option value="">— Chọn phường/xã —</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="WebsiteUrl">Website</label>
+                            <input type="url" id="WebsiteUrl" name="WebsiteUrl" class="form-control" placeholder="https://example.com" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Scale">Quy mô (số nhân viên)</label>
+                            <select id="Scale" name="Scale" class="form-control">
+                                <option value="">-- Chọn quy mô --</option>
+                                <option value="1-9">Dưới 10</option>
+                                <option value="10-19">Từ 10 đến 19</option>
+                                <option value="20-49">Từ 20 đến 49</option>
+                                <option value="50-99">Từ 50 đến 99</option>
+                                <option value="100-199">Từ 100 đến 199</option>
+                                <option value="200-499">Từ 200 đến 499</option>
+                                <option value="500-999">Từ 500 đến 999</option>
+                                <option value="1000+">Trên 1000</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Industry">Ngành nghề</label>
+                            <input type="text" id="Industry" name="Industry" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="TaxCode">Mã số thuế</label>
+                            <input type="text" id="TaxCode" name="TaxCode" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="BusinessLicenseFile">Giấy phép kinh doanh *</label>
+                            <input asp-for="BusinessLicenseFile" type="file" id="BusinessLicenseFile" name="BusinessLicenseFile"
+                                   class="form-control" accept=".pdf,.png,.jpg" required />
+                            <span class="text-danger" asp-validation-for="BusinessLicenseFile"></span>
+                            <small class="text-muted">Chọn file PDF/PNG/JPG làm giấy phép.</small>
+                        </div>
+                    </div>
+
+                    <div class="form-grid-single">
+                        <div class="form-group">
+                            <label for="Description">Mô tả công ty</label>
+                            <textarea id="Description" name="Description" class="form-control" placeholder="Giới thiệu về công ty của bạn..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thông tin vị trí HR -->
+                <div class="section">
+                    <h3 class="section-title">Thông tin vị trí HR</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="Title">Chức danh *</label>
+                            <input type="text" id="Title" name="Title" class="form-control" required />
+                            <span class="text-danger" id="Title-error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Department">Bộ phận *</label>
+                            <input type="text" id="Department" name="Department" class="form-control" required />
+                            <span class="text-danger" id="Department-error"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="submit-section">
+                    <button type="submit" class="btn-primary1">Đăng ký tài khoản</button>
+                    <div class="login-link">
+                        <span>Đã có tài khoản?</span>
+                        <a href="/Auth/Login">Đăng nhập ngay</a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Right Side - Image/Content -->
+        <div class="image-section">
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const provinces = @Html.Raw(JsonConvert.SerializeObject(Model.Provinces));
+
+          const provSel = document.getElementById('ProvinceSelect');
+          const distSel = document.getElementById('DistrictSelect');
+          const wardSel = document.getElementById('WardSelect');
+          const addrInput = document.getElementById('Address');
+
+          provSel.addEventListener('change', () => {
+            const prov = provinces.find(p => p.code === +provSel.value);
+
+            distSel.innerHTML = '<option value="">— Chọn quận/huyện —</option>';
+            distSel.disabled = !prov;
+            wardSel.innerHTML = '<option value="">— Chọn phường/xã —</option>';
+            wardSel.disabled = true;
+
+            if (prov?.districts) {
+              prov.districts.forEach(d =>
+                distSel.add(new Option(d.name, d.code))
+              );
+              distSel.disabled = false;
+            }
+
+            addrInput.value = '';
+          });
+          distSel.addEventListener('change', () => {
+            const prov = provinces.find(p => p.code === +provSel.value);
+            const dist = prov?.districts.find(d => d.code === +distSel.value);
+
+            wardSel.innerHTML = '<option value="">— Chọn phường/xã —</option>';
+            wardSel.disabled = !dist;
+
+            if (dist?.wards) {
+              dist.wards.forEach(w =>
+                wardSel.add(new Option(w.name, w.code))
+              );
+              wardSel.disabled = false;
+            }
+
+            addrInput.value = '';
+          });
+
+          wardSel.addEventListener('change', () => {
+            const provText = provSel.options[provSel.selectedIndex].text;
+            const distText = distSel.options[distSel.selectedIndex].text;
+            const wardText = wardSel.options[wardSel.selectedIndex].text;
+            addrInput.value = `${wardText}, ${distText}, ${provText}`;
+          });
+        });
+    </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const phoneInput = document.getElementById('PhoneNumber');
+            const errorEl = document.getElementById('PhoneNumber-error');
+
+            phoneInput.addEventListener('focus', () => {
+                if (!phoneInput.value.startsWith('+84')) {
+                    phoneInput.value = '+84';
+                }
+                setTimeout(() => {
+                    phoneInput.setSelectionRange(phoneInput.value.length, phoneInput.value.length);
+                }, 0);
+            });
+
+            phoneInput.addEventListener('input', () => {
+                let digits = phoneInput.value.replace(/\D/g, '');
+                if (digits.startsWith('84')) {
+                    digits = digits.substring(2);
+                }
+                digits = digits.substring(0, 9);
+
+                phoneInput.value = '+84' + digits;
+
+                if (digits.length > 0 && (digits.length < 8 || digits.length > 9)) {
+                    errorEl.textContent = 'Số điện thoại phải có 8–9 chữ số sau mã vùng';
+                } else {
+                    errorEl.textContent = '';
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('recruiterForm');
+            const inputs = form.querySelectorAll('.form-control');
+
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'scale(1.02)';
+                    this.parentElement.style.transition = 'transform 0.2s ease';
+                });
+
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'scale(1)';
+                });
+            });
+
+            const password = document.getElementById('Password');
+            const confirmPassword = document.getElementById('ConfirmPassword');
+
+            confirmPassword.addEventListener('blur', function() {
+                if (password.value !== confirmPassword.value && confirmPassword.value !== '') {
+                    document.getElementById('ConfirmPassword-error').textContent = 'Mật khẩu xác nhận không khớp';
+                } else {
+                    document.getElementById('ConfirmPassword-error').textContent = '';
+                }
+            });
+
+            // Form submission handling
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Add your form submission logic here
+                console.log('Form submitted');
+
+                // Show success message
+                document.getElementById('successAlert').style.display = 'block';
+                document.getElementById('successMessage').textContent = 'Đăng ký thành công!';
+
+                // Scroll to top
+                document.querySelector('.form-section').scrollTop = 0;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+﻿@model HuitWorks.AdminWeb.Models.ViewModels.UserViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết người dùng";
+}
+
+<link href="~/css/users/details.css" rel="stylesheet" />
+
+
+<div class="user-detail-card">
+    <div class="user-header">
+        <img src="@(!string.IsNullOrEmpty(Model.AvatarUrl) ? Model.AvatarUrl : Url.Content("~/images/user.png"))" alt="Avatar" class="user-avatar" />
+        <div class="user-basic-info">
+            <h2>@(Model.UserName ?? "Không rõ")</h2>
+            <p><i class="fas fa-envelope"></i> @(Model.Email ?? "-")</p>
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-item">
+            <label>Số điện thoại:</label>
+            <span>@(Model.PhoneNumber ?? "Chưa cập nhật")</span>
+        </div>
+        <div class="info-item">
+            <label>Vai trò:</label>
+            <span>@(Model.RoleName ?? "Không rõ")</span>
+        </div>
+        <div class="info-item">
+            <label>Trạng thái tài khoản:</label>
+            <span>@(Model.AccountStatus ?? "-")</span>
+        </div>
+        <div class="info-item">
+            <label>Ngày tạo tài khoản:</label>
+            <span>@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</span>
+        </div>
+        <div class="info-item">
+            <label>Số điện thoại:</label>
+            <span>@Model.PhoneNumber</span>
+        </div>
+        <div class="info-item">
+            <label>Tạo lúc:</label>
+            <span>@Model.CreatedAt</span>
+        </div>
+    </div>
+
+    <a href="@Url.Action("Index", "Users")" class="back-button">
+        ← Quay lại danh sách
+    </a>
+</div>

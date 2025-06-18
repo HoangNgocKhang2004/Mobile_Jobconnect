@@ -1,0 +1,82 @@
+﻿@model HuitWorks.AdminWeb.Models.EvaluateCandidateViewModel
+@{
+    ViewData["Title"] = "Chi tiết đánh giá";
+}
+
+<div class="container py-4">
+    <!-- Header + Back Button -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">@ViewData["Title"]</h2>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Quay lại
+        </a>
+    </div>
+
+    <!-- Card chứa thông tin chung -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row gy-2">
+                <div class="col-md-6">
+                    <strong class="text-muted">Evaluation ID:</strong>
+                    <p class="mb-0">@Model.EvaluationId</p>
+                </div>
+                <div class="col-md-6">
+                    <strong class="text-muted">Job Post:</strong>
+                    <p class="mb-0">@Model.IdJobPost</p>
+                </div>
+                <div class="col-md-6">
+                    <strong class="text-muted">Candidate:</strong>
+                    <p class="mb-0">@Model.IdCandidate</p>
+                </div>
+                <div class="col-md-6">
+                    <strong class="text-muted">Recruiter:</strong>
+                    <p class="mb-0">@Model.IdRecruiter</p>
+                </div>
+                <div class="col-md-6">
+                    <strong class="text-muted">Ngày đánh giá:</strong>
+                    <p class="mb-0">@Model.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</p>
+                </div>
+                <div class="col-md-6">
+                    <strong class="text-muted">Điểm trung bình:</strong>
+                    <h4 class="mb-0">
+                        <span class="badge bg-primary">@Model.AverageScore</span>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card chứa bảng chi tiết -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-light">
+            <h5 class="mb-0"><i class="fas fa-list me-2"></i>Chi tiết tiêu chí</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Tiêu chí</th>
+                        <th>Mô tả</th>
+                        <th class="text-center">Điểm</th>
+                        <th>Nhận xét</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.Description</td>
+                            <td class="text-center">
+                                <span class="badge @(item.Score == 0 ? "bg-secondary" : "bg-success")">
+                                    @item.Score
+                                </span>
+                            </td>
+                            <td>@item.Comments</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+﻿@model HuitWorks.AdminWeb.Models.ViewModels.UserViewModel
+
+@{
+    ViewData["Title"] = "Xóa Người dùng";
+}
+
+<h2>Xác nhận xóa người dùng</h2>
+
+<div class="alert alert-danger">
+    Bạn có chắc chắn muốn xóa người dùng: <strong>@Model.UserName</strong> (Email: @Model.Email) không?
+</div>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="IdUser" />
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>

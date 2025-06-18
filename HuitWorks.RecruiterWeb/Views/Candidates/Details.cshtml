@@ -1,0 +1,270 @@
+﻿@model HuitWorks.RecruiterWeb.Models.ViewModel.CandidateViewModel
+@{
+    ViewData["Title"] = "Chi tiết ứng viên";
+}
+
+<style>
+    :root {
+        --primary-color: #094174;
+        --primary-light: #1a5285;
+        --secondary-color: #f8f9fa;
+        --accent-color: #ffc107;
+        --text-light: #ffffff;
+        --border-radius: 8px;
+        --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .bg-custom-primary {
+        background-color: var(--primary-color);
+    }
+
+    .text-custom-primary {
+        color: var(--primary-color);
+    }
+
+    .border-custom-primary {
+        border-color: var(--primary-color) !important;
+    }
+
+    .custom-card {
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: var(--box-shadow);
+        border: none;
+    }
+
+    .custom-card-header {
+        background-color: var(--primary-color);
+        color: var(--text-light);
+        padding: 1.5rem;
+        border-bottom: none;
+    }
+
+    .custom-card-body {
+        padding: 1.5rem;
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        background-color: var(--primary-light);
+        color: var(--text-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 2rem;
+        margin-right: 1.5rem;
+    }
+
+    .skill-badge {
+        background-color: var(--primary-light);
+        color: var(--text-light);
+        border-radius: 20px;
+        padding: 0.4rem 1rem;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+        display: inline-block;
+    }
+
+    .info-group {
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+        padding-bottom: 1rem;
+    }
+
+        .info-group:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    .info-label {
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .btn-custom-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: var(--text-light);
+    }
+
+        .btn-custom-primary:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary-light);
+            color: var(--text-light);
+        }
+
+    .btn-custom-secondary {
+        background-color: transparent;
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+
+        .btn-custom-secondary:hover {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+        }
+
+    .section-title {
+        color: var(--primary-color);
+        font-weight: 600;
+        position: relative;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 3px;
+            width: 50px;
+            background-color: var(--primary-color);
+        }
+
+    .nav-dropdown > .nav-link::after {
+        color: gray;
+    }
+</style>
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="section-title m-0">Chi tiết hồ sơ ứng viên</h2>
+        <a href="@Url.Action("Applied", "Candidates")" class="btn btn-custom-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Quay lại danh sách
+        </a>
+    </div>
+
+    <div class="custom-card">
+        <div class="custom-card-header">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div>
+                    <h4 class="mb-1">@Model.UserName</h4>
+                    <p class="mb-0">
+                        <i class="fas fa-envelope me-2"></i>@Model.Email
+                    </p>
+                    <div class="mt-2">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (Model.RatingScore >= i)
+                            {
+                                <i class="fas fa-star text-warning"></i>
+                            }
+                            else if (Model.RatingScore >= i - 0.5)
+                            {
+                                <i class="fas fa-star-half-alt text-warning"></i>
+                            }
+                            else
+                            {
+                                <i class="far fa-star text-warning"></i>
+                            }
+                        }
+                        <span class="ms-2 text-warning">(@Model.RatingScore)</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">
+                <span class="badge bg-warning text-dark">
+                    <i class="fas fa-briefcase me-1"></i>@Model.WorkPosition
+                </span>
+            </div>
+        </div>
+        <div class="custom-card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info-group">
+                        <h5 class="text-custom-primary mb-3">
+                            <i class="fas fa-info-circle me-2"></i>Thông tin cơ bản
+                        </h5>
+                        <div class="row mb-3">
+                            <div class="col-sm-5 info-label">Vị trí ứng tuyển:</div>
+                            <div class="col-sm-7">@Model.WorkPosition</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-5 info-label">Kinh nghiệm:</div>
+                            <div class="col-sm-7">@Model.ExperienceYears năm</div>
+                        </div>
+                    </div>
+
+                    <div class="info-group">
+                        <h5 class="text-custom-primary mb-3">
+                            <i class="fas fa-graduation-cap me-2"></i>Học vấn
+                        </h5>
+                        <div class="row mb-3">
+                            <div class="col-sm-5 info-label">Trình độ:</div>
+                            <div class="col-sm-7">@Model.EducationLevel</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-5 info-label">Trường:</div>
+                            <div class="col-sm-7">@Model.UniversityName</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="info-group">
+                        <h5 class="text-custom-primary mb-3">
+                            <i class="fas fa-laptop-code me-2"></i>Kỹ năng
+                        </h5>
+                        <div>
+                            @foreach (var skill in Model.Skills?.Split(',') ?? Array.Empty<string>())
+                            {
+                                <span class="skill-badge">@skill.Trim()</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="info-group">
+                        <h5 class="text-custom-primary mb-3">
+                            <i class="fas fa-chart-line me-2"></i>Đánh giá tổng quát
+                        </h5>
+                        <div class="progress mb-3" style="height: 10px;">
+                            <div class="progress-bar bg-custom-primary"
+                                 role="progressbar"
+                                 style="width: @(Model.RatingScore * 20)%;"
+                                 aria-valuenow="@(Model.RatingScore * 20)"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <small class="text-muted">Đánh giá: @Model.RatingScore/5</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <!-- Nút Quay lại bên trái -->
+                <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>
+                    Quay lại
+                </a>
+
+                <!-- Các nút bên phải -->
+                <div>
+                    <a href="#" class="btn btn-custom-secondary me-2">
+                        <i class="fas fa-calendar-alt me-1"></i> Lịch phỏng vấn
+                    </a>
+
+                    <a href="#" class="btn btn-custom-primary">
+                        <i class="fas fa-phone-alt me-1"></i> Liên hệ
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

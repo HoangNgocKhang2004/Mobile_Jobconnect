@@ -1,0 +1,177 @@
+﻿@model HuitWorks.RecruiterWeb.Service.PaginatedList<HuitWorks.RecruiterWeb.Models.Dtos.UserActivityLogDto>
+
+@{
+    ViewData["Title"] = "Lịch sử hoạt động";
+}
+
+<style>
+    /* Card container */
+    .activity-card {
+        margin-top: 20px;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        border: none;
+        border-radius: 0.5rem;
+    }
+
+        /* Card header */
+        .activity-card .card-header {
+            background-color: #094174;
+            color: #ffffff;
+            font-weight: 600;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+    /* Table adjustments */
+    .activity-table thead th {
+        background-color: #f1f3f5;
+        font-weight: 600;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .activity-table tbody td {
+        vertical-align: middle;
+        word-wrap: break-word;
+    }
+
+    .activity-table tbody tr:hover {
+        background-color: #e9ecef;
+    }
+
+    /* Badge for EntityName */
+    .badge-entity {
+        background-color: #0d6efd;
+        color: #fff;
+        font-size: 0.85rem;
+    }
+
+    /* Pagination */
+    .pagination .page-item .page-link {
+        color: #0056b3;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #0056b3;
+        border-color: #0056b3;
+        color: #fff;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        pointer-events: none;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #094174;
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 80px;
+            height: 4px;
+            background: #094174;
+            border-radius: 2px;
+        }
+</style>
+
+<div class="container">
+    <h2 class="page-title">@ViewData["Title"]</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info" role="alert">
+            Bạn chưa có hoạt động nào trong hệ thống.
+        </div>
+    }
+    else
+    {
+        <div class="card activity-card">
+            <div class="card-header">
+                <i class="fas fa-history me-2"></i> Lịch sử hoạt động của bạn
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-bordered mb-0 activity-table">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="width:170px;">Thời gian</th>
+                                <th scope="col" style="width:130px;">Loại hành động</th>
+                                <th scope="col">Mô tả</th>
+                                <th scope="col" style="width:180px;">Liên quan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var log in Model)
+                            {
+                                <tr>
+                                    <td class="text-center text-muted">
+                                        @log.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="fw-semibold">@log.ActionType</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-wrap">@log.Description</span>
+                                    </td>
+                                    <td class="text-center">
+                                        @if (!string.IsNullOrEmpty(log.EntityName))
+                                        {
+                                            <span class="badge badge-entity">
+                                                @log.EntityName <small>(ID: @log.EntityId)</small>
+                                            </span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="card-footer bg-white">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center mb-0">
+                        <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                            <a class="page-link" aria-label="Previous"
+                               asp-action="Activities"
+                               asp-route-pageNumber="@(Model.PageIndex - 1)">
+                                ‹
+                            </a>
+                        </li>
+
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                                <a class="page-link"
+                                   asp-action="Activities"
+                                   asp-route-pageNumber="@i">
+                                    @i
+                                </a>
+                            </li>
+                        }
+
+                        <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                            <a class="page-link" aria-label="Next"
+                               asp-action="Activities"
+                               asp-route-pageNumber="@(Model.PageIndex + 1)">
+                                ›
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Ngoài ra, nếu bạn chưa load FontAwesome thì có thể thêm link sau vào _Layout.cshtml -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" /> -->

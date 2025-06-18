@@ -1,0 +1,44 @@
+﻿@model HuitWorks.AdminWeb.Models.ViewModels.PodcastCreateViewModel
+
+<h2>Thêm Podcast</h2>
+<form asp-action="Create" method="post">
+
+    <div class="form-group mb-3">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" required />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Host"></label>
+        <input asp-for="Host" class="form-control" />
+        <span asp-validation-for="Host" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="AudioUrl">Link file audio (.mp3)</label>
+        <input asp-for="AudioUrl" class="form-control" />
+        <span asp-validation-for="AudioUrl" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="CoverImageUrl">Ảnh bìa podcast (URL)</label>
+        <input asp-for="CoverImageUrl" class="form-control" />
+        <span asp-validation-for="CoverImageUrl" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="PublishDate">Ngày phát hành</label>
+        <input asp-for="PublishDate" class="form-control" type="date" />
+        <span asp-validation-for="PublishDate" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Lưu</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Quay lại</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

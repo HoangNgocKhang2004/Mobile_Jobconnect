@@ -1,0 +1,432 @@
+﻿@model List<News>
+
+@{
+    ViewData["Title"] = "Tin tức & Xu hướng Tuyển dụng";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<link href="~/css/blog/index.css" rel="stylesheet" />
+
+<div class="blogs-page">
+    <main class="container mx-auto px-4 py-12" style="padding-top: 1rem !important;">
+        <!-- Hero Section -->
+        <section class="gradient-bg text-white rounded-2xl p-8 mb-12 shadow-lg">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="mb-6 md:mb-0 md:w-2/3">
+                    <h1 class="text-4xl font-bold mb-4 leading-tight">Tin tức & Xu hướng <br>Tuyển dụng</h1>
+                    <p class="text-lg opacity-90 mb-6">Cập nhật những thông tin mới nhất về thị trường lao động và chiến lược tuyển dụng hiệu quả</p>
+                    <div class="flex space-x-4">
+                        <a href="#featured" class="bg-white text-indigo-700 hover:bg-opacity-90 font-semibold py-3 px-6 rounded-lg transition duration-300 flex items-center">
+                            <i class="fas fa-newspaper mr-2"></i> Khám phá
+                        </a>
+                        <a href="#subscribe" class="bg-transparent border-2 border-white hover:bg-white hover:text-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 flex items-center">
+                            <i class="fas fa-bell mr-2"></i> Đăng ký nhận tin
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/3 text-center">
+                    <div class="bg-white rounded-2xl shadow-lg p-6 transform rotate-3 hover:rotate-0 transition duration-300">
+                        <div class="text-indigo-700 font-bold text-xl mb-2">Bạn là nhà tuyển dụng?</div>
+                        <p class="text-gray-600 mb-4">Đăng tin tuyển dụng ngay để tiếp cận ứng viên tiềm năng</p>
+                        <a href="/Jobs/Create" class="bg-indigo-700 text-white hover:bg-indigo-800 font-bold py-3 px-8 rounded-lg transition duration-300 w-full flex items-center justify-center">
+                            <i class="fas fa-plus-circle mr-2"></i> Đăng tin ngay
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search and filter -->
+        <section class="mb-12">
+            <div class="bg-white rounded-xl p-6 shadow-md">
+                <div class="flex flex-col md:flex-row gap-4 items-center">
+                    <div class="flex-grow relative">
+                        <i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i>
+                        <input type="text" placeholder="Tìm kiếm bài viết..." class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div class="flex gap-2 w-full md:w-auto">
+                        <select class="px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white appearance-none pr-10 relative w-full md:w-auto">
+                            <option value="">Tất cả chủ đề</option>
+                            <option value="hr-trends">Xu hướng nhân sự</option>
+                            <option value="recruitment">Tuyển dụng</option>
+                            <option value="interview">Phỏng vấn</option>
+                            <option value="retention">Giữ chân nhân tài</option>
+                        </select>
+                        <button class="bg-indigo-600 text-white hover:bg-indigo-700 px-6 py-3 rounded-lg transition duration-300 flex items-center">
+                            <i class="fas fa-filter mr-2"></i> Lọc
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured articles -->
+        <section id="featured" class="mb-16">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 flex items-center">
+                    <span class="w-8 h-8 bg-indigo-600 rounded-lg inline-block mr-3"></span>
+                    Bài viết nổi bật
+                </h2>
+                <a href="#" class="text-indigo-600 hover:text-indigo-800 font-semibold flex items-center">
+                    Xem tất cả <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                @foreach (var item in Model.Take(3))  // Lấy 3 bài đầu làm nổi bật
+                {
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden transition duration-300 card-hover">
+                        <div class="card-image-hover">
+                            <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "~/images/default.png" : item.ImageUrl)" alt="@item.Title" class="w-full h-60 object-cover">
+                        </div>
+                        <div class="p-6">
+                            <span class="tag bg-blue-100 text-blue-700">@item.CategoryName</span>
+                            <h3 class="text-xl font-bold mt-4 mb-3 text-gray-800">@item.Title</h3>
+                            <p class="text-gray-600 mb-6 line-clamp-3">@item.Summary</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <i class="far fa-calendar-alt text-gray-400 mr-2"></i>
+                                    <span class="text-sm text-gray-500">@item.PublishDate.ToString("dd/MM/yyyy")</span>
+                                </div>
+                                <a asp-action="Details" asp-route-id="@item.idNews" class="text-indigo-600 hover:text-indigo-800 font-semibold flex items-center">
+                                    Đọc tiếp <i class="fas fa-long-arrow-alt-right ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+
+
+        <!-- Latest articles -->
+        <section class="mb-16">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 flex items-center">
+                    <span class="w-8 h-8 bg-indigo-600 rounded-lg inline-block mr-3"></span>
+                    Bài viết mới nhất
+                </h2>
+            </div>
+            <div class="space-y-8">
+                @foreach (var item in Model.Skip(3))  // Phần còn lại
+                {
+                    <div class="flex flex-col md:flex-row bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-lg">
+                        <div class="card-image-hover">
+                            <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "~/images/default.png" : item.ImageUrl)" alt="@item.Title" class="w-full h-60 object-cover">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="tag bg-yellow-100 text-yellow-700">@item.CategoryName</span>
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="far fa-calendar-alt mr-1"></i>
+                                    @item.PublishDate.ToString("dd/MM/yyyy")
+                                </div>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-3 text-gray-800">@item.Title</h3>
+                            <p class="text-gray-600 mb-6">@item.Summary</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <img src="~/images/default.png" alt="Author" class="w-10 h-10 rounded-full mr-3">
+                                    <span class="text-sm font-medium text-gray-700">@item.Author</span>
+                                </div>
+                                <a asp-action="Details" asp-route-id="@item.idNews" class="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 font-semibold py-2 px-5 rounded-lg transition duration-300 flex items-center">
+                                    Đọc tiếp <i class="fas fa-arrow-right ml-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <!-- Pagination, nếu muốn động cũng dùng ViewBag.CurrentPage ... -->
+        </section>
+
+        <!-- Newsletter subscription -->
+        <section id="subscribe" class="gradient-bg rounded-2xl p-8 shadow-lg overflow-hidden relative">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full -mr-20 -mt-20"></div>
+            <div class="absolute bottom-0 left-0 w-40 h-40 bg-white opacity-10 rounded-full -ml-10 -mb-10"></div>
+
+            <div class="flex flex-col md:flex-row items-center justify-between relative z-10">
+                <div class="mb-8 md:mb-0 md:w-1/2">
+                    <h2 class="text-3xl font-bold mb-4 text-white">Đăng ký nhận bản tin</h2>
+                    <p class="text-white opacity-90 text-lg mb-6">Nhận những thông tin, xu hướng tuyển dụng mới nhất qua email hàng tuần từ đội ngũ chuyên gia của chúng tôi.</p>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-white mr-2"></i>
+                            <span class="text-white">Miễn phí 100%</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-white mr-2"></i>
+                            <span class="text-white">Hủy bất kỳ lúc nào</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 w-full">
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-bold mb-4 text-gray-800">Đăng ký ngay</h3>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-medium mb-2">Họ và tên</label>
+                            <input type="text" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Nhập họ tên của bạn">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-medium mb-2">Email</label>
+                            <input type="email" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="nguyenvanA@example.com">
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-gray-700 text-sm font-medium mb-2">Bạn quan tâm đến chủ đề nào?</label>
+                            <select class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                                <option value="">Chọn chủ đề</option>
+                                <option value="hr-trends">Xu hướng nhân sự</option>
+                                <option value="recruitment">Tuyển dụng</option>
+                                <option value="interview">Phỏng vấn</option>
+                                <option value="retention">Giữ chân nhân tài</option>
+                            </select>
+                        </div>
+                        <button class="w-full bg-indigo-600 text-white hover:bg-indigo-700 font-semibold py-3 px-6 rounded-lg transition duration-300 flex items-center justify-center">
+                            <i class="fas fa-paper-plane mr-2"></i> Đăng ký nhận bản tin
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trending Topics -->
+        <section class="mt-12 mb-16">
+            <h4 class="font-bold text-lg mb-4 text-gray-800">Chủ đề thịnh hành</h4>
+            <div class="flex flex-wrap gap-2">
+                <a href="#" class="bg-gray-100 hover:bg-indigo-100 text-gray-700 hover:text-indigo-700 px-4 py-2 rounded-full transition duration-300">#XuHướngTuyểnDụng</a>
+                <a href="#" class="bg-gray-100 hover:bg-indigo-100 text-gray-700 hover:text-indigo-700 px-4 py-2 rounded-full transition duration-300">#AI</a>
+                <a href="#" class="bg-gray-100 hover:bg-indigo-100 text-gray-700 hover:text-indigo-700 px-4 py-2 rounded-full transition duration-300">#PhátTriểnNhânViên</a>
+                <a href="#" class="bg-gray-100 hover:bg-indigo-100 text-gray-700 hover:text-indigo-700 px-4 py-2 rounded-full transition duration-300">#LàmViệcTừXa</a>
+                <a href="#" class="bg-gray-100 hover:bg-indigo-100 text-gray-700 hover:text-indigo-700 px-4 py-2 rounded-full transition duration-300">#ThươngHiệuTuyểnDụng</a>
+                <a href="#" class="bg-gray-100 hover:bg-indigo-100 text-gray-700 hover:text-indigo-700 px-4 py-2 rounded-full transition duration-300">#LươngThưởng</a>
+                <a href="#" class="bg-gray-100 hover:bg-indigo-100 text-gray-700 hover:text-indigo-700 px-4 py-2 rounded-full transition duration-300">#PhúcLợiNhânViên</a>
+                <a href="#" class="bg-gray-100 hover:bg-indigo-100 text-gray-700 hover:text-indigo-700 px-4 py-2 rounded-full transition duration-300">#GiữChânNhânTài</a>
+            </div>
+        </section>
+
+        <!-- Featured Experts -->
+        <section class="mb-16">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 flex items-center">
+                    <span class="w-6 h-6 bg-indigo-600 rounded-lg inline-block mr-3"></span>
+                    Chuyên gia nổi bật
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="bg-white rounded-xl shadow-md p-6 text-center transition duration-300 card-hover">
+                    <div class="w-24 h-24 mx-auto mb-4 overflow-hidden rounded-full border-4 border-indigo-100">
+                        <img src="~/images/default.png" alt="Chuyên gia 1" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">TS. Nguyễn Văn A</h3>
+                    <p class="text-indigo-600 text-sm mb-3">Chuyên gia Nhân sự</p>
+                    <p class="text-gray-600 text-sm mb-4">15+ năm kinh nghiệm trong lĩnh vực tuyển dụng và quản lý nhân tài</p>
+                    <div class="flex justify-center space-x-2">
+                        <a href="#" class="text-blue-600 hover:text-blue-800">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 hover:text-gray-800">
+                            <i class="fas fa-globe"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6 text-center transition duration-300 card-hover">
+                    <div class="w-24 h-24 mx-auto mb-4 overflow-hidden rounded-full border-4 border-indigo-100">
+                        <img src="~/images/default.png" alt="Chuyên gia 2" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">ThS. Trần Thị B</h3>
+                    <p class="text-indigo-600 text-sm mb-3">Chuyên gia Phát triển tổ chức</p>
+                    <p class="text-gray-600 text-sm mb-4">Chuyên gia tư vấn về chiến lược phát triển tổ chức và văn hóa doanh nghiệp</p>
+                    <div class="flex justify-center space-x-2">
+                        <a href="#" class="text-blue-600 hover:text-blue-800">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 hover:text-gray-800">
+                            <i class="fas fa-globe"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6 text-center transition duration-300 card-hover">
+                    <div class="w-24 h-24 mx-auto mb-4 overflow-hidden rounded-full border-4 border-indigo-100">
+                        <img src="~/images/default.png" alt="Chuyên gia 3" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">TS. Lê Văn C</h3>
+                    <p class="text-indigo-600 text-sm mb-3">Chuyên gia AI trong HR</p>
+                    <p class="text-gray-600 text-sm mb-4">Nghiên cứu và ứng dụng AI vào quy trình tuyển dụng và quản lý nhân sự</p>
+                    <div class="flex justify-center space-x-2">
+                        <a href="#" class="text-blue-600 hover:text-blue-800">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 hover:text-gray-800">
+                            <i class="fas fa-globe"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6 text-center transition duration-300 card-hover">
+                    <div class="w-24 h-24 mx-auto mb-4 overflow-hidden rounded-full border-4 border-indigo-100">
+                        <img src="~/images/default.png" alt="Chuyên gia 4" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">ThS. Phạm Thị D</h3>
+                    <p class="text-indigo-600 text-sm mb-3">Chuyên gia Thương hiệu NTD</p>
+                    <p class="text-gray-600 text-sm mb-4">Tư vấn chiến lược xây dựng thương hiệu nhà tuyển dụng hấp dẫn</p>
+                    <div class="flex justify-center space-x-2">
+                        <a href="#" class="text-blue-600 hover:text-blue-800">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 hover:text-gray-800">
+                            <i class="fas fa-globe"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upcoming Events -->
+        <section class="mb-12">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 flex items-center">
+                    <span class="w-6 h-6 bg-indigo-600 rounded-lg inline-block mr-3"></span>
+                    Sự kiện sắp diễn ra
+                </h2>
+                <a href="#" class="text-indigo-600 hover:text-indigo-800 font-semibold flex items-center">
+                    Xem tất cả <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden transition duration-300 card-hover">
+                    <div class="relative">
+                        <img src="~/images/default.png" alt="Sự kiện 1" class="w-full h-48 object-cover">
+                        <div class="absolute top-4 right-4 bg-white rounded-lg px-3 py-2 shadow-md">
+                            <div class="text-center">
+                                <span class="block text-sm font-bold text-indigo-600">25</span>
+                                <span class="block text-xs text-gray-600">Tháng 5</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3 text-gray-800">Hội nghị Nhân sự Toàn quốc 2025</h3>
+                        <div class="flex items-center mb-3 text-gray-600">
+                            <i class="far fa-clock mr-2"></i>
+                            <span>09:00 - 17:00</span>
+                        </div>
+                        <div class="flex items-center mb-4 text-gray-600">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            <span>Trung tâm Hội nghị Quốc gia, Hà Nội</span>
+                        </div>
+                        <a href="#" class="block text-center bg-indigo-600 text-white hover:bg-indigo-700 font-semibold py-2 px-4 rounded-lg transition duration-300">
+                            Đăng ký tham dự
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md overflow-hidden transition duration-300 card-hover">
+                    <div class="relative">
+                        <img src="~/images/default.png" alt="Sự kiện 2" class="w-full h-48 object-cover">
+                        <div class="absolute top-4 right-4 bg-white rounded-lg px-3 py-2 shadow-md">
+                            <div class="text-center">
+                                <span class="block text-sm font-bold text-indigo-600">10</span>
+                                <span class="block text-xs text-gray-600">Tháng 6</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3 text-gray-800">Webinar: AI trong Tuyển dụng</h3>
+                        <div class="flex items-center mb-3 text-gray-600">
+                            <i class="far fa-clock mr-2"></i>
+                            <span>14:00 - 16:00</span>
+                        </div>
+                        <div class="flex items-center mb-4 text-gray-600">
+                            <i class="fas fa-laptop mr-2"></i>
+                            <span>Trực tuyến qua Zoom</span>
+                        </div>
+                        <a href="#" class="block text-center bg-indigo-600 text-white hover:bg-indigo-700 font-semibold py-2 px-4 rounded-lg transition duration-300">
+                            Đăng ký tham dự
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md overflow-hidden transition duration-300 card-hover">
+                    <div class="relative">
+                        <img src="~/images/default.png" alt="Sự kiện 3" class="w-full h-48 object-cover">
+                        <div class="absolute top-4 right-4 bg-white rounded-lg px-3 py-2 shadow-md">
+                            <div class="text-center">
+                                <span class="block text-sm font-bold text-indigo-600">15</span>
+                                <span class="block text-xs text-gray-600">Tháng 6</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3 text-gray-800">Workshop: Xây dựng thương hiệu NTD</h3>
+                        <div class="flex items-center mb-3 text-gray-600">
+                            <i class="far fa-clock mr-2"></i>
+                            <span>09:00 - 12:00</span>
+                        </div>
+                        <div class="flex items-center mb-4 text-gray-600">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            <span>GEM Center, TP. Hồ Chí Minh</span>
+                        </div>
+                        <a href="#" class="block text-center bg-indigo-600 text-white hover:bg-indigo-700 font-semibold py-2 px-4 rounded-lg transition duration-300">
+                            Đăng ký tham dự
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Back to top button -->
+    <button class="fixed bottom-8 right-8 bg-blue-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:bg-blue-700 transition duration-300">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Trang tin tức nhà tuyển dụng đã sẵn sàng");
+
+        // Animation on scroll
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.card-hover');
+            elements.forEach(element => {
+                const position = element.getBoundingClientRect();
+                if(position.top < window.innerHeight && position.bottom >= 0) {
+                    element.style.opacity = '1';
+                }
+            });
+        };
+
+        // Initialize elements
+        document.querySelectorAll('.card-hover').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transition = 'opacity 0.5s ease, transform 0.3s ease';
+        });
+
+        // Run on page load
+        animateOnScroll();
+
+        // Run on scroll
+        window.addEventListener('scroll', animateOnScroll);
+
+        // Back to top functionality
+        const backToTopButton = document.querySelector('button.fixed');
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        });
+
+        // Show/hide back to top button based on scroll position
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopButton.style.opacity = '1';
+            } else {
+                backToTopButton.style.opacity = '0';
+            }
+        });
+        backToTopButton.style.opacity = '0';
+        backToTopButton.style.transition = 'opacity 0.3s ease';
+    });
+</script>
+    

@@ -1,0 +1,1282 @@
+﻿@model List<HuitWorks.RecruiterWeb.Models.ViewModel.JobPostingViewModel>
+
+@{
+    ViewData["Title"] = "Quản lý bài tuyển dụng";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    /* Modern Recruitment Management Styles */
+    :root {
+        --primary-color: #094174;
+        --secondary-color: #073256;
+        --success-color: #4cc9f0;
+        --danger-color: #f72585;
+        --warning-color: #f8961e;
+        --info-color: #4895ef;
+        --light-color: #f8f9fa;
+        --dark-color: #212529;
+        --border-radius: 0.75rem;
+        --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+    }
+
+    /* Card styling */
+    .card {
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        margin-bottom: 1.5rem;
+        border: none;
+        transition: var(--transition);
+    }
+
+        .card:hover {
+            box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.15);
+        }
+
+    .card-header {
+        border-top-left-radius: var(--border-radius);
+        border-top-right-radius: var(--border-radius);
+        padding: 1.25rem;
+        background-color: white;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    /* Badge styling */
+    .status-badge {
+        padding: 0.5rem 0.75rem;
+        border-radius: 50rem;
+        font-weight: 500;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        text-wrap: nowrap;
+    }
+
+    /* Button styling */
+    .btn {
+        border-radius: 50rem;
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        transition: var(--transition);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+        transform: translateY(-2px);
+    }
+
+    .btn-sm {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.875rem;
+    }
+
+    .btn-group .btn {
+        margin-right: 0.5rem;
+        border-radius: 50rem;
+    }
+
+    /* Table styling */
+    .table {
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        .table thead th {
+            background-color: rgba(9, 65, 116, 0.05);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            padding: 1rem;
+            border-top: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .table td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-top: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .table tbody tr {
+            transition: var(--transition);
+        }
+
+            .table tbody tr:hover {
+                background-color: rgba(9, 65, 116, 0.02);
+            }
+
+    /* Dashboard stats */
+    .stats-card {
+        text-align: center;
+        border-radius: var(--border-radius);
+        transition: var(--transition);
+        background-color: white;
+        box-shadow: var(--box-shadow);
+    }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stats-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .stats-card .title {
+            color: #6c757d;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-card .value {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0;
+            color: var(--dark-color);
+        }
+
+    /* Status colors */
+    .bg-success {
+        background-color: #4cc9f0 !important;
+    }
+
+    .bg-danger {
+        background-color: #f72585 !important;
+    }
+
+    /* Alert styling */
+    .alert {
+        border-radius: var(--border-radius);
+        padding: 1rem 1.5rem;
+        border: none;
+        box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+    }
+
+    .alert-success {
+        background-color: rgba(76, 201, 240, 0.1);
+        color: var(--success-color);
+    }
+
+    /* Pagination styling */
+    .page-item .page-link {
+        border-radius: 50%;
+        margin: 0 0.25rem;
+        color: var(--primary-color);
+    }
+
+    .page-item.active .page-link {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    /* DataTable styling */
+    .dataTables_wrapper .dataTables_length select {
+        border-radius: 50rem;
+        padding: 0.5rem 2rem 0.5rem 1rem;
+        border: 1px solid #dee2e6;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+        border-radius: 50rem;
+        padding: 0.5rem 1rem;
+        border: 1px solid #dee2e6;
+    }
+
+    /* Action icons */
+    .action-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        transition: var(--transition);
+        color: white;
+    }
+
+        .action-icon:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0.5rem 0.75rem rgba(0, 0, 0, 0.1);
+        }
+
+    .action-view {
+        background-color: var(--info-color);
+    }
+
+    .action-edit {
+        background-color: var(--warning-color);
+    }
+
+    .action-delete {
+        background-color: var(--danger-color);
+    }
+
+    .action-toggle {
+        background-color: #6c757d;
+    }
+
+        .action-toggle.active {
+            background-color: var(--success-color);
+        }
+
+    /* Header area */
+    .page-header {
+        background-color: white;
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        margin-bottom: 2rem;
+        box-shadow: var(--box-shadow);
+    }
+
+    .header-title {
+        font-weight: 700;
+        margin-bottom: 0;
+        color: var(--dark-color);
+    }
+
+    .new-job-btn i {
+        margin-right: 0.5rem;
+    }
+
+    /* Filter section */
+    .filters-section {
+        background-color: white;
+        padding: 1.5rem;
+        border-radius: var(--border-radius);
+        margin-bottom: 2rem;
+        box-shadow: var(--box-shadow);
+    }
+
+    .filter-control {
+        margin-right: 1rem;
+    }
+
+    .page-title {
+        color: #094174;
+        margin-bottom: 30px;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 15px;
+        font-size: 28px;
+    }
+
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: #094174;
+            border-radius: 2px;
+        }
+
+    .pagination {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        padding: 15px 20px;
+        background-color: var(--white);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+    }
+
+    .page-info {
+        color: #6c757d;
+        font-size: 14px;
+    }
+
+    .page-buttons {
+        display: flex;
+        gap: 5px;
+    }
+
+    .page-btn {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        background-color: var(--white);
+        color: #495057;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+        .page-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .page-btn:hover:not(.active) {
+            background-color: #f5f5f5;
+        }
+
+    .status-badge {
+        display: inline-block;
+        padding: 3px 14px;
+        border-radius: 18px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: white;
+        margin: 2px 0;
+    }
+
+    .status-open {
+        background: #22c55e;
+    }
+    /* Xanh lá */
+    .status-closed {
+        background: #ef4444;
+    }
+    /* Đỏ */
+    .status-waiting {
+        background: #f59e0b;
+    }
+    /* Vàng */
+    .status-editing {
+        background: #3b82f6;
+    }
+    /* Xanh dương */
+
+</style>
+
+<div class="container-fluid">
+    <h2 class="page-title">Danh sách tin tuyển dụng</h2>
+    <!-- Dashboard Stats -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <div class="title">Tổng số tin</div>
+                <div class="value">@ViewBag.TotalJob</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="title">Hoạt động</div>
+                <div class="value">@ViewBag.IsActive</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="title">Sắp hết hạn</div>
+                <div class="value">@ViewBag.Saphethan</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="title">Ứng viên cần tuyển</div>
+                <div class="value">0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Filters -->
+    <form method="get" class="filters-section mb-4">
+        <div class="d-flex flex-wrap align-items-center">
+            <!-- Trạng thái -->
+            <div class="filter-control">
+                <label class="form-label">Trạng thái:</label>
+                <select name="status" class="form-select filter-status">
+                    @* Dùng Razor, KHÔNG để trong thuộc tính *@
+                    <option value="all" selected=@(ViewBag.CurrentStatus == null || ViewBag.CurrentStatus == "all" ? "selected" : "")>Tất cả</option>
+                    <option value="active" selected=@(ViewBag.CurrentStatus == "active" ? "selected" : "")>Hoạt động</option>
+                    <option value="inactive" selected=@(ViewBag.CurrentStatus == "inactive" ? "selected" : "")>Đã tắt</option>
+                </select>
+            </div>
+            <!-- Địa điểm -->
+            @* <div class="filter-control"> *@
+            @*     <label class="form-label">Địa điểm:</label> *@
+            @*     <select name="location" class="form-select filter-location"> *@
+            @*         <option value="all" selected=@(ViewBag.CurrentLocation == null || ViewBag.CurrentLocation == "all" ? "selected" : "")>Tất cả</option> *@
+            @*         @foreach (var location in ViewBag.Location) *@
+            @*         { *@
+            @*             <option value="@location" selected=@(ViewBag.CurrentLocation == location ? "selected" : "")>@location</option> *@
+            @*         } *@
+            @*     </select> *@
+            @* </div> *@
+            <div class="filter-control ms-auto d-flex gap-2 align-items-center">
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="fas fa-filter me-2"></i>Lọc
+                </button>
+                <a href="@Url.Action("Index", new { status = "all", location = "all" })" class="btn btn-outline-secondary">
+                    <i class="fas fa-sync-alt me-2"></i>Đặt lại bộ lọc
+                </a>
+
+                <a asp-action="Create" class="btn btn-primary new-job-btn">
+                    <i class="fas fa-plus-circle"></i>Tạo bài tuyển dụng mới
+                </a>
+            </div>
+        </div>
+    </form>
+
+
+    <!-- Jobs Table Card -->
+    <div class="card">
+        @* <div class="card-header bg-white"> *@
+        @*     <h5 class="mb-0 fw-bold">Danh sách bài tuyển dụng</h5> *@
+        @* </div> *@
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" id="jobsTable">
+                    <thead>
+                        <tr>
+                            @* <th>ID</th> *@
+                            <th>Tiêu đề</th>
+                            <th>Địa điểm</th>
+                            <th>Ngày đăng</th>
+                            <th>Hạn tuyển</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            
+                            <tr>
+                                @* <td>@item.IdJobPost</td> *@
+                                <td><strong>@item.Title</strong></td>
+                                @{
+                                var parts = (item.Location ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries);
+                                var district = parts.Length > 1 ? parts[1].Trim() : "";
+                                var province = parts.Length > 2 ? parts[2].Trim() : "";
+                                }
+                                <td>
+                                    <span class="badge bg-light text-dark">
+                                        <i class="fas fa-map-marker-alt me-1"></i>
+                                        @if (!string.IsNullOrEmpty(district) && !string.IsNullOrEmpty(province))
+                                        {
+                                            @($"{district}, {province}")
+                                        }
+                                        else if (!string.IsNullOrEmpty(district))
+                                        {
+                                            @district
+                                        }
+                                        else
+                                        {
+                                            @item.Location
+                                        }
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="text-muted">
+                                        <i class="far fa-calendar-alt me-1"></i>
+                                        @item.CreatedAt.ToString("dd/MM/yyyy")
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge @(
+                                    (item.ApplicationDeadline - DateTime.Now).TotalDays <= 3
+                                    ? "bg-danger"
+                                    : "bg-light text-dark")">
+                                        <i class="far fa-clock me-1"></i>
+                                        @item.ApplicationDeadline.ToString("dd/MM/yyyy")
+                                    </span>
+                                </td>
+                                <td>
+                                    @switch (item.PostStatus)
+                                    {
+                                        case "open":
+                                            <span class="status-badge status-open">
+                                                <i class="fas fa-unlock me-1"></i> Đang mở
+                                            </span>
+                                            break;
+                                        case "closed":
+                                            <span class="status-badge status-closed">
+                                                <i class="fas fa-lock me-1"></i> Đã đóng
+                                            </span>
+                                            break;
+                                        case "waiting":
+                                            <span class="status-badge status-waiting">
+                                                <i class="fas fa-hourglass-half me-1"></i> Chờ duyệt
+                                            </span>
+                                            break;
+                                        case "editing":
+                                            <span class="status-badge status-editing">
+                                                <i class="fas fa-pen me-1"></i> Đang chỉnh sửa
+                                            </span>
+                                            break;
+                                        default:
+                                            <span class="status-badge bg-secondary">
+                                                <i class="fas fa-question me-1"></i> Không rõ
+                                            </span>
+                                            break;
+                                    }
+                                </td>
+
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <a asp-action="Details" asp-route-id="@item.IdJobPost" class="action-icon action-view me-2" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.IdJobPost" class="action-icon action-edit me-2" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.IdJobPost" class="action-icon action-delete" title="Xóa">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <div class="page-info">
+                        Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
+                    </div>
+
+                    <div class="page-buttons">
+                        @if ((int)ViewBag.CurrentPage > 1)
+                        {
+                            <a href="?page=@((int)ViewBag.CurrentPage - 1)" class="page-btn">
+                                <i class="fas fa-angle-left"></i>
+                            </a>
+                        }
+
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            if (i == 1 || i == ViewBag.TotalPages || (i >= ViewBag.CurrentPage - 1 && i <= ViewBag.CurrentPage + 1))
+                            {
+                                <a href="?page=@i" class="page-btn @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                            }
+                            else if (i == 2 || i == ViewBag.TotalPages - 1)
+                            {
+                                <span class="page-btn">...</span>
+                            }
+                        }
+
+                        @if ((int)ViewBag.CurrentPage < (int)ViewBag.TotalPages)
+                        {
+                            <a href="?page=@((int)ViewBag.CurrentPage + 1)" class="page-btn">
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Khởi tạo DataTable với các tùy chọn nâng cao
+            const table = $('#jobsTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Vietnamese.json'
+                },
+                responsive: true,
+                dom: '<"top"fl>rt<"bottom"ip><"clear">',
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Tất cả"]],
+                columnDefs: [
+                    { targets: [6, 7], orderable: false }
+                ],
+                order: [[3, 'desc']] // Sắp xếp theo ngày đăng
+            });
+
+            // Xử lý lọc theo trạng thái
+            $('.filter-status').on('change', function() {
+                const status = $(this).val();
+
+                if (status === 'all') {
+                    table.column(6).search('').draw();
+                } else {
+                    table.column(6).search(status === 'active' ? 'Hoạt động' : 'Đã tắt').draw();
+                }
+            });
+
+            // Xử lý lọc theo địa điểm
+            $('.filter-location').on('change', function() {
+                const location = $(this).val();
+
+                if (location === 'all') {
+                    table.column(2).search('').draw();
+                } else {
+                    table.column(2).search(location).draw();
+                }
+            });
+
+            // Xử lý đặt lại bộ lọc
+            $('#resetFilters').on('click', function() {
+                $('.filter-status, .filter-location').val('all');
+                table.search('').columns().search('').draw();
+            });
+
+            // Xử lý toggle trạng thái bài tuyển dụng
+            $('.toggle-status').on('click', function () {
+                const button = $(this);
+                const jobId = button.data('id');
+                const isActive = button.data('active') === 'true';
+                const title = button.data('title');
+
+                // Hiển thị hộp thoại xác nhận với SweetAlert2
+                Swal.fire({
+                    title: `Xác nhận ${isActive ? 'tắt' : 'kích hoạt'}?`,
+                    text: `Bạn có chắc chắn muốn ${isActive ? 'tắt' : 'kích hoạt'} bài tuyển dụng "${title}"?`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: isActive ? '#f72585' : '#4cc9f0',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Xác nhận',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '@Url.Action("ToggleStatus")',
+                            type: 'POST',
+                            data: { id: jobId },
+                            success: function (result) {
+                                if (result.success) {
+                                    // Cập nhật UI
+                                    button.data('active', result.isActive);
+
+                                    if (result.isActive) {
+                                        button.removeClass('active');
+                                        button.closest('tr').find('.status-badge')
+                                            .removeClass('bg-danger').addClass('bg-success')
+                                            .html('<i class="fas fa-check-circle me-1"></i>Hoạt động');
+                                        button.find('i').removeClass('fa-toggle-on').addClass('fa-toggle-off');
+                                        button.attr('title', 'Tắt bài tuyển dụng');
+                                    } else {
+                                        button.addClass('active');
+                                        button.closest('tr').find('.status-badge')
+                                            .removeClass('bg-success').addClass('bg-danger')
+                                            .html('<i class="fas fa-times-circle me-1"></i>Đã tắt');
+                                        button.find('i').removeClass('fa-toggle-off').addClass('fa-toggle-on');
+                                        button.attr('title', 'Kích hoạt bài tuyển dụng');
+                                    }
+
+                                    // Hiển thị thông báo toast
+                                    const Toast = Swal.mixin({
+                                        toast: true,
+                                        position: 'top-end',
+                                        showConfirmButton: false,
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                        didOpen: (toast) => {
+                                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                        }
+                                    });
+
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: result.message
+                                    });
+                                }
+                            },
+                            error: function () {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Lỗi',
+                                    text: 'Có lỗi xảy ra, vui lòng thử lại.',
+                                    confirmButtonColor: '#4361ee'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Animation cho các thẻ
+            $('.card, .stats-card').each(function(index) {
+                $(this).css('animation', `fadeInUp ${0.3 + index * 0.1}s ease`);
+            });
+        });
+    </script>
+}
+
+<script>
+        // recruitment.js - Phiên bản cải tiến
+
+    /**
+     * Các biến và cấu hình toàn cục
+     */
+    const CONFIG = {
+        animationSpeed: 300,
+        toastDuration: 3000,
+        dateFormat: 'DD/MM/YYYY',
+        warningDays: 7
+    };
+
+    /**
+     * Khởi tạo các module và event listeners khi document đã sẵn sàng
+     */
+    $(document).ready(function() {
+        // Khởi tạo các thành phần
+        DataTableManager.init();
+        NotificationManager.init();
+        ChartManager.init();
+        FilterManager.init();
+        FormValidator.init();
+        StatusManager.init();
+
+        // Hiệu ứng xuất hiện cho các phần tử
+        AnimationManager.runEntryAnimations();
+
+        // Hiển thị dashboard widgets
+        DashboardManager.loadStats();
+    });
+
+    /**
+     * Quản lý bảng dữ liệu DataTables
+     */
+    const DataTableManager = {
+        table: null,
+
+        init: function() {
+            if (!$('#jobsTable').length) return;
+
+            this.table = $('#jobsTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Vietnamese.json'
+                },
+                responsive: true,
+                dom: '<"top d-flex justify-content-between align-items-center"<"dataTables_info">fl>rt<"bottom"ip><"clear">',
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Tất cả"]],
+                columnDefs: [
+                    { targets: [6, 7], orderable: false },
+                    { targets: 4, render: function(data) {
+                        // Định dạng lại hiển thị ngày hết hạn với tính toán thời gian còn lại
+                        const expiryDate = moment(data, CONFIG.dateFormat);
+                        const now = moment();
+                        const daysLeft = expiryDate.diff(now, 'days');
+
+                        let badgeClass = 'bg-light text-dark';
+                        if (daysLeft <= 3) badgeClass = 'bg-danger';
+                        else if (daysLeft <= CONFIG.warningDays) badgeClass = 'bg-warning text-dark';
+
+                        let badgeText = data;
+                        if (daysLeft > 0 && daysLeft <= CONFIG.warningDays) {
+                            badgeText += ` (${daysLeft} ngày)`;
+                        }
+
+                        return `<span class="badge ${badgeClass}"><i class="far fa-clock me-1"></i>${badgeText}</span>`;
+                    }}
+                ],
+                order: [[3, 'desc']], // Sắp xếp theo ngày đăng
+                initComplete: function() {
+                    // Thêm số lượng bản ghi được hiển thị
+                    $(".dataTables_info").html(`<h6 class="mb-0">Hiển thị <span class="text-primary">${DataTableManager.table.page.info().recordsDisplay}</span> / <span class="text-primary">${DataTableManager.table.page.info().recordsTotal}</span> bài tuyển dụng</h6>`);
+
+                    // Đăng ký sự kiện để cập nhật thông tin khi bảng thay đổi
+                    DataTableManager.table.on('draw', function() {
+                        $(".dataTables_info").html(`<h6 class="mb-0">Hiển thị <span class="text-primary">${DataTableManager.table.page.info().recordsDisplay}</span> / <span class="text-primary">${DataTableManager.table.page.info().recordsTotal}</span> bài tuyển dụng</h6>`);
+                    });
+                }
+            });
+        }
+    };
+
+    /**
+     * Quản lý thông báo và alerts
+     */
+    const NotificationManager = {
+        init: function() {
+            // Khởi tạo SweetAlert2 toast
+            this.Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: CONFIG.toastDuration,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                }
+            });
+
+            // Tự động ẩn alerts sau một thời gian
+            setTimeout(() => {
+                $('.alert').fadeOut(CONFIG.animationSpeed);
+            }, CONFIG.toastDuration);
+        },
+
+        showToast: function(message, type = 'success') {
+            this.Toast.fire({
+                icon: type,
+                title: message
+            });
+        },
+
+        confirm: function(options) {
+            return Swal.fire({
+                title: options.title,
+                text: options.text,
+                icon: options.icon || 'question',
+                showCancelButton: true,
+                confirmButtonColor: options.confirmButtonColor || '#4361ee',
+                cancelButtonColor: options.cancelButtonColor || '#6c757d',
+                confirmButtonText: options.confirmButtonText || 'Xác nhận',
+                cancelButtonText: options.cancelButtonText || 'Hủy'
+            });
+        }
+    };
+
+    /**
+     * Quản lý biểu đồ và thống kê
+     */
+    const ChartManager = {
+        charts: {},
+
+        init: function() {
+            // Khởi tạo biểu đồ nếu có
+            if ($('#jobsChart').length) {
+                this.initJobsOverviewChart();
+            }
+
+            if ($('#candidatesChart').length) {
+                this.initCandidatesChart();
+            }
+        },
+
+            // recruitment.js - Phiên bản cải tiến (tiếp tục)
+
+        initJobsOverviewChart: function() {
+            const ctx = document.getElementById('jobsChart').getContext('2d');
+
+            // Lấy dữ liệu từ API hoặc sử dụng dữ liệu mẫu
+            const labels = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6'];
+            const activeJobs = [5, 8, 12, 7, 10, 15];
+            const appliedCandidates = [15, 25, 35, 20, 30, 45];
+
+            this.charts.jobsOverview = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Bài tuyển dụng hoạt động',
+                            data: activeJobs,
+                            backgroundColor: 'rgba(67, 97, 238, 0.7)',
+                            borderColor: 'rgba(67, 97, 238, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Ứng viên ứng tuyển',
+                            data: appliedCandidates,
+                            backgroundColor: 'rgba(76, 201, 240, 0.7)',
+                            borderColor: 'rgba(76, 201, 240, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        },
+
+        initCandidatesChart: function() {
+            const ctx = document.getElementById('candidatesChart').getContext('2d');
+
+            // Dữ liệu mẫu về nguồn ứng viên
+            const data = {
+                labels: ['LinkedIn', 'Website', 'Giới thiệu nội bộ', 'Cổng tuyển dụng', 'Khác'],
+                datasets: [{
+                    data: [35, 25, 20, 15, 5],
+                    backgroundColor: [
+                        'rgba(67, 97, 238, 0.7)',
+                        'rgba(76, 201, 240, 0.7)',
+                        'rgba(248, 150, 30, 0.7)',
+                        'rgba(247, 37, 133, 0.7)',
+                        'rgba(114, 9, 183, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(67, 97, 238, 1)',
+                        'rgba(76, 201, 240, 1)',
+                        'rgba(248, 150, 30, 1)',
+                        'rgba(247, 37, 133, 1)',
+                        'rgba(114, 9, 183, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            this.charts.candidatesSource = new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        },
+
+        updateCharts: function(data) {
+            // Cập nhật dữ liệu biểu đồ nếu cần
+            if (this.charts.jobsOverview) {
+                this.charts.jobsOverview.data.datasets[0].data = data.activeJobs;
+                this.charts.jobsOverview.data.datasets[1].data = data.appliedCandidates;
+                this.charts.jobsOverview.update();
+            }
+
+            if (this.charts.candidatesSource) {
+                this.charts.candidatesSource.data.datasets[0].data = data.candidatesSources;
+                this.charts.candidatesSource.update();
+            }
+        }
+    };
+
+    /**
+     * Quản lý bộ lọc cho bảng dữ liệu
+     */
+    const FilterManager = {
+        init: function() {
+            if (!$('#jobsTable').length) return;
+
+            // Xử lý lọc theo trạng thái
+            $('.filter-status').on('change', function() {
+                const status = $(this).val();
+
+                if (status === 'all') {
+                    DataTableManager.table.column(6).search('').draw();
+                } else {
+                    DataTableManager.table.column(6).search(status === 'active' ? 'Hoạt động' : 'Đã tắt').draw();
+                }
+
+                // Cập nhật thông tin hiển thị
+                DashboardManager.updateFilterInfo();
+            });
+
+            // Xử lý lọc theo địa điểm
+            $('.filter-location').on('change', function() {
+                const location = $(this).val();
+
+                if (location === 'all') {
+                    DataTableManager.table.column(2).search('').draw();
+                } else {
+                    DataTableManager.table.column(2).search(location).draw();
+                }
+
+                // Cập nhật thông tin hiển thị
+                DashboardManager.updateFilterInfo();
+            });
+
+            // Xử lý đặt lại bộ lọc
+            $('#resetFilters').on('click', function() {
+                $('.filter-status, .filter-location').val('all');
+                DataTableManager.table.search('').columns().search('').draw();
+
+                // Hiệu ứng "shake" cho biểu tượng reset
+                $(this).find('i').addClass('fa-spin');
+                setTimeout(() => {
+                    $(this).find('i').removeClass('fa-spin');
+                }, 500);
+
+                // Cập nhật thông tin hiển thị
+                DashboardManager.updateFilterInfo();
+
+                // Hiển thị thông báo
+                NotificationManager.showToast('Đã đặt lại bộ lọc', 'info');
+            });
+        }
+    };
+
+    /**
+     * Kiểm tra và xác thực form
+     */
+    const FormValidator = {
+        init: function() {
+            // Khởi tạo Summernote cho các textarea nếu có
+            if ($('#Description, #Requirements').length) {
+                $('#Description, #Requirements').summernote({
+                    height: 250,
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'underline', 'clear']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['table', ['table']],
+                        ['insert', ['link']],
+                        ['view', ['fullscreen', 'codeview', 'help']]
+                    ],
+                    placeholder: 'Nhập nội dung...',
+                    styleTags: [
+                        'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+                    ],
+                    callbacks: {
+                        onImageUpload: function(files) {
+                            NotificationManager.showToast('Chức năng upload ảnh không được hỗ trợ.', 'warning');
+                        }
+                    }
+                });
+            }
+
+            // Khởi tạo date picker cho các trường ngày
+            if ($('.datepicker').length) {
+                $('.datepicker').datepicker({
+                    format: 'dd/mm/yyyy',
+                    autoclose: true,
+                    todayHighlight: true,
+                    language: 'vi'
+                });
+            }
+
+            // Xử lý form submit để kiểm tra ngày hết hạn
+            $('form').on('submit', function(e) {
+                if (!FormValidator.validateForm()) {
+                    e.preventDefault();
+                    return false;
+                }
+                return true;
+            });
+        },
+
+        validateForm: function() {
+            let isValid = true;
+
+            // Kiểm tra ngày hết hạn
+            if ($('#ExpiryDate').length) {
+                const expiryDateInput = document.getElementById('ExpiryDate');
+                const expiryDate = moment(expiryDateInput.value, 'DD/MM/YYYY');
+                const today = moment().startOf('day');
+
+                if (!expiryDate.isValid() || expiryDate.isSameOrBefore(today)) {
+                    NotificationManager.showToast('Ngày hết hạn phải lớn hơn ngày hiện tại!', 'error');
+                    $(expiryDateInput).addClass('is-invalid').focus();
+                    isValid = false;
+                } else {
+                    $(expiryDateInput).removeClass('is-invalid');
+                }
+            }
+
+            // Kiểm tra các trường bắt buộc khác
+            $('.required').each(function() {
+                if ($(this).val().trim() === '') {
+                    $(this).addClass('is-invalid').focus();
+                    const fieldName = $(this).prev('label').text() || 'Trường này';
+                    NotificationManager.showToast(`${fieldName} không được để trống!`, 'error');
+                    isValid = false;
+                    return false; // Break each loop
+                } else {
+                    $(this).removeClass('is-invalid');
+                }
+            });
+
+            return isValid;
+        }
+    };
+
+    /**
+     * Quản lý trạng thái bài tuyển dụng
+     */
+    const StatusManager = {
+        init: function() {
+            // Xử lý toggle trạng thái bài tuyển dụng
+            $(document).on('click', '.toggle-status', function() {
+                const button = $(this);
+                const jobId = button.data('id');
+                const isActive = button.data('active') === 'true';
+                const title = button.data('title');
+
+                NotificationManager.confirm({
+                    title: `Xác nhận ${isActive ? 'tắt' : 'kích hoạt'}?`,
+                    text: `Bạn có chắc chắn muốn ${isActive ? 'tắt' : 'kích hoạt'} bài tuyển dụng "${title}"?`,
+                    icon: 'question',
+                    confirmButtonColor: isActive ? '#f72585' : '#4cc9f0',
+                    confirmButtonText: 'Xác nhận'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        StatusManager.toggleJobStatus(jobId, button);
+                    }
+                });
+            });
+        },
+
+        toggleJobStatus: function(jobId, button) {
+            // Hiển thị loading trên nút
+            button.html('<i class="fas fa-spinner fa-spin"></i>');
+            button.prop('disabled', true);
+
+            $.ajax({
+                url: '/Jobs/ToggleStatus',
+                type: 'POST',
+                data: { id: jobId },
+                success: function (result) {
+                    if (result.success) {
+                        // Cập nhật UI
+                        button.data('active', result.isActive);
+                        button.prop('disabled', false);
+
+                        if (result.isActive) {
+                            button.removeClass('active');
+                            button.closest('tr').find('.status-badge')
+                                .removeClass('bg-danger').addClass('bg-success')
+                                .html('<i class="fas fa-check-circle me-1"></i>Hoạt động');
+                            button.html('<i class="fas fa-toggle-off"></i>');
+                            button.attr('title', 'Tắt bài tuyển dụng');
+                        } else {
+                            button.addClass('active');
+                            button.closest('tr').find('.status-badge')
+                                .removeClass('bg-success').addClass('bg-danger')
+                                .html('<i class="fas fa-times-circle me-1"></i>Đã tắt');
+                            button.html('<i class="fas fa-toggle-on"></i>');
+                            button.attr('title', 'Kích hoạt bài tuyển dụng');
+                        }
+
+                        // Hiển thị thông báo
+                        NotificationManager.showToast(result.message, 'success');
+
+                        // Cập nhật các số liệu thống kê
+                        DashboardManager.loadStats();
+                    }
+                },
+                error: function () {
+                    button.prop('disabled', false);
+                    button.html(button.data('active') === 'true' ?
+                        '<i class="fas fa-toggle-off"></i>' :
+                        '<i class="fas fa-toggle-on"></i>');
+
+                    NotificationManager.showToast('Có lỗi xảy ra, vui lòng thử lại.', 'error');
+                }
+            });
+        }
+    };
+
+    /**
+     * Quản lý hiệu ứng animation
+     */
+    const AnimationManager = {
+        runEntryAnimations: function() {
+            // Hiệu ứng xuất hiện cho các phần tử
+            $('.card, .stats-card, .page-header').each(function(index) {
+                $(this).css({
+                    'animation': `fadeInUp ${0.3 + index * 0.1}s ease forwards`,
+                    'opacity': '0'
+                });
+            });
+        },
+
+        pulseEffect: function(element) {
+            $(element).addClass('pulse-animation');
+            setTimeout(() => {
+                $(element).removeClass('pulse-animation');
+            }, 1000);
+        }
+    };
+
+    /**
+     * Quản lý thông tin dashboard
+     */
+    const DashboardManager = {
+        loadStats: function() {
+            // Trong một ứng dụng thực tế, đây sẽ là một API call
+            // Nhưng bây giờ chúng ta sẽ giả lập nó
+
+            // Tạo hiệu ứng loading
+            $('.stats-card .value').html('<i class="fas fa-spinner fa-spin"></i>');
+
+            setTimeout(() => {
+                // Tính toán các thống kê từ dữ liệu hiện tại trong bảng
+                const totalJobs = DataTableManager.table.rows().count();
+                const activeJobs = DataTableManager.table.rows().data().filter(row =>
+                    $(row[6]).text().includes('Hoạt động')
+                ).length;
+
+                // Tính số bài tuyển dụng sắp hết hạn (trong vòng 7 ngày)
+                const expiringJobs = DataTableManager.table.rows().data().filter(row => {
+                    const expiryDateText = $(row[4]).text();
+                    const match = expiryDateText.match(/\((\d+) ngày\)/);
+                    return match && parseInt(match[1]) <= 7;
+                }).length;
+
+                // Tổng số ứng viên cần tuyển
+                const requiredCandidates = DataTableManager.table.rows().data().reduce((sum, row) => {
+                    if ($(row[6]).text().includes('Hoạt động')) {
+                        const candidates = parseInt($(row[5]).text()) || 0;
+                        return sum + candidates;
+                    }
+                    return sum;
+                }, 0);
+
+                // Cập nhật UI
+                $('.stats-card:nth-child(1) .value').text(totalJobs);
+                $('.stats-card:nth-child(2) .value').text(activeJobs);
+                $('.stats-card:nth-child(3) .value').text(expiringJobs);
+                $('.stats-card:nth-child(4) .value').text(requiredCandidates);
+
+                // Hiệu ứng pulse cho các thẻ stats
+                AnimationManager.pulseEffect('.stats-card .value');
+            }, 800);
+        },
+
+        updateFilterInfo: function() {
+            // Cập nhật thông tin về số lượng bản ghi hiện đang hiển thị
+            const info = DataTableManager.table.page.info();
+            $(".dataTables_info").html(`<h6 class="mb-0">Hiển thị <span class="text-primary">${info.recordsDisplay}</span> / <span class="text-primary">${info.recordsTotal}</span> bài tuyển dụng</h6>`);
+        }
+    };
+</script>

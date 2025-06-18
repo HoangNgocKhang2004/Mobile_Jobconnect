@@ -1,0 +1,350 @@
+﻿@model IEnumerable<HuitWorks.RecruiterWeb.Models.ViewModel.InterviewViewModel>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Quản lý lịch phỏng vấn";
+}
+
+<style>
+    .page-title {
+        color: #094174;
+        margin-bottom: 30px;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 15px;
+        font-size: 28px;
+    }
+
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: #094174;
+            border-radius: 2px;
+        }
+    /* Định dạng thêm cho avatar và badge */
+    .avatar-initials {
+        font-size: 1.2rem;
+        border: 2px solid #dbeafe;
+    }
+
+    .badge {
+        font-size: 1rem;
+        border-radius: 1.25rem;
+        letter-spacing: 0.5px;
+    }
+
+    .table-hover tbody tr:hover {
+        background: #f4f7fa;
+    }
+
+    .table thead th {
+        vertical-align: middle;
+    }
+</style>
+
+<div class="container-fluid">
+    <h2 class="page-title">Quản lý lịch phỏng vấn</h2>
+
+    <div class="card shadow">
+        <div class="card-header bg-white py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <i class="fas fa-calendar-alt me-1"></i>
+                @* Nếu cần nút "Tạo lịch phỏng vấn", bỏ comment đoạn sau *@
+                @* <a asp-action="Create" class="btn btn-primary">Tạo lịch phỏng vấn</a> *@
+            </div>
+        </div>
+
+        <div class="card-body">
+            <!-- Bộ lọc và tìm kiếm -->
+            <div class="row mb-4 g-3">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1z" />
+                                <path d="M12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                            </svg>
+                        </span>
+                        <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm ứng viên...">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <input type="date" id="dateFilter" class="form-control" placeholder="Chọn ngày">
+                </div>
+                <div class="col-md-2">
+                    <button id="resetFilters" class="btn btn-outline-secondary w-100">
+                        Làm mới
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bảng lịch phỏng vấn -->
+            <div class="table-responsive">
+                @if (!Model.Any())
+                {
+                    <div class="text-center py-5">
+                        <div class="text-secondary mb-3" style="font-size: 48px;">📅</div>
+                        <h5 class="mt-3 text-secondary">Chưa có cuộc phỏng vấn nào được lên lịch</h5>
+                        <p class="text-muted">Nhấn "Tạo lịch phỏng vấn" để bắt đầu</p>
+                    </div>
+                }
+                else
+                {
+                    <table class="table table-hover align-middle shadow-sm rounded bg-white" id="interviewTable">
+                        <thead class="table-light">
+                            <tr class="align-middle">
+                                <th class="sortable" data-sort="candidate">
+                                    <i class="fas fa-user me-1 text-primary"></i> Ứng viên <span class="text-secondary ms-1">↕</span>
+                                </th>
+                                <th class="sortable" data-sort="position">
+                                    <i class="fas fa-briefcase me-1 text-info"></i> Vị trí <span class="text-secondary ms-1">↕</span>
+                                </th>
+                                <th class="sortable" data-sort="datetime">
+                                    <i class="fas fa-calendar-alt me-1 text-success"></i> Thời gian <span class="text-secondary ms-1">↕</span>
+                                </th>
+                                <th><i class="fas fa-laptop-house me-1 text-dark"></i> Hình thức</th>
+                                <th class="text-end"><i class="fas fa-cogs me-1"></i> Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="interview-row @(item.HasPassed ? "table-danger" : "")"
+                                    data-candidate="@item.CandidateName.ToLower()"
+                                    data-position="@item.PositionTitle.ToLower()"
+                                    data-date="@item.InterviewDateTime?.ToString("yyyy-MM-dd")"
+                                    data-passed="@(item.HasPassed.ToString().ToLower())">
+
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-initials bg-light text-primary rounded-circle me-3 shadow-sm"
+                                                 style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.15rem;">
+                                                @(item.CandidateName?.Length > 0 ? item.CandidateName[0].ToString().ToUpper() : "")
+                                            </div>
+                                            <div>
+                                                <div class="fw-semibold">@item.CandidateName</div>
+                                                @if (!string.IsNullOrEmpty(item.CandidateEmail))
+                                                {
+                                                    <div class="small text-muted">@item.CandidateEmail</div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td class="fw-medium text-info">@item.PositionTitle</td>
+
+                                    <td>
+                                        <div class="fw-bold text-dark">@item.InterviewDateTime?.ToString("dd/MM/yyyy")</div>
+                                        <div class="small text-muted">@item.InterviewDateTime?.ToString("HH:mm")</div>
+                                    </td>
+
+                                    <td>
+                                        @if (item.Mode == "Online")
+                                        {
+                                            <span class="badge bg-info text-dark px-3 py-2">Online</span>
+                                        }
+                                        else if (item.Mode == "Offline")
+                                        {
+                                            <span class="badge bg-secondary text-white px-3 py-2">Tại văn phòng</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-light text-dark px-3 py-2">@item.Mode</span>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <a asp-action="DetailsInterview" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-outline-primary" title="Xem chi tiết">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a asp-action="EditInterview" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-outline-secondary" title="Chỉnh sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            @* <button type="button" *@
+                                            @*         class="btn btn-sm btn-outline-danger btn-delete-interview" *@
+                                            @*         data-id="@item.Id" *@
+                                            @*         title="Xóa"> *@
+                                            @*     <i class="fas fa-trash"></i> *@
+                                            @* </button> *@
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="card-footer bg-white py-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-muted small">
+                        Tổng số: <span class="fw-bold" id="totalCount">@Model.Count()</span> cuộc phỏng vấn
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary" id="exportBtn">
+                            Xuất dữ liệu
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal Xóa -->
+<div class="modal fade" id="deleteInterviewModal" tabindex="-1" aria-labelledby="deleteInterviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="deleteInterviewModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4">
+                <div class="text-center mb-3">
+                    <div class="text-danger mb-3" style="font-size: 3rem;">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <h5 class="mb-3">Bạn chắc chắn muốn xóa?</h5>
+                    <p class="text-muted">Lịch phỏng vấn này sẽ bị xóa vĩnh viễn và không thể khôi phục.</p>
+                </div>
+                <input type="hidden" id="deleteInterviewId" value="">
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i> Hủy
+                </button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                    <i class="fas fa-trash-alt me-1"></i> Xác nhận xóa
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Tìm kiếm trên cột Ứng viên và Vị trí
+            $("#searchInput").on("keyup", filterInterviews);
+            $("#dateFilter").on("change", filterInterviews);
+
+            // Reset bộ lọc
+            $("#resetFilters").click(function() {
+                $("#searchInput").val('');
+                $("#dateFilter").val('');
+                filterInterviews();
+            });
+
+            // Xử lý sắp xếp (chỉ hiển thị console, bạn có thể bổ sung logic)
+            $(".sortable").click(function() {
+                const column = $(this).data("sort");
+                console.log("Sorting by", column);
+            });
+
+            // Tạm thời chỉ alert khi bấm Xuất dữ liệu
+            $("#exportBtn").click(function() {
+                alert("Tính năng xuất dữ liệu đang được phát triển");
+            });
+
+            // Hàm filter
+            function filterInterviews() {
+                const searchText = $("#searchInput").val().toLowerCase();
+                const dateFilter = $("#dateFilter").val();
+                let visibleCount = 0;
+
+                $(".interview-row").each(function() {
+                    const candidate = $(this).data("candidate");
+                    const position = $(this).data("position");
+                    const date = $(this).data("date");
+
+                    const matchesSearch = candidate.includes(searchText) || position.includes(searchText);
+                    const matchesDate = !dateFilter || date === dateFilter;
+
+                    if (matchesSearch && matchesDate) {
+                        $(this).show();
+                        visibleCount++;
+                    } else {
+                        $(this).hide();
+                    }
+                });
+
+                $("#totalCount").text(visibleCount);
+            }
+
+            // Xử lý Xóa: mở modal rồi gọi AJAX
+            $(document).on('click', '.btn-delete-interview', function(e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+                $("#deleteInterviewId").val(id);
+                var deleteModal = new bootstrap.Modal(document.getElementById('deleteInterviewModal'));
+                deleteModal.show();
+            });
+            $("#confirmDeleteBtn").click(function() {
+                var id = $("#deleteInterviewId").val();
+                $.ajax({
+                    url: '@Url.Action("DeleteInterview", "Candidates")',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function(result) {
+                        var deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteInterviewModal'));
+                        deleteModal.hide();
+                        if (result.success) {
+                            $('tr[data-passed][data-candidate]').filter(function() {
+                                return $(this).data('id') == id;
+                            }).fadeOut(400, function() {
+                                $(this).remove();
+                                var count = $('#interviewTable tbody tr:visible').length;
+                                $('#totalCount').text(count);
+                                if (count === 0) {
+                                    $('.table-responsive').html(`
+                                        <div class="text-center py-5">
+                                            <div class="text-secondary mb-3" style="font-size: 48px;">📅</div>
+                                            <h5 class="mt-3 text-secondary">Chưa có cuộc phỏng vấn nào được lên lịch</h5>
+                                            <p class="text-muted">Nhấn "Tạo lịch phỏng vấn" để bắt đầu</p>
+                                        </div>
+                                    `);
+                                }
+                            });
+                            toastr.success(result.message || 'Xóa lịch phỏng vấn thành công!');
+                        } else {
+                            toastr.error(result.message || 'Xóa lịch phỏng vấn thất bại!');
+                        }
+                    },
+                    error: function() {
+                        var deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteInterviewModal'));
+                        deleteModal.hide();
+                        toastr.error('Có lỗi xảy ra trong quá trình xử lý, vui lòng thử lại sau.');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <style>
+        .avatar-initials {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .sortable {
+            cursor: pointer;
+        }
+
+            .sortable:hover {
+                background-color: rgba(0,0,0,0.03);
+            }
+    </style>
+}

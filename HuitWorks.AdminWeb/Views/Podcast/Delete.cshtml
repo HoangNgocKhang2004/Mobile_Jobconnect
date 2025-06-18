@@ -1,0 +1,16 @@
+﻿@model HuitWorks.AdminWeb.Models.ViewModels.PodcastViewModel
+@{
+    ViewData["Title"] = "Xoá Podcast";
+}
+<h2>Xác nhận xoá Podcast</h2>
+<div class="alert alert-warning">
+    <strong>Bạn có chắc chắn muốn xoá podcast:</strong> <br />
+    <img src="@Model.CoverImageUrl" style="height:120px; border-radius:8px;" />
+    <div><strong>@Model.Title</strong> (Host: @Model.Host)</div>
+    <div>@Model.Description</div>
+</div>
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="IdPodcast" />
+    <button type="submit" class="btn btn-danger">Xoá</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Hủy</a>
+</form>
