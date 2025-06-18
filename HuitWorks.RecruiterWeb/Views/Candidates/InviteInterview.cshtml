@@ -1,0 +1,197 @@
+﻿<!-- Thêm thư viện Font Awesome từ CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+@model HuitWorks.RecruiterWeb.Models.ViewModel.InterviewSchedViewModel
+@{
+    ViewData["Title"] = "Mời phỏng vấn ứng viên";
+}
+
+<style>
+    :root {
+        --primary-color: #094174;
+        --primary-light: #e6eef4;
+        --primary-hover: #0a5799;
+        --text-light: #f8f9fa;
+    }
+
+    .bg-primary-custom {
+        background-color: var(--primary-color);
+    }
+
+    .text-primary-custom {
+        color: var(--primary-color);
+    }
+
+    .card-header-custom {
+        background-color: var(--primary-color);
+        color: var(--text-light);
+        padding: 1.5rem;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .interview-form {
+        border-radius: 10px;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(9, 65, 116, 0.25);
+    }
+
+    .btn-primary-custom {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+        padding: 0.5rem 2rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary-custom:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .candidate-info {
+        background-color: var(--primary-light);
+        border-left: 4px solid var(--primary-color);
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border-radius: 5px;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+    }
+    
+    .form-icon {
+        color: var(--primary-color);
+        margin-right: 0.5rem;
+    }
+
+    .nav-dropdown > .nav-link::after {
+        color: gray;
+    }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="interview-form">
+                <div class="card-header-custom">
+                    <h3 class="mb-0">
+                        <i class="fas fa-calendar-check form-icon"></i>
+                        Mời phỏng vấn ứng viên
+                    </h3>
+                </div>
+                
+                <div class="card-body p-4">
+                    <div class="candidate-info">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="text-primary-custom mb-1">
+                                    <i class="fas fa-user form-icon"></i>
+                                    @Model.CandidateName
+                                </h5>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <h5 class="text-primary-custom mb-1">
+                                    <i class="fas fa-briefcase form-icon"></i>
+                                    @Model.PositionTitle
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form asp-action="InviteInterview" method="post">
+                        <input type="hidden" asp-for="IdUser" />
+                        <input type="hidden" asp-for="IdJobPost" />
+                        <input type="hidden" asp-for="CandidateName" />
+                        <input type="hidden" asp-for="PositionTitle" />
+                        @* <input type="hidden" asp-for="IdSchedule" /> *@
+                        @* <input type="hidden" asp-for="Interviewer" /> *@
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">
+                                        <i class="far fa-calendar-alt form-icon"></i>
+                                        Ngày phỏng vấn
+                                    </label>
+                                    <input type="date" asp-for="InterviewDate" class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">
+                                        <i class="far fa-clock form-icon"></i>
+                                        Giờ phỏng vấn
+                                    </label>
+                                    <input type="time" asp-for="InterviewTime" class="form-control" required />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-video form-icon"></i>
+                                        Hình thức
+                                    </label>
+                                    <select asp-for="InterviewMode" class="form-select" required>
+                                        <option value="">-- Chọn hình thức --</option>
+                                        <option value="Offline">Trực tiếp (Offline)</option>
+                                        <option value="Online">Trực tuyến (Online)</option>
+                                        <option value="Phone">Qua điện thoại (Phone)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-map-marker-alt form-icon"></i>
+                                        Địa điểm
+                                    </label>
+                                    <input type="text" asp-for="Location" class="form-control" placeholder="Nhập địa điểm hoặc link meeting" required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-user-tie form-icon"></i>
+                                        Người phỏng vấn
+                                    </label>
+                                    <input type="text" asp-for="Interviewer" class="form-control" placeholder="Nhập tên người phỏng vấn" required />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-sticky-note form-icon"></i>
+                                        Ghi chú thêm
+                                    </label>
+                                    <textarea asp-for="Note" class="form-control" rows="4" placeholder="Nhập thông tin bổ sung cho ứng viên..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>
+                                Quay lại
+                            </a>
+                            <button type="submit" class="btn btn-primary-custom">
+                                <i class="fas fa-paper-plane me-1"></i>
+                                Gửi lời mời
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

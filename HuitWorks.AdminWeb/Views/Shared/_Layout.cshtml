@@ -1,0 +1,481 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HUITern Admin Portal</title>
+    <!-- Thêm jQuery trước Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Di chuyển Chart.js sau phần tử canvas trong HTML -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="~/css/layout.css" rel="stylesheet" />
+    <style>
+        /* Điều chỉnh kích thước logo cho vừa navbar */
+        .logo-img {
+            height: 40px;
+            width: auto;
+        }
+
+        /* (tuỳ chọn) căn giữa text nếu cần */
+        .brand-logo .logo-text {
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="wrapper d-flex flex-column min-vh-100">
+        <header class="main-header">
+            <div class="brand-logo">
+                <a class="navbar-brand d-flex align-items-center" href="/home/index">
+                    <!-- Logo image -->
+                    <img src="~/images/sv_logo_dashboard.png"
+                         alt="HUITern"
+                         class="me-2 logo-img" />
+                </a>
+            </div>
+
+
+            <div class="navbar-content">
+                <div class="d-flex align-items-center">
+                    <div class="search-bar d-none d-md-block">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Tìm kiếm...">
+                    </div>
+                </div>
+
+                <div class="header-nav">
+                    <div class="nav-item">
+                        <button class="header-icon-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">5</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end notification-dropdown">
+                            <div class="notification-header">
+                                <h6>Thông báo</h6>
+                                <a href="#" class="text-primary" style="font-size: 0.9rem;">Đánh dấu đã đọc</a>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon bg-primary-light text-primary">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">Hồ sơ mới: Software Engineer</div>
+                                    <div class="notification-text">
+                                        Nguyễn Văn A đã ứng tuyển vào vị trí Software Engineer
+                                    </div>
+                                    <div class="notification-time">30 phút trước</div>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon bg-primary-light text-primary">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">Hồ sơ mới: UX Designer</div>
+                                    <div class="notification-text">Trần Thị B đã ứng tuyển vào vị trí UX Designer</div>
+                                    <div class="notification-time">1 giờ trước</div>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon" style="background-color: #fee2e2; color: #ef4444;">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">Tin tuyển dụng hết hạn</div>
+                                    <div class="notification-text">Tin tuyển dụng vị trí Data Analyst đã hết hạn</div>
+                                    <div class="notification-time">2 giờ trước</div>
+                                </div>
+                            </div>
+                            <div class="notification-footer">
+                                <a href="#">Xem tất cả thông báo</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-item">
+                        <button class="header-icon-btn" type="button">
+                            <i class="fas fa-inbox"></i>
+                        </button>
+                    </div>
+                    @using System.Security.Claims
+
+                    <div class="nav-item">
+                        <div class="user-profile" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="~/images/user.png" alt="Admin User">
+                            <div class="user-info d-none d-md-block">
+                                <div class="user-name">@User.Identity.Name</div>
+                                <div class="user-role">Quản trị viên</div>
+                            </div>
+                            <i class="fas fa-chevron-down ms-2 d-none d-md-block"
+                               style="font-size: 0.8rem; color: var(--text-light);"></i>
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end user-dropdown">
+                            <li>
+                                <div class="px-4 py-3">
+                                    <div style="font-weight: 600;">@User.Identity.Name</div>
+                                    <div style="font-size: 0.9rem; color: var(--text-light);">
+                                        @User.FindFirstValue(ClaimTypes.Email)
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Hồ sơ cá nhân</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Cài đặt</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <form asp-action="Logout" asp-controller="Auth" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="dropdown-item" style="color: var(--danger-color); border: none; background: none; padding: 0; width: 100%; text-align: left;">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <aside class="sidebar">
+            <!-- Logo Section -->
+            <div class="brand-logo">
+                <a class="navbar-brand logo-text" href="/home/index">
+                    @* <i class="fas fa-user-tie"></i> *@
+                    @* <span>HUITern</span> *@
+                </a>
+            </div>
+
+            <!-- Navigation Sections -->
+            <div class="sidebar-section">
+                <ul class="nav flex-column">
+                    <li class="nav-item" style="margin-bottom: 1rem !important;">
+                        <a class="nav-link" href="/home/index">
+                            <i class="fas fa-th-large"></i>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <h5 class="sidebar-section-title">Quản lý ứng viên</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/candidates/listcandidate">
+                            <i class="fas fa-users"></i>
+                            <span class="nav-text">Danh sách ứng viên</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/candidates/applications">
+                            <i class="fas fa-file-signature"></i>
+                            <span class="nav-text">Đơn ứng tuyển</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/interview/index">
+                            <i class="fas fa-calendar-check"></i>
+                            <span class="nav-text">Lịch phỏng vấn</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/evaluation/index">
+                            <i class="fas fa-user-check"></i>
+                            <span class="nav-text">QL đánh giá ứng viên</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <h5 class="sidebar-section-title">Quản lý doanh nghiệp</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/company/index">
+                            <i class="fas fa-briefcase"></i>
+                            <span class="nav-text">Danh sách công ty</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/hr/index">
+                            <i class="fas fa-building"></i>
+                            <span class="nav-text">Nhà tuyển dụng</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/jobpost/index">
+                            <i class="fas fa-bullhorn"></i>
+                            <span class="nav-text">Tin tuyển dụng</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h5 class="sidebar-section-title">Quản lý chung</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Subscription/Index">
+                            <i class="fas fa-box"></i>
+                            <span class="nav-text">Quản lý gói dịch vụ</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/payment/index">
+                            <i class="fas fa-wallet"></i>
+                            <span class="nav-text">Quản lý giao dịch</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/evaluationcriteria/index">
+                            <i class="fas fa-user-check"></i>
+                            <span class="nav-text">Quản lý đánh giá</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/News/Index">
+                            <i class="fas fa-bullhorn"></i>
+                            <span class="nav-text">Quản lý tin tức</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Podcast/Index">
+                            <i class="fas fa-podcast"></i>
+                            <span class="nav-text">Quản lý Podcast</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <h5 class="sidebar-section-title">Hệ thống</h5>
+                <ul class="nav flex-column">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/systemnotification/index">
+                            <i class="fas fa-bell"></i>
+                            <span class="nav-text">Quản lý thông báo</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users/index">
+                            <i class="fas fa-user-shield"></i>
+                            <span class="nav-text">Quản lý người dùng</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users/report">
+                            <i class="fas fa-flag"></i>
+                            <span class="nav-text">Quản lý báo cáo</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <div class="main-content flex-grow-1">
+            @RenderBody()
+            <!-- Scripts -->
+            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Initialize all dropdowns
+                    var dropdowns = document.querySelectorAll('[data-bs-toggle="dropdown"]');
+                    dropdowns.forEach(function(dropdown) {
+                        new bootstrap.Dropdown(dropdown);
+                    });
+
+                    // Highlight active menu item
+                    highlightActiveMenu();
+                });
+
+                function highlightActiveMenu() {
+                    const currentPath = window.location.pathname.toLowerCase();
+                    let activeMenuFound = false;
+
+                    // Xử lý menu chính
+                    document.querySelectorAll('.sidebar .nav-link:not(.dropdown-toggle)').forEach(function(link) {
+                        const href = link.getAttribute('href').toLowerCase();
+                        // Loại bỏ dấu / ở cuối nếu có
+                        const cleanHref = href.endsWith('/') ? href.slice(0, -1) : href;
+                        const cleanPath = currentPath.endsWith('/') ? currentPath.slice(0, -1) : currentPath;
+
+                        // Kiểm tra nếu đường dẫn hiện tại khớp với href hoặc bắt đầu bằng href + /
+                        if (cleanPath === cleanHref ||
+                            (cleanHref !== '/' && cleanPath.startsWith(cleanHref + '/'))) {
+                            link.classList.add('active');
+                            activeMenuFound = true;
+                        } else {
+                            link.classList.remove('active');
+                        }
+                    });
+
+                    // Xử lý submenu
+                    document.querySelectorAll('.sidebar .submenu-link').forEach(function(item) {
+                        const href = item.getAttribute('href').toLowerCase();
+                        const cleanHref = href.endsWith('/') ? href.slice(0, -1) : href;
+                        const cleanPath = currentPath.endsWith('/') ? currentPath.slice(0, -1) : currentPath;
+
+                        if (cleanPath === cleanHref ||
+                            (cleanHref !== '/' && cleanPath.startsWith(cleanHref + '/'))) {
+                            item.classList.add('active');
+
+                            // Mở collapse và cập nhật aria-expanded cho dropdown-toggle
+                            const collapseElement = item.closest('.collapse');
+                            if (collapseElement) {
+                                collapseElement.classList.add('show');
+                                const toggleButton = document.querySelector(`[data-bs-toggle="collapse"][href="#${collapseElement.id}"]`);
+                                if (toggleButton) {
+                                    toggleButton.classList.remove('collapsed');
+                                    toggleButton.setAttribute('aria-expanded', 'true');
+                                    toggleButton.classList.add('active');
+                                }
+                            }
+                            activeMenuFound = true;
+                        } else {
+                            item.classList.remove('active');
+                        }
+                    });
+
+                    // Xử lý menu dropdown
+                    document.querySelectorAll('.sidebar .nav-link.dropdown-toggle').forEach(function(dropdown) {
+                        // Nếu không có submenu item nào được chọn, kiểm tra xem có nên highlight dropdown không
+                        const collapseId = dropdown.getAttribute('href');
+                        const collapseElement = document.querySelector(collapseId);
+
+                        if (collapseElement) {
+                            const submenuLinks = collapseElement.querySelectorAll('.submenu-link');
+                            let hasActiveSubmenu = false;
+
+                            submenuLinks.forEach(function(link) {
+                                if (link.classList.contains('active')) {
+                                    hasActiveSubmenu = true;
+                                }
+                            });
+
+                            // Nếu có submenu đang active, highlight luôn dropdown
+                            if (hasActiveSubmenu) {
+                                dropdown.classList.add('active');
+                            }
+                        }
+                    });
+
+                    // Đặc biệt xử lý cho trang chủ
+                    if (currentPath === '/' || currentPath === '/home' || currentPath === '/home/index') {
+                        document.querySelector('.sidebar .nav-link[href="/home/index"]').classList.add('active');
+                    }
+                }
+
+                // Thêm sự kiện cho sidebar khi chuyển trang
+                document.querySelectorAll('.sidebar .nav-link, .sidebar .submenu-link').forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        // Xóa tất cả active class
+                        document.querySelectorAll('.sidebar .nav-link, .sidebar .submenu-link').forEach(function(item) {
+                            item.classList.remove('active');
+                        });
+
+                        // Thêm active class cho item được nhấp vào
+                        this.classList.add('active');
+                    });
+                });
+            </script>
+            @RenderSection("Scripts", required: false)
+        </div>
+
+        <footer class="footer mt-auto">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>&copy; 2025 - HUITern Admin Portal - Kết nối nhà tuyển dụng và ứng viên</div>
+                <div>
+                    <a href="#" class="text-primary me-3">Điều khoản</a>
+                    <a href="#" class="text-primary">Bảo mật</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!-- Các script cuối cùng trước </body> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mặc định tất cả menu đều đóng
+            document.querySelectorAll('.sidebar .collapse').forEach(function(collapse) {
+                collapse.classList.remove('show');
+                const toggleButton = document.querySelector(`[data-bs-toggle="collapse"][href="#${collapse.id}"]`);
+                if (toggleButton) {
+                    toggleButton.classList.add('collapsed');
+                    toggleButton.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // Kiểm tra xem người dùng có đang ở trang con nào của menu không
+            const currentPath = window.location.pathname;
+            let activeSubmenuFound = false;
+
+            document.querySelectorAll('.sidebar .submenu-link').forEach(function(item) {
+                const href = item.getAttribute('href');
+                if (currentPath.includes(href)) {
+                    item.classList.add('active');
+                    // Chỉ mở collapse nếu người dùng đang ở trang con của menu
+                    const collapseElement = item.closest('.collapse');
+                    if (collapseElement) {
+                        collapseElement.classList.add('show');
+                        const toggleButton = document.querySelector(`[data-bs-toggle="collapse"][href="#${collapseElement.id}"]`);
+                        if (toggleButton) {
+                            toggleButton.classList.remove('collapsed');
+                            toggleButton.setAttribute('aria-expanded', 'true');
+                        }
+                        activeSubmenuFound = true;
+                    }
+                }
+            });
+
+            // Thêm active class cho menu chính
+            document.querySelectorAll('.sidebar .nav-link:not(.dropdown-toggle)').forEach(function(item) {
+                const href = item.getAttribute('href');
+                if (currentPath === href || currentPath.startsWith(href + '/')) {
+                    item.classList.add('active');
+                }
+            });
+
+            // Xử lý sự kiện click và lưu trạng thái
+            document.querySelectorAll('.sidebar [data-bs-toggle="collapse"]').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    // Đóng tất cả các menu khác khi mở menu mới
+                    const clickedTarget = this.getAttribute('href') || this.getAttribute('data-bs-target');
+                    document.querySelectorAll('.sidebar .collapse.show').forEach(function(openCollapse) {
+                        const openCollapseId = `#${openCollapse.id}`;
+                        if (openCollapseId !== clickedTarget) {
+                            openCollapse.classList.remove('show');
+                            const openButton = document.querySelector(`[data-bs-toggle="collapse"][href="${openCollapseId}"]`);
+                            if (openButton) {
+                                openButton.classList.add('collapsed');
+                                openButton.setAttribute('aria-expanded', 'false');
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Gọi hàm highlight menu
+            highlightActiveMenu();
+        });
+    </script>
+</body>
+
+</html>

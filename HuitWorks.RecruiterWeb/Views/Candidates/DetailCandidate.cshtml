@@ -1,0 +1,268 @@
+﻿@model HuitWorks.RecruiterWeb.Models.ViewModel.CandidateDetailViewModel
+@{
+    ViewData["Title"] = "Chi tiết hồ sơ ứng viên";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết hồ sơ ứng viên</title>
+    <style>
+        :root {
+            --primary-color: #094174;
+            --primary-light: #155a94;
+            --secondary-color: #f8f9fa;
+            --accent-color: #17a2b8;
+            --text-light: #ffffff;
+            --text-dark: #343a40;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            font-weight: 500;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            border: 1px solid transparent;
+            padding: 0.5rem 1rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            border-radius: var(--border-radius);
+            transition: all 0.2s ease-in-out;
+            text-decoration: none;
+        }
+
+        .btn-back {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+            width: fit-content;
+        }
+
+            .btn-back:hover {
+                background-color: #e2e6ea;
+            }
+
+            .btn-back i {
+                margin-right: 0.5rem;
+            }
+
+        .profile-card {
+            background: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            margin-top: 1.5rem;
+        }
+
+        .profile-header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 1.5rem;
+            position: relative;
+        }
+
+            .profile-header h3 {
+                margin: 0;
+                font-size: 1.75rem;
+                font-weight: 600;
+            }
+
+            .profile-header .position {
+                opacity: 0.9;
+                font-size: 1rem;
+                margin-top: 0.25rem;
+            }
+
+        .profile-body {
+            padding: 1.5rem;
+        }
+
+        .info-section {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .info-primary {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .info-secondary {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+        }
+
+        .info-item {
+            margin-bottom: 0.75rem;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-right: 0.5rem;
+        }
+
+        .rating-badge {
+            background-color: #28a745;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+        }
+
+            .section-title::after {
+                content: '';
+                flex: 1;
+                height: 1px;
+                background-color: #dee2e6;
+                margin-left: 1rem;
+            }
+
+        .education-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .education-item {
+            flex: 1;
+            min-width: 200px;
+            background-color: var(--secondary-color);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .education-label {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .education-value {
+            font-size: 1rem;
+        }
+
+        .skills-container {
+            margin-top: 1rem;
+        }
+
+        .skill-badge {
+            display: inline-block;
+            background-color: rgba(9, 65, 116, 0.1);
+            color: var(--primary-color);
+            border: 1px solid rgba(9, 65, 116, 0.2);
+            padding: 0.35rem 0.75rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/Jobs/SavedApplications" class="btn btn-back">
+            <i>←</i> Quay lại Hồ sơ đã lưu
+        </a>
+
+        <div class="profile-card">
+            <div class="profile-header">
+                <h3>@Model.UserName</h3>
+                <div class="position">@Model.WorkPosition</div>
+            </div>
+
+            <div class="profile-body">
+                <div class="info-section">
+                    <div class="info-primary">
+                        <div class="info-item">
+                            <span class="info-label">Email:</span>
+                            <span>@Model.Email</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Điện thoại:</span>
+                            <span>@(Model.PhoneNumber ?? "Chưa cập nhật")</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Địa chỉ:</span>
+                            <span>@(Model.Address ?? "Chưa cập nhật")</span>
+                        </div>
+                    </div>
+
+                    <div class="info-secondary">
+                        <div class="rating-badge">
+                            Đánh giá: @Model.RatingScore / 5
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">Học vấn & Kinh nghiệm</div>
+
+                <div class="education-row">
+                    <div class="education-item">
+                        <div class="education-label">Trường</div>
+                        <div class="education-value">@Model.UniversityName</div>
+                    </div>
+
+                    <div class="education-item">
+                        <div class="education-label">Bằng cấp</div>
+                        <div class="education-value">@Model.EducationLevel</div>
+                    </div>
+
+                    <div class="education-item">
+                        <div class="education-label">Kinh nghiệm</div>
+                        <div class="education-value">@Model.ExperienceYears năm</div>
+                    </div>
+                </div>
+
+                <div class="section-title">Kỹ năng</div>
+
+                <div class="skills-container">
+                    @if (!string.IsNullOrEmpty(Model.Skills))
+                    {
+                        foreach (var skill in Model.Skills.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            <span class="skill-badge">@skill.Trim()</span>
+                        }
+                    }
+                    else
+                    {
+                        <p>Chưa cập nhật kỹ năng</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

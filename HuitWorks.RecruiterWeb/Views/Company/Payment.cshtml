@@ -1,0 +1,593 @@
+﻿@model HuitWorks.RecruiterWeb.Models.ViewModel.SubscriptionPackageViewModel
+@{
+    ViewData["Title"] = "Thanh toán gói dịch vụ";
+    var bankCode = "970422"; // MB Bank
+    var bankAccount = "0334297551";
+    var bankName = "MB Bank";
+    var bankHolder = "HOANGNGOCKHANG";
+    var info = $"Thanh toán {Model.PackageName}";
+    var amount = Model.Price;
+    var qrUrl = $"https://img.vietqr.io/image/{bankCode}-{bankAccount}-print.png?amount={amount}&addInfo={System.Net.WebUtility.UrlEncode(info)}";
+}
+
+<style>
+    :root {
+        --primary-color: #094174;
+        --secondary-color: #0a5999;
+        --accent-color: #f8f9fa;
+        --border-radius: 12px;
+        --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    body {
+        background-color: #f5f7fa;
+    }
+
+    .payment-container {
+
+    }
+
+    .payment-card {
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: none;
+        box-shadow: var(--box-shadow);
+        background-color: white;
+    }
+
+    .payment-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        padding: 25px 30px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .payment-header::before {
+            content: "";
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .payment-header::after {
+            content: "";
+            position: absolute;
+            bottom: -60px;
+            left: -60px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+    .payment-title {
+        position: relative;
+        z-index: 1;
+        margin: 0;
+        font-weight: 700;
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;
+    }
+
+        .payment-title i {
+            background: rgba(255, 255, 255, 0.2);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+    .payment-body {
+        padding: 30px;
+    }
+
+    .package-details {
+        background-color: #f8fafc;
+        border-radius: var(--border-radius);
+        padding: 20px 25px;
+        margin-bottom: 30px;
+        border-left: 4px solid var(--primary-color);
+    }
+
+    .package-name {
+        color: var(--primary-color);
+        font-weight: 700;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+        border-bottom: 1px solid #e6eaf0;
+        padding-bottom: 15px;
+    }
+
+    .package-price {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: var(--primary-color);
+    }
+
+    .package-info {
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+    }
+
+        .package-info i {
+            margin-right: 15px;
+            color: var(--primary-color);
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+    .payment-method-title {
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 18px;
+        font-size: 1.2rem;
+        position: relative;
+        padding-left: 15px;
+    }
+
+        .payment-method-title::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: var(--primary-color);
+            border-radius: 4px;
+        }
+
+    .payment-methods-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+        gap: 15px;
+    }
+
+    .payment-method-card {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
+
+        .payment-method-card:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(9, 65, 116, 0.05);
+            transform: translateY(-3px);
+        }
+
+        .payment-method-card.active {
+            border-color: var(--primary-color);
+            background-color: rgba(9, 65, 116, 0.1);
+        }
+
+        .payment-method-card img {
+            height: 35px;
+            width: auto;
+            margin-right: 15px;
+            object-fit: contain;
+        }
+
+        .payment-method-card .method-details {
+            flex: 1;
+        }
+
+        .payment-method-card .method-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .payment-method-card .method-description {
+            color: #6c757d;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .payment-method-card .check-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method-card.active .check-icon {
+            opacity: 1;
+        }
+
+    .payment-btn-container {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .payment-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border: none;
+        border-radius: 50px;
+        padding: 14px 28px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(9, 65, 116, 0.3);
+        width: auto;
+        min-width: 250px;
+    }
+
+        .payment-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(9, 65, 116, 0.4);
+        }
+
+    .payment-footer {
+        padding: 20px 30px;
+        background-color: #f8fafc;
+        border-top: 1px solid #e6eaf0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .secure-badge {
+        display: flex;
+        align-items: center;
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+        .secure-badge i {
+            margin-right: 8px;
+            color: #28a745;
+        }
+
+    .payment-logos {
+        display: flex;
+        align-items: center;
+    }
+
+        .payment-logos img {
+            height: 20px;
+            margin-left: 12px;
+            opacity: 0.7;
+        }
+
+    /* QR section */
+    #qr-bank-box {
+        display: none;
+        text-align: center;
+        animation: fadeIn 0.5s;
+        background-color: #f8fafc;
+        border-radius: var(--border-radius);
+        padding: 30px;
+        margin: 20px 0;
+    }
+
+        #qr-bank-box h5 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+    #bank-qr-img {
+        border: 8px solid white;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        margin: 15px auto;
+        max-width: 50%;
+        height: auto;
+        display: block;
+    }
+
+    .qr-info-box {
+        background-color: white;
+        border-radius: 10px;
+        padding: 15px;
+        margin: 20px 0;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .qr-info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px dashed #e6eaf0;
+    }
+
+        .qr-info-row:last-child {
+            border-bottom: none;
+        }
+
+    .qr-info-label {
+        font-weight: 600;
+        color: #555;
+    }
+
+    .qr-info-value {
+        font-weight: 500;
+    }
+
+    .amount-value {
+        color: #e63946;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .qr-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 25px;
+    }
+
+    .back-btn {
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+        color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+        border-radius: 50px;
+        padding: 10px 20px;
+        transition: all 0.2s ease;
+    }
+
+        .back-btn:hover {
+            background-color: rgba(9, 65, 116, 0.05);
+        }
+
+        .back-btn i {
+            margin-right: 8px;
+        }
+</style>
+
+<!-- Link to Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<div class="container payment-container">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="payment-card">
+                <div class="payment-header">
+                    <h4 class="payment-title">
+                        <i class="fas fa-credit-card"></i>
+                        Thanh toán gói dịch vụ
+                    </h4>
+                </div>
+                <div class="payment-body">
+                    <div class="package-details">
+                        <h5 class="package-name">@Model.PackageName</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="package-info">
+                                    <i class="fas fa-tag"></i>
+                                    <span>Giá: <span class="package-price">@Model.Price.ToString("N0")đ</span></span>
+                                </div>
+                                <div class="package-info">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>Thời hạn: <strong>@Model.DurationDays ngày</strong></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="package-info">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>Mô tả: @Model.Description</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form asp-action="Pay" asp-controller="Company" method="post" id="paymentForm">
+                        <input type="hidden" name="packageId" value="@Model.IdPackage" />
+                        <input type="hidden" name="paymentMethod" id="selectedPaymentMethod" value="" />
+
+                        <div id="choose-method">
+                            <h5 class="payment-method-title">Chọn phương thức thanh toán</h5>
+
+                            <div class="payment-methods-container">
+                                <div class="payment-method-card" data-method="Credit Card">
+                                    <img src="/api/placeholder/80/40" alt="Credit Card" />
+                                    <div class="method-details">
+                                        <div class="method-name">Thẻ tín dụng/ghi nợ</div>
+                                        <div class="method-description">Visa, MasterCard, JCB</div>
+                                    </div>
+                                    <div class="check-icon">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+
+                                <div class="payment-method-card" data-method="PayPal">
+                                    <img src="/api/placeholder/80/40" alt="PayPal" />
+                                    <div class="method-details">
+                                        <div class="method-name">PayPal</div>
+                                        <div class="method-description">Thanh toán an toàn qua PayPal</div>
+                                    </div>
+                                    <div class="check-icon">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+
+                                <div class="payment-method-card" data-method="VNPay">
+                                    <img src="/api/placeholder/80/40" alt="VNPay" />
+                                    <div class="method-details">
+                                        <div class="method-name">VNPay</div>
+                                        <div class="method-description">Thanh toán qua QR code</div>
+                                    </div>
+                                    <div class="check-icon">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+
+                                <div class="payment-method-card" data-method="Momo">
+                                    <img src="/api/placeholder/80/40" alt="Momo" />
+                                    <div class="method-details">
+                                        <div class="method-name">Ví Momo</div>
+                                        <div class="method-description">Thanh toán qua ví điện tử Momo</div>
+                                    </div>
+                                    <div class="check-icon">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+
+                                <div class="payment-method-card" data-method="Bank Transfer">
+                                    <img src="/api/placeholder/80/40" alt="Bank Transfer" />
+                                    <div class="method-details">
+                                        <div class="method-name">Chuyển khoản ngân hàng</div>
+                                        <div class="method-description">Chuyển khoản trực tiếp đến tài khoản của chúng tôi</div>
+                                    </div>
+                                    <div class="check-icon">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @* <div class="payment-btn-container"> *@
+                            @*     <button type="submit" class="btn payment-btn text-white" id="pay-btn"> *@
+                            @*         <i class="fas fa-lock me-2"></i>Xác nhận thanh toán *@
+                            @*     </button> *@
+                            @* </div> *@
+                        </div>
+
+                        <!-- QR Bank Box -->
+                        <div id="qr-bank-box">
+                            <h5><i class="fas fa-qrcode me-2"></i>Quét mã QR để chuyển khoản</h5>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-4 mb-md-0">
+                                    <img id="bank-qr-img" src="@qrUrl" alt="QR Bank">
+                                </div>
+                                <div class="col-md-6 d-flex align-items-center">
+                                    <div class="qr-info-box w-100">
+                                        <div class="qr-info-row">
+                                            <div class="qr-info-label">Ngân hàng:</div>
+                                            <div class="qr-info-value">@bankName</div>
+                                        </div>
+                                        <div class="qr-info-row">
+                                            <div class="qr-info-label">Số tài khoản:</div>
+                                            <div class="qr-info-value">@bankAccount</div>
+                                        </div>
+                                        <div class="qr-info-row">
+                                            <div class="qr-info-label">Chủ tài khoản:</div>
+                                            <div class="qr-info-value">@bankHolder</div>
+                                        </div>
+                                        <div class="qr-info-row">
+                                            <div class="qr-info-label">Nội dung CK:</div>
+                                            <div class="qr-info-value">@info</div>
+                                        </div>
+                                        <div class="qr-info-row">
+                                            <div class="qr-info-label">Số tiền:</div>
+                                            <div class="amount-value">@Model.Price.ToString("N0") đ</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="qr-actions">
+                                <a href="#" id="back-bank-method" class="back-btn">
+                                    <i class="fas fa-arrow-left"></i> Chọn lại phương thức khác
+                                </a>
+                                <button type="submit" name="confirmed" value="true" class="btn payment-btn text-white">
+                                    <i class="fas fa-check-circle me-2"></i>Đã thanh toán
+                                </button>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="payment-footer">
+                    <div class="secure-badge">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Thanh toán an toàn & bảo mật</span>
+                    </div>
+                    <div class="payment-logos">
+                        <img src="/api/placeholder/40/20" alt="Visa">
+                        <img src="/api/placeholder/40/20" alt="Mastercard">
+                        <img src="/api/placeholder/40/20" alt="PayPal">
+                        <img src="/api/placeholder/40/20" alt="VNPay">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const paymentCards = document.querySelectorAll('.payment-method-card');
+        const selectedPaymentMethodInput = document.getElementById('selectedPaymentMethod');
+        const chooseMethodDiv = document.getElementById('choose-method');
+        const qrBankBox = document.getElementById('qr-bank-box');
+        const backBankBtn = document.getElementById('back-bank-method');
+
+        paymentCards.forEach(card => {
+            card.addEventListener('click', function () {
+                paymentCards.forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                const method = this.getAttribute('data-method');
+                selectedPaymentMethodInput.value = method;
+                if (method === "Bank Transfer") {
+                    chooseMethodDiv.style.display = 'none';
+                    qrBankBox.style.display = 'block';
+                } else {
+                    chooseMethodDiv.style.display = 'block';
+                    qrBankBox.style.display = 'none';
+                }
+            });
+        });
+
+        if (backBankBtn) {
+            backBankBtn.onclick = function (e) {
+                e.preventDefault();
+                qrBankBox.style.display = 'none';
+                chooseMethodDiv.style.display = 'block';
+                selectedPaymentMethodInput.value = "";
+                paymentCards.forEach(c => c.classList.remove('active'));
+            }
+        }
+
+        // Tự động chọn phương thức đầu tiên
+        if (paymentCards.length > 0) {
+            paymentCards[0].click();
+        }
+
+        // Xử lý submit CHUẨN
+        document.getElementById('paymentForm').addEventListener('submit', function (event) {
+            const paymentMethod = selectedPaymentMethodInput.value;
+            const submitter = event.submitter; // Nút đã bấm để submit
+            if (paymentMethod === 'Bank Transfer') {
+                // Nếu bấm nút "Xác nhận thanh toán" (id="pay-btn") => chặn submit, chỉ show QR
+                if (submitter && submitter.id === "pay-btn") {
+                    event.preventDefault();
+                    return;
+                }
+                // Nếu bấm "Đã thanh toán" (id="confirmed-btn") => cho submit (KHÔNG ngăn)
+            } else if (!paymentMethod) {
+                event.preventDefault();
+                alert('Vui lòng chọn phương thức thanh toán');
+            }
+        });
+    });
+</script>

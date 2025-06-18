@@ -1,0 +1,457 @@
+﻿:root {
+    --primary-color: #094174;
+    --primary-light: #1c5d93;
+    --primary-dark: #073258;
+    --accent-color: #f8f9fa;
+    --text-light: #6c757d;
+    --border-radius: 8px;
+    --box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.page-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin-bottom: 25px;
+    box-shadow: var(--box-shadow);
+}
+
+.form-card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 25px;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    color: var(--primary-color);
+    font-weight: 600;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--primary-dark);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(9, 65, 116, 0.25);
+}
+
+.form-control,
+.form-select {
+    border-radius: var(--border-radius);
+    padding: 10px;
+}
+
+.custom-checkbox {
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+    .btn-primary:hover {
+        background-color: var(--primary-light);
+        border-color: var(--primary-light);
+    }
+
+.btn-secondary {
+    background-color: var(--text-light);
+    border-color: var(--text-light);
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.required-field::after {
+    content: " *";
+    color: #dc3545;
+}
+
+.page-title {
+    color: #094174;
+    margin-bottom: 30px;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 15px;
+    font-size: 28px;
+}
+
+    .page-title:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 80px;
+        height: 4px;
+        background-color: #094174;
+        border-radius: 2px;
+    }
+
+/* ==================== CẢI TIẾN MODAL BẢN ĐỒ ==================== */
+
+/* Modal backdrop với hiệu ứng blur */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1100;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+    .modal-backdrop.show {
+        opacity: 1;
+    }
+
+/* Modal container với hiệu ứng xuất hiện */
+.map-modal {
+    background: #fff;
+    border-radius: 16px;
+    width: 95%;
+    max-width: 900px;
+    height: 85vh;
+    max-height: 700px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9) translateY(30px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.modal-backdrop.show .map-modal {
+    transform: scale(1) translateY(0);
+}
+
+/* Header của modal */
+.map-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: #fff;
+    padding: 20px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+    .map-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #fff, transparent, #fff);
+        opacity: 0.3;
+    }
+
+    .map-header h5 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+        .map-header h5::before {
+            content: '📍';
+            font-size: 22px;
+        }
+
+/* Nút đóng modal */
+.map-close {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+    .map-close:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: rotate(90deg) scale(1.1);
+    }
+
+/* Container chứa bản đồ */
+#mapid {
+    flex: 1;
+    position: relative;
+    background: #f8f9fa;
+}
+
+/* Container chứa bản đồ */
+#mapid {
+    flex: 1;
+    position: relative;
+    background: #f8f9fa;
+}
+
+/* ==================== STYLE CHO LEAFLET CONTROLS ==================== */
+
+/* Geocoder search box */
+.leaflet-control-geocoder {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+    border: none !important;
+}
+
+.leaflet-control-geocoder-form input {
+    border: none !important;
+    padding: 12px 16px !important;
+    font-size: 14px !important;
+    background: #fff !important;
+    color: #333 !important;
+    min-width: 250px !important;
+    transition: all 0.3s ease !important;
+}
+
+    .leaflet-control-geocoder-form input:focus {
+        outline: 2px solid var(--primary-color) !important;
+        outline-offset: -2px !important;
+        background: #f8f9ff !important;
+    }
+
+.leaflet-control-geocoder-icon {
+    background-color: var(--primary-color) !important;
+    border-radius: 0 12px 12px 0 !important;
+    width: 40px !important;
+    height: 40px !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E") !important;
+    background-size: 20px 20px !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    transition: all 0.3s ease !important;
+}
+
+    .leaflet-control-geocoder-icon:hover {
+        background-color: var(--primary-light) !important;
+        transform: scale(1.05) !important;
+    }
+
+/* Kết quả tìm kiếm */
+.leaflet-control-geocoder-alternatives {
+    background: #fff !important;
+    border-radius: 0 0 12px 12px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    border: none !important;
+    max-height: 200px !important;
+    overflow-y: auto !important;
+}
+
+    .leaflet-control-geocoder-alternatives a {
+        padding: 12px 16px !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+        color: #333 !important;
+        text-decoration: none !important;
+        transition: all 0.2s ease !important;
+        font-size: 14px !important;
+        display: block !important;
+    }
+
+        .leaflet-control-geocoder-alternatives a:hover {
+            background: #f8f9ff !important;
+            color: var(--primary-color) !important;
+            padding-left: 20px !important;
+        }
+
+        .leaflet-control-geocoder-alternatives a:last-child {
+            border-bottom: none !important;
+        }
+
+/* ==================== ZOOM CONTROLS ==================== */
+
+.leaflet-control-zoom {
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+    .leaflet-control-zoom a {
+        background: #fff !important;
+        color: var(--primary-color) !important;
+        border: none !important;
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 18px !important;
+        font-weight: 600 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: all 0.3s ease !important;
+    }
+
+        .leaflet-control-zoom a:hover {
+            background: var(--primary-color) !important;
+            color: #fff !important;
+            transform: scale(1.1) !important;
+        }
+
+.leaflet-control-zoom-in {
+    border-radius: 12px 12px 0 0 !important;
+}
+
+.leaflet-control-zoom-out {
+    border-radius: 0 0 12px 12px !important;
+    border-top: 1px solid #f0f0f0 !important;
+}
+
+/* ==================== MARKER STYLE ==================== */
+
+/* Custom marker với hiệu ứng */
+.leaflet-marker-icon {
+    transition: all 0.3s ease !important;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)) !important;
+}
+
+    .leaflet-marker-icon:hover {
+        transform: scale(1.1) translateY(-5px) !important;
+    }
+
+/* Popup style */
+.leaflet-popup-content-wrapper {
+    border-radius: 12px !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2) !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
+.leaflet-popup-content {
+    margin: 16px !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    color: #333 !important;
+}
+
+.leaflet-popup-tip {
+    background: #fff !important;
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ==================== SCROLLBAR CHO MODAL ==================== */
+
+.leaflet-control-geocoder-alternatives::-webkit-scrollbar {
+    width: 6px;
+}
+
+.leaflet-control-geocoder-alternatives::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.leaflet-control-geocoder-alternatives::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+    .leaflet-control-geocoder-alternatives::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-light);
+    }
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 768px) {
+    .map-modal {
+        width: 98%;
+        height: 90vh;
+        border-radius: 12px;
+    }
+
+    .map-header {
+        padding: 16px 20px;
+    }
+
+        .map-header h5 {
+            font-size: 18px;
+        }
+
+    .leaflet-control-geocoder-form input {
+        min-width: 200px !important;
+        font-size: 16px !important; /* Tránh zoom trên iOS */
+    }
+
+    .leaflet-control-zoom {
+        transform: scale(0.9) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .map-modal {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    .map-header h5::before {
+        display: none;
+    }
+
+    .leaflet-control-geocoder-form input {
+        min-width: 150px !important;
+    }
+}
+
+/* ==================== DARK MODE SUPPORT ==================== */
+
+@media (prefers-color-scheme: dark) {
+    .map-modal {
+        background: #1e1e1e;
+        color: #fff;
+    }
+
+    .leaflet-control-geocoder-form input {
+        background: #2d2d2d !important;
+        color: #fff !important;
+    }
+
+    .leaflet-control-geocoder-alternatives {
+        background: #2d2d2d !important;
+    }
+
+        .leaflet-control-geocoder-alternatives a {
+            color: #fff !important;
+            border-color: #404040 !important;
+        }
+
+    .leaflet-control-zoom a {
+        background: #2d2d2d !important;
+        color: #fff !important;
+    }
+}

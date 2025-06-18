@@ -1,0 +1,1136 @@
+﻿@using System.Security.Claims
+@{
+    var routeData = ViewContext.RouteData.Values;
+    var currentCtrl = routeData["Controller"]?.ToString();
+    var currentAct = routeData["Action"]?.ToString();
+    var avatarUrl = User.FindFirst("avatar")?.Value;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HuitWorks Recruitment Platform</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/HuitWorks.RecruiterWeb.styles.css" asp-append-version="true" />
+    <link href="~/css/layout.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --sidebar-collapsed-width: 80px;
+            --primary-color: #1e40af;
+            --primary-light: #dbeafe;
+            --secondary-color: #4b5563;
+            --sidebar-bg: #f8fafc;
+            --sidebar-hover: #f1f5f9;
+            --sidebar-active: #e0f2fe;
+            --border-color: #e2e8f0;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --transition: all 0.25s ease-in-out;
+        }
+
+        /* Sidebar Base Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1030;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .sidebar-collapsed {
+            width: var(--sidebar-collapsed-width);
+        }
+
+        /* Logo Container */
+        .sidebar .logo-container {
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--border-color);
+            background-color: #fff;
+            height: 70px;
+        }
+
+            .sidebar .logo-container img {
+                height: 40px !important;
+                transition: var(--transition);
+            }
+
+        /* Menu Container */
+        .sidebar-menu {
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        /* Navigation Items */
+        .sidebar .nav-item {
+            margin: 0.3rem 0;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .sidebar .nav-link {
+            padding: 0.6rem 1rem;
+            color: var(--text-dark);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+            border-radius: 0.5rem;
+            position: relative;
+            letter-spacing: 0.01em;
+        }
+
+            .sidebar .nav-link .icon-container {
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 12px;
+                border-radius: 6px;
+                background-color: #f8fafc;
+                transition: var(--transition);
+            }
+
+            .sidebar .nav-link i {
+                font-size: 1rem;
+                color: var(--text-light);
+            }
+
+            .sidebar .nav-link span {
+                white-space: nowrap;
+                transition: var(--transition);
+                font-size: 0.9rem;
+            }
+
+            /* Active State */
+            .sidebar .nav-link.active {
+                background-color: var(--sidebar-active);
+                color: var(--primary-color);
+                font-weight: 600;
+                box-shadow: var(--shadow-sm);
+            }
+
+                .sidebar .nav-link.active .icon-container {
+                    background-color: rgba(37, 99, 235, 0.15);
+                }
+
+                .sidebar .nav-link.active i {
+                    color: var(--primary-color);
+                }
+
+                .sidebar .nav-link.active::before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    height: 100%;
+                    width: 4px;
+                    background-color: var(--primary-color);
+                    border-radius: 0 2px 2px 0;
+                }
+
+            /* Hover State */
+            .sidebar .nav-link:hover {
+                background-color: var(--sidebar-hover);
+                color: var(--text-dark);
+                transform: translateX(3px);
+            }
+
+                .sidebar .nav-link:hover .icon-container {
+                    background-color: rgba(37, 99, 235, 0.1);
+                }
+
+                .sidebar .nav-link:hover i {
+                    color: var(--primary-color);
+                }
+
+        /* Collapsed State */
+        .sidebar-collapsed .nav-link {
+            padding: 0.875rem 0;
+            justify-content: center;
+        }
+
+            .sidebar-collapsed .nav-link .icon-container {
+                margin-right: 0;
+                width: 36px;
+                height: 36px;
+            }
+
+            .sidebar-collapsed .nav-link i {
+                font-size: 1.1rem;
+            }
+
+            .sidebar-collapsed .nav-link span {
+                opacity: 0;
+                width: 0;
+                overflow: hidden;
+            }
+
+        .sidebar-collapsed .logo-container img {
+            transform: scale(1.1);
+        }
+
+        /* User Info Section */
+        .sidebar-user-info {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            background-color: #fff;
+            transition: var(--transition);
+        }
+
+            .sidebar-user-info .user-avatar {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                background-color: rgba(37, 99, 235, 0.1);
+                margin-right: 10px;
+            }
+
+                .sidebar-user-info .user-avatar i {
+                    color: var(--primary-color);
+                    font-size: 1.5rem;
+                }
+
+            .sidebar-user-info .user-details {
+                flex: 1;
+            }
+
+            .sidebar-user-info .fw-bold {
+                color: var(--text-dark);
+                font-size: 0.9rem;
+                margin-bottom: 0.25rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 180px;
+                transition: var(--transition);
+            }
+
+            .sidebar-user-info .dropdown-toggle {
+                color: var(--primary-color);
+                font-size: 0.8rem;
+                text-decoration: none;
+                font-weight: 500;
+                transition: var(--transition);
+            }
+
+                .sidebar-user-info .dropdown-toggle:hover {
+                    /* text-decoration: underline; */
+                }
+
+        .sidebar-collapsed .sidebar-user-info {
+            padding: 1rem 0;
+            display: flex;
+            justify-content: center;
+        }
+
+            .sidebar-collapsed .sidebar-user-info .user-details {
+                display: none;
+            }
+
+            .sidebar-collapsed .sidebar-user-info .user-avatar {
+                margin-right: 0;
+                width: 45px;
+                height: 45px;
+            }
+
+        /* Badge Styles */
+        .unread-badge {
+            position: absolute;
+            top: calc(50% - 9px);
+            right: 15px;
+            font-size: 0.7rem;
+            min-width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9px;
+            transition: var(--transition);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-collapsed .unread-badge {
+            top: 8px;
+            right: 8px;
+            transform: none;
+        }
+
+        /* Main Content Adjustment */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            width: calc(100% - var(--sidebar-width));
+        }
+
+        .main-content-expanded {
+            margin-left: var(--sidebar-collapsed-width);
+            width: calc(100% - var(--sidebar-collapsed-width));
+        }
+
+        /* Mobile States */
+        .sidebar-mobile-hidden {
+            transform: translateX(-100%);
+            z-index: 1040;
+        }
+
+        .sidebar-show {
+            transform: translateX(0);
+        }
+
+        .main-content-mobile {
+            margin-left: 0 !important;
+            width: 100% !important;
+        }
+
+        /* Page Content adjustments */
+        .page-content {
+            padding: 1.5rem;
+            flex: 1;
+        }
+
+        /* Transactions page specific */
+        body.transactions-page .page-content {
+            padding: 1rem 0.75rem;
+        }
+
+        .transactions-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Animation */
+        .badge-animation {
+            transform-origin: center;
+            transition: transform 0.3s ease;
+        }
+
+        /* Overlay for mobile */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1035;
+        }
+
+        .overlay-visible {
+            display: block;
+        }
+
+        /* ----- CSS CHO DROPDOWN SUBMENU ----- */
+
+        /* Container của nav-item có dropdown */
+        .nav-item.nav-dropdown > .nav-link {
+            cursor: pointer;
+            position: relative;
+        }
+
+        /* Submenu */
+        .sidebar-submenu {
+            list-style: none;
+            margin: 0;
+            padding: 0 0 0 42px;
+            display: none;
+            background-color: transparent;
+        }
+
+        /* Item trong submenu */
+        .sidebar-submenu .nav-item {
+            margin: 0.1rem 0;
+        }
+
+        /* Link con */
+        .sidebar-submenu .nav-link {
+            padding: 0.5rem 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 400;
+            border-radius: 0.5rem;
+        }
+
+        /* Hover item con */
+        .sidebar-submenu .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        /* Active item con */
+        .sidebar-submenu .nav-link.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Caret icon cho dropdown */
+        .nav-dropdown > .nav-link::after {
+            content: "\f107";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            margin-left: auto;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            display: inline-block;
+        }
+
+        /* Đảm bảo submenu không hiển thị trong trạng thái thu gọn */
+        .sidebar-collapsed .sidebar-submenu {
+            display: none;
+        }
+
+        /* Hiệu ứng đặc biệt cho Lịch sử giao dịch */
+        .sidebar .nav-item .icon-container i.fa-history {
+            color: var(--primary-color);
+        }
+
+        .nav-link .transaction-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 10px;
+            background-color: #10b981;
+            color: white;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .sidebar-collapsed .transaction-badge {
+            top: 5px;
+            right: 5px;
+        }
+
+        /* Tối ưu CSS cho Applications page */
+        body.applications-page .main-content {
+            padding-left: 0;
+        }
+
+        body.applications-page .page-content {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+
+        body.applications-page .applications-table {
+            margin-left: -1px;
+            width: calc(100% + 2px);
+        }
+
+        .nav-dropdown > .nav-link::after {
+            color: gray;
+        }
+
+        .sidebar-wrapper {
+          top: 0;
+          left: 0;
+          bottom: 0;
+          width: 250px;
+          overflow-y: auto;
+          background: #fff;
+        }
+
+        .sidebar-menu {
+          padding-top: 1rem;
+        }
+    </style>
+    @RenderSection("Head", required: false)
+</head>
+<body>
+    @using Microsoft.AspNetCore.Http
+    @{
+        string? overlayUser = null;
+        if (TempData["ShowWelcomeOverlay"]?.ToString() == "true")
+        {
+            overlayUser = TempData["WelcomeUserName"] as string ?? "Bạn";
+        }
+        else if (Context.Request.Query["welcome"].FirstOrDefault() == "true")
+        {
+            overlayUser = Context.Request.Query["userName"].FirstOrDefault() ?? "Bạn";
+        }
+    }
+
+    @* ===== Phần FULL-SCREEN WELCOME OVERLAY===== *@
+    @if (!string.IsNullOrEmpty(overlayUser))
+    {
+        <div id="welcomeOverlay"
+             class="fixed-top fixed-start d-flex align-items-center justify-content-center"
+             style="
+             width: 100vw;
+             height: 100vh;
+             background: linear-gradient(135deg, #094174 0%, #0a5d8a 25%, #1e6091 50%, #094174 100%);
+             z-index: 9999;
+             position: relative;
+             overflow: hidden;
+             ">
+
+            @* Animated background elements *@
+            <div class="position-absolute w-100 h-100" style="opacity: 0.1;">
+                <div class="position-absolute rounded-circle"
+                     style="
+                     width: 300px;
+                     height: 300px;
+                     background: rgba(255,255,255,0.1);
+                     top: -150px;
+                     right: -150px;
+                     animation: float 6s ease-in-out infinite;
+                     "></div>
+                <div class="position-absolute rounded-circle"
+                     style="
+                     width: 200px;
+                     height: 200px;
+                     background: rgba(255,255,255,0.05);
+                     bottom: -100px;
+                     left: -100px;
+                     animation: float 8s ease-in-out infinite reverse;
+                     "></div>
+                <div class="position-absolute rounded-circle"
+                     style="
+                     width: 150px;
+                     height: 150px;
+                     background: rgba(255,255,255,0.08);
+                     top: 20%;
+                     left: 10%;
+                     animation: float 7s ease-in-out infinite;
+                     "></div>
+            </div>
+
+            @* Main content *@
+            <div class="text-center text-white position-relative">
+                @* Welcome icon *@
+                <div class="mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle"
+                         style="
+                         width: 100px;
+                         height: 100px;
+                         background: rgba(255,255,255,0.15);
+                         backdrop-filter: blur(10px);
+                         border: 2px solid rgba(255,255,255,0.2);
+                         animation: pulse 2s ease-in-out infinite;
+                         ">
+                        <svg width="50" height="50" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z" />
+                        </svg>
+                    </div>
+                </div>
+
+                @* Welcome text *@
+                <div class="animate__animated animate__fadeInUp">
+                    <h1 class="display-3 fw-bold mb-3"
+                        style="
+                        text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                        letter-spacing: -1px;
+                        ">
+                        Chào mừng trở lại!
+                    </h1>
+                    <div class="mb-4">
+                        <span class="fs-4 fw-light" style="opacity: 0.9;">Xin chào, </span>
+                        <span class="fs-3 fw-semibold text-warning">@overlayUser</span>
+                    </div>
+                    <p class="lead mb-4" style="opacity: 0.8; max-width: 500px; margin: 0 auto;">
+                        Bạn đã đăng nhập thành công vào <strong>HUITERN</strong>
+                    </p>
+
+                    @* Loading indicator *@
+                    <div class="d-flex align-items-center justify-content-center">
+                        <div class="spinner-border text-light me-3"
+                             role="status"
+                             style="width: 1.5rem; height: 1.5rem; border-width: 2px;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <span class="text-light" style="opacity: 0.7;">Đang tải...</span>
+                    </div>
+                </div>
+            </div>
+
+            @* Decorative bottom wave *@
+            <div class="position-absolute bottom-0 start-0 w-100" style="height: 100px; overflow: hidden;">
+                <svg class="position-absolute bottom-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"
+                     style="height: 100px; width: 100%; fill: rgba(255,255,255,0.05);">
+                    <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
+                </svg>
+            </div>
+        </div>
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            $(function() {
+                setTimeout(function() {
+                    $('#welcomeOverlay').fadeOut(800, function() {
+                        $(this).remove();
+                    });
+                }, 2000);
+            });
+        </script>
+    }
+    @* ===== END WELCOME OVERLAY ===== *@
+
+    <div class="wrapper d-flex" style="min-height: 100vh;">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="logo-container">
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="d-flex align-items-center justify-content-center">
+                    <img src="~/images/sv_logo_dashboard.png" alt="HuitWorks Logo" onerror="this.src='/img/default-logo.png';">
+                </a>
+            </div>
+
+            <div class="sidebar-wrapper">
+                <div class="sidebar-menu">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Home" ? "active" : "")"
+                               asp-area="" asp-controller="Home" asp-action="Index">
+                                <div class="icon-container">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                                <span>Trang chủ</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Blogs" ? "active" : "")"
+                               asp-area="" asp-controller="Blogs" asp-action="Index">
+                                <div class="icon-container">
+                                    <i class="fas fa-blog"></i>
+                                </div>
+                                <span>Blog</span>
+                            </a>
+                        </li>
+                        <hr />
+                        <li class="nav-item nav-dropdown">
+                            <a class="nav-link" href="#jobsSubmenu">
+                                <div class="icon-container">
+                                    <i class="fas fa-briefcase"></i>
+                                </div>
+                                <span>Quản lý đăng tin</span>
+                            </a>
+                            <ul class="sidebar-submenu" id="jobsSubmenu">
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "Index" && ViewContext.RouteData.Values["Controller"].ToString() == "Jobs" ? "active" : "")"
+                                       asp-area="" asp-controller="Jobs" asp-action="Index">
+                                        Danh sách tin
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "Create" && ViewContext.RouteData.Values["Controller"].ToString() == "Jobs" ? "active" : "")"
+                                       asp-area="" asp-controller="Jobs" asp-action="Create">
+                                        Tạo tin mới
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item nav-dropdown">
+                            <a class="nav-link" href="#candidatesSubmenu">
+                                <div class="icon-container">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <span>Ứng viên</span>
+                            </a>
+                            <ul class="sidebar-submenu" id="candidatesSubmenu">
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "Index" && ViewContext.RouteData.Values["Controller"].ToString() == "Candidates" ? "active" : "")"
+                                       asp-area="" asp-controller="Candidates" asp-action="Index">
+                                        Tất cả ứng viên
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "Applied" && ViewContext.RouteData.Values["Controller"].ToString() == "Candidates" ? "active" : "")"
+                                       asp-area="" asp-controller="Candidates" asp-action="Applied">
+                                        Đã ứng tuyển
+                                    </a>
+                                </li>
+                                @* <li class="nav-item"> *@
+                                @*     <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Applications" && ViewContext.RouteData.Values["Controller"].ToString() == "Jobs" ? "active" : "")" *@
+                                @*        asp-area="" asp-controller="Jobs" asp-action="Applications"> *@
+                                @*         Đơn ứng tuyển *@
+                                @*     </a> *@
+                                @* </li> *@
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "SavedApplications" && ViewContext.RouteData.Values["Controller"].ToString() == "Jobs" ? "active" : "")"
+                                       asp-area="" asp-controller="Jobs" asp-action="SavedApplications">
+                                        Hồ sơ đã lưu
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "Interviews" && ViewContext.RouteData.Values["Controller"].ToString() == "Candidates" ? "active" : "")"
+                                       asp-area="" asp-controller="Candidates" asp-action="Interviews">
+                                        Lịch phỏng vấn
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "Index" && ViewContext.RouteData.Values["Controller"].ToString() == "CandidateEvaluation" ? "active" : "")"
+                                       asp-area="" asp-controller="CandidateEvaluation" asp-action="Index">
+                                        Đánh giá ứng viên
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <hr />
+
+                        <li class="nav-item">
+                            <a class="nav-link @(currentCtrl == "Service" && currentAct == "Create" ? "active" : "")"
+                               asp-controller="Service" asp-action="Create">
+                                <div class="icon-container">
+                                    <i class="fas fa-plus-circle"></i>
+                                </div>
+                                <span>Thêm dịch vụ</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link @(currentCtrl == "Service" && currentAct == "MyServices" ? "active" : "")"
+                               asp-controller="Service" asp-action="MyServices">
+                                <div class="icon-container">
+                                    <i class="fas fa-briefcase"></i>
+                                </div>
+                                <span>Dịch vụ của tôi</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link @(currentCtrl == "Service" && currentAct == "Index" ? "active" : "")"
+                               asp-controller="Service" asp-action="Index">
+                                <div class="icon-container">
+                                    <i class="fas fa-money-check-alt"></i>
+                                </div>
+                                <span>Lịch sử giao dịch</span>
+                            </a>
+                        </li>
+                        <hr />
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "Index" && ViewContext.RouteData.Values["Controller"].ToString() == "Company" ? "active" : "")" *@
+                               asp-area="" asp-controller="Company" asp-action="Index">
+                                <div class="icon-container">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                                <span>Hồ sơ công ty</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext?.RouteData.Values["Controller"]?.ToString() == "Account"
+                        && ViewContext.RouteData.Values["Action"]?.ToString() == "Activities"
+                        ? "active" : "")"
+                               asp-area="" asp-controller="Account" asp-action="Activities">
+                                <div class="icon-container">
+                                    <i class="fas fa-history"></i>
+                                </div>
+                                <span>Lịch sử hoạt động</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext?.RouteData.Values["Controller"]?.ToString() == "Account"
+                        && ViewContext.RouteData.Values["Action"]?.ToString() == "Settings"
+                        ? "active" : "")"
+                               asp-area="" asp-controller="Account" asp-action="Settings">
+                                <div class="icon-container">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <span>Cài đặt tài khoản</span>
+                            </a>
+                        </li>
+
+
+                        <hr />
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "Index" && ViewContext.RouteData.Values["Controller"].ToString() == "Notification" ? "active" : "")"
+                               asp-area="" asp-controller="Notification" asp-action="Index">
+                                <div class="icon-container">
+                                    <i class="fas fa-bell"></i>
+                                </div>
+                                <span>Thông báo hệ thống</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Contact" ? "active" : "")"
+                               asp-area="" asp-controller="Contact" asp-action="Index">
+                                <div class="icon-container">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <span>Liên hệ</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                    <div class="sidebar-footer mb-auto small p-4 border-top">
+                        <div class="text-muted">
+                            <div class="text-nowrap">Phiên bản 1.0.0 | All Rights Reserved</div>
+                            <div class="text-nowrap">© 2025 HUITERN</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="sidebar-user-info">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <div class="d-flex align-items-center gap-3 p-2 rounded bg-light shadow-sm">
+                        @if (!string.IsNullOrEmpty(avatarUrl))
+                        {
+                            <img src="@avatarUrl"
+                                 class="rounded-circle"
+                                 style="width:40px;height:40px;object-fit:cover"
+                                 onerror="this.onerror=null;this.src='/images/default-avatar.png';" />
+                        }
+                        else
+                        {
+                            <i class="fas fa-user-circle fa-2x text-secondary"></i>
+                        }
+
+                        <div>
+                            <div class="fw-bold">@User.Identity.Name</div>
+                            <form asp-controller="Auth" asp-action="Logout" method="post" class="mt-1">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="fas fa-sign-out-alt me-1"></i>Đăng xuất
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="d-grid gap-2">
+                        <a class="btn btn-outline-primary btn-sm" asp-controller="Auth" asp-action="Login">Đăng nhập</a>
+                        <a class="btn btn-primary btn-sm" asp-controller="Auth" asp-action="Register">Đăng ký</a>
+                    </div>
+                }
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <div class="main-content flex-grow-1" id="mainContent">
+            <div class="top-header border-bottom py-2">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <span class="me-4"><i class="fas fa-phone-alt me-2"></i>+84 33 429 7551</span>
+                            <span><i class="fas fa-envelope me-2"></i>career@huitworks.vn</span>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <a href="#" class="me-3"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="me-3"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Content -->
+            <div class="page-content p-4">
+                @RenderBody()
+            </div>
+        </div>
+        <footer class="footer mt-auto px-3" style="width: 84% !important; margin-left: 260px !important">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <div class="w-33"></div>
+                <div class="text-center w-33">
+                    &copy; 2025 - HuitWorks Admin Portal - Kết nối nhà tuyển dụng và ứng viên
+                </div>
+                <div class="text-end w-33">
+                    <a href="#" class="text-primary me-3">Điều khoản</a>
+                    <a href="#" class="text-primary">Bảo mật</a>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Chat Button and Container -->
+    <div class="chatbox-button" id="chatboxButton">
+        <i class="fas fa-comment-dots fa-lg"></i>
+    </div>
+
+    <div class="chatbox-container" id="chatboxContainer">
+        <div class="chatbox-header">
+            <h5 class="mb-0">HuitWorks Support</h5>
+            <button class="chatbox-close" id="chatboxClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chatbox-messages" id="chatboxMessages">
+            <div class="chatbox-message chatbox-agent-message">
+                Hello! How can I help you with HuitWorks recruitment services today?
+            </div>
+        </div>
+        <div class="chatbox-input-container">
+            <input type="text" class="chatbox-input" id="chatboxInput" placeholder="Type your message..." />
+            <button class="chatbox-send-button" id="chatboxSendButton">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          var activeLink = document.querySelector('.sidebar-menu .nav-link.active');
+          if (activeLink) {
+            activeLink.scrollIntoView({ block: 'center' });
+          }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function pulseAnimation() {
+                const badge = document.getElementById('unreadMessagesBadge');
+                if (!badge) return;
+                
+                let scale = 1;
+                let growing = true;
+                
+                setInterval(function() {
+                    if (growing) {
+                        scale += 0.01;
+                        if (scale >= 1.2) growing = false;
+                    } else {
+                        scale -= 0.01;
+                        if (scale <= 1) growing = true;
+                    }
+                    
+                    badge.style.transform = `scale(${scale})`;
+                }, 20);
+            }
+            
+            pulseAnimation();
+            
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+            
+            dropdownToggles.forEach(function(toggle) {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const target = document.querySelector(targetId);
+                    
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                    this.setAttribute('aria-expanded', !isExpanded);
+                    
+                    target.classList.toggle('show');
+                    
+                    
+                });
+            });
+            
+            const activeLinks = document.querySelectorAll('.sidebar-submenu .nav-link.active');
+            activeLinks.forEach(function(link) {
+                const submenu = link.closest('.sidebar-submenu');
+                if (submenu) {
+                    submenu.classList.add('show');
+                    const toggle = document.querySelector(`[href="#${submenu.id}"]`);
+                    if (toggle) {
+                        toggle.setAttribute('aria-expanded', 'true');
+                    }
+                }
+            });
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'overlay';
+            document.body.appendChild(overlay);
+            
+            function handleResponsive() {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.add('sidebar-mobile-hidden');
+                    mainContent.classList.add('main-content-mobile');
+                } else {
+                    sidebar.classList.remove('sidebar-mobile-hidden');
+                    sidebar.classList.remove('sidebar-show');
+                    mainContent.classList.remove('main-content-mobile');
+                    overlay.classList.remove('overlay-visible');
+                }
+            }
+            
+            handleResponsive();
+            
+            window.addEventListener('resize', handleResponsive);
+            
+            const navbarToggler = document.querySelector('.navbar-toggler');
+            if (navbarToggler) {
+                navbarToggler.addEventListener('click', function() {
+                    sidebar.classList.toggle('sidebar-show');
+                    overlay.classList.toggle('overlay-visible');
+                });
+            }
+            
+            
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('sidebar-show');
+                overlay.classList.remove('overlay-visible');
+            });
+
+            const chatboxButton = document.getElementById('chatboxButton');
+            const chatboxContainer = document.getElementById('chatboxContainer');
+            const chatboxClose = document.getElementById('chatboxClose');
+            const chatboxInput = document.getElementById('chatboxInput');
+            const chatboxSendButton = document.getElementById('chatboxSendButton');
+            const chatboxMessages = document.getElementById('chatboxMessages');
+
+            chatboxButton.addEventListener('click', function() {
+                chatboxContainer.style.display = 'flex';
+                chatboxButton.style.display = 'none';
+            });
+
+            chatboxClose.addEventListener('click', function() {
+                chatboxContainer.style.animation = 'zoomOut 0.3s ease forwards';
+                setTimeout(() => {
+                    chatboxContainer.style.display = 'none';
+                    chatboxButton.style.display = 'flex';
+                    chatboxContainer.style.animation = 'zoomIn 0.3s ease';
+                }, 300);
+            });
+
+            function sendMessage() {
+                const message = chatboxInput.value.trim();
+                if (message !== '') {
+                    addMessage(message, 'user');
+                    chatboxInput.value = '';
+
+                    setTimeout(() => {
+                        const responses = [
+                            "Cảm ơn bạn đã liên hệ. Đội tuyển dụng của chúng tôi sẽ hỗ trợ bạn ngay.",
+                            "Tôi hiểu câu hỏi của bạn. Hãy để tôi kết nối bạn với các chuyên gia của chúng tôi.",
+                            "Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi lại với thông tin chi tiết về dịch vụ tuyển dụng của chúng tôi."
+                        ];
+                        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                        addMessage(randomResponse, 'agent');
+                    }, 1000);
+                }
+            }
+
+            function addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('chatbox-message');
+                messageDiv.classList.add(sender === 'user' ? 'chatbox-user-message' : 'chatbox-agent-message');
+                messageDiv.textContent = text;
+
+                chatboxMessages.appendChild(messageDiv);
+                chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
+            }
+
+            chatboxSendButton.addEventListener('click', sendMessage);
+
+            chatboxInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            function updateUnreadMessagesBadge(count) {
+                const badge = document.getElementById('unreadMessagesBadge');
+                if (badge) {
+                    if (count > 0) {
+                        badge.textContent = count > 99 ? '99+' : count;
+                        badge.classList.remove('d-none');
+                    } else {
+                        badge.classList.add('d-none');
+                    }
+                }
+            }
+
+            function updateTransactionBadge(count) {
+                const transactionBadge = document.querySelector('.transaction-badge');
+                if (transactionBadge) {
+                    if (count > 0) {
+                        transactionBadge.textContent = count > 99 ? '99+' : count;
+                        transactionBadge.classList.remove('d-none');
+                        
+                        transactionBadge.classList.add('badge-animation');
+                        setTimeout(() => {
+                            transactionBadge.classList.remove('badge-animation');
+                        }, 5000);
+                    } else {
+                        transactionBadge.classList.add('d-none');
+                    }
+                }
+            }
+
+            function fetchUnreadMessagesCount() {
+                const unreadCount = 3;
+                updateUnreadMessagesBadge(unreadCount);
+                
+                const transactionCount = 2;
+                updateTransactionBadge(transactionCount);
+            }
+
+            fetchUnreadMessagesCount();
+
+            setInterval(fetchUnreadMessagesCount, 30000);
+            
+            function notifyNewMessage() {
+                const badge = document.getElementById('unreadMessagesBadge');
+                badge.classList.add('badge-animation');
+                setTimeout(() => {
+                    badge.classList.remove('badge-animation');
+                }, 5000);
+            }
+            
+            notifyNewMessage();
+        });
+        document.querySelectorAll('.nav-item.nav-dropdown > .nav-link').forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const parent = this.closest('.nav-dropdown');
+                const submenu = parent.querySelector('.sidebar-submenu');
+                
+                if (submenu.style.display === 'block') {
+                    submenu.style.display = 'none';
+                } else {
+                    submenu.style.display = 'block';
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const activeSubmenuItem = document.querySelector('.sidebar-submenu .nav-link.active');
+            if (activeSubmenuItem) {
+                const submenu = activeSubmenuItem.closest('.sidebar-submenu');
+                if (submenu) {
+                    submenu.style.display = 'block';
+                }
+            }
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

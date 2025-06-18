@@ -1,0 +1,160 @@
+﻿@model HuitWorks.AdminWeb.Models.ServicePackage
+@{
+    ViewData["Title"] = "Chỉnh sửa gói dịch vụ";
+}
+
+<div class="container py-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-edit me-2"></i>@ViewData["Title"]</h5>
+            <a asp-action="Index" class="btn btn-light btn-sm">
+                <i class="fas fa-arrow-left me-1"></i>Quay lại
+            </a>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Edit" method="post" class="needs-validation" novalidate>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Name" class="form-label fw-bold">Tên gói dịch vụ</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-tag"></i></span>
+                            <input asp-for="Name" class="form-control" placeholder="Nhập tên gói dịch vụ" required />
+                        </div>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Price" class="form-label fw-bold">Giá (VNĐ)</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            <input asp-for="Price" class="form-control" placeholder="Nhập giá" required type="number" />
+                            <span class="input-group-text">VNĐ</span>
+                        </div>
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label fw-bold">Mô tả</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-align-left"></i></span>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Nhập mô tả chi tiết về gói dịch vụ"></textarea>
+                    </div>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Duration" class="form-label fw-bold">Thời hạn (ngày)</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                            <input asp-for="Duration" class="form-control" placeholder="Số ngày" required type="number" min="1" />
+                            <span class="input-group-text">ngày</span>
+                        </div>
+                        <span asp-validation-for="Duration" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="JobPostLimit" class="form-label fw-bold">Giới hạn đăng tin</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
+                            <input asp-for="JobPostLimit" class="form-control" placeholder="Số tin đăng tối đa" required type="number" min="0" />
+                            <span class="input-group-text">tin</span>
+                        </div>
+                        <span asp-validation-for="JobPostLimit" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="CVViewLimit" class="form-label fw-bold">Giới hạn xem CV</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-file-alt"></i></span>
+                            <input asp-for="CVViewLimit" class="form-control" placeholder="Số CV xem tối đa" required type="number" min="0" />
+                            <span class="input-group-text">CV</span>
+                        </div>
+                        <span asp-validation-for="CVViewLimit" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-4 mt-2">
+                    <div class="form-check form-switch">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                        <label asp-for="IsActive" class="form-check-label fw-bold">Kích hoạt gói dịch vụ</label>
+                    </div>
+                    <small class="text-muted">Gói dịch vụ sẽ được hiển thị cho khách hàng nếu được kích hoạt</small>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4 gap-2">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="fas fa-times me-1"></i>Hủy
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check me-1"></i>Cập nhật
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card-footer bg-light">
+            <div class="d-flex align-items-center">
+                <span class="text-muted small me-auto">
+                    <i class="fas fa-info-circle me-1"></i>Cập nhật lần cuối: @DateTime.Now.ToString("dd/MM/yyyy HH:mm")
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Xác nhận xóa -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">Bạn có chắc chắn muốn xóa gói dịch vụ <strong>@Model.Name</strong>?</p>
+                <p class="text-danger small mt-2 mb-0">
+                    <i class="fas fa-exclamation-triangle me-1"></i>Hành động này không thể hoàn tác!
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                    <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Custom form validation
+        (function() {
+            'use strict';
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // Fetch all forms that need validation
+                var forms = document.querySelectorAll('.needs-validation');
+
+                // Loop and prevent submission
+                Array.prototype.slice.call(forms).forEach(function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            });
+        })();
+    </script>
+}

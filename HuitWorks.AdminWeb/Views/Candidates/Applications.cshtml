@@ -1,0 +1,470 @@
+﻿@model List<HuitWorks.AdminWeb.Models.ViewModels.JobApplicationViewModel>
+
+@{
+    ViewData["Title"] = "Quản lý Đơn Ứng Tuyển";
+    var statuses = new List<string> { "Tất cả", "pending", "accepted", "rejected" };
+}
+<link href="~/css/candidates/applications.css" rel="stylesheet" />
+<style>
+    .badge-status {
+        border-radius: 1.2rem !important;
+        font-weight: 500 !important;
+        padding: 0.55em 1.15em !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        font-size: 1rem !important;
+        letter-spacing: 0.01em !important;
+        border-width: 1px !important;
+    }
+
+    .badge-waiting {
+        background: #fff3cd !important;
+        color: #856404 !important;
+        border: 1px solid #ffeeba !important;
+    }
+
+    .badge-approved {
+        background: #d4edda !important;
+        color: #155724 !important;
+        border: 1px solid #b9f6ca !important;
+    }
+
+    .badge-rejected {
+        background: #f8d7da !important;
+        color: #721c24 !important;
+        border: 1px solid #f5c6cb !important;
+    }
+
+    .badge-default {
+        background: #e2e3e5 !important;
+        color: #383d41 !important;
+        border: 1px solid #d6d8db !important;
+    }
+
+    .badge-interview {
+        background-color: #17a2b8; /* màu xanh dương nhạt */
+        color: #fff;
+    }
+
+    .badge-viewed {
+        background-color: #6c757d; /* màu xám */
+        color: #fff;
+    }
+
+</style>
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Tổng đơn ứng tuyển</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count</div>
+                    </div>
+                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Đang xem xét</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(x => x.ApplicationStatus == "pending")</div>
+                    </div>
+                    <i class="fas fa-search fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Đã chấp nhận</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(x => x.ApplicationStatus == "accepted")</div>
+                    </div>
+                    <i class="fas fa-check fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Bị từ chối</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(x => x.ApplicationStatus == "rejected")</div>
+                    </div>
+                    <i class="fas fa-times fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Danh sách đơn ứng tuyển</h6>
+            <div class="d-flex">
+                <select id="statusFilter" class="form-control mr-2">
+                    @foreach (var status in statuses)
+                    {
+                        <option value="@status">@status</option>
+                    }
+                </select>
+                <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm...">
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover shadow-sm rounded" id="applicationsTable">
+                    <thead>
+                        <tr>
+                            <th colspan="2" class="text-center bg-light border-end">Bài Đăng</th>
+                            <th colspan="2" class="text-center bg-light border-end">Ứng Viên</th>
+                            <th class="text-center bg-light border-end">Ngày Nộp</th>
+                            <th class="text-center bg-light border-end">Trạng Thái</th>
+                            <th class="text-center bg-light border-end">Công ty</th>
+                            <th class="text-center bg-light">Hành động</th>
+                        </tr>
+                        <tr>
+                            <th class="text-center small text-muted border-end">Mã</th>
+                            <th class="text-center small text-muted border-end">Tên bài</th>
+                            <th class="text-center small text-muted border-end">Mã</th>
+                            <th class="text-center small text-muted border-end">Tên ứng viên</th>
+                            <th class="text-center small text-muted border-end"></th>
+                            <th class="text-center small text-muted border-end"></th>
+                            <th class="text-center small text-muted border-end"></th>
+                            <th class="text-center small text-muted"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center border-end">@item.IdJobPost</td>
+                                <td class="border-end">@item.JobTitle</td>
+                                <td class="text-center border-end">@item.IdUser</td>
+                                <td class="border-end">@item.CandidateName</td>
+                                <td class="text-center border-end">@item.SubmittedAt.ToString("dd/MM/yyyy")</td>
+                                <td class="text-center border-end">
+                                    @{
+                                        var status = item.ApplicationStatus?.ToLower() ?? "";
+                                        var badgeClass = status switch
+                                        {
+                                            "pending" => "badge badge-status badge-waiting",
+                                            "accepted" => "badge badge-status badge-approved",
+                                            "rejected" => "badge badge-status badge-rejected",
+                                            "interview" => "badge badge-status badge-interview",
+                                            "viewed" => "badge badge-status badge-viewed",
+                                            _ => "badge badge-status badge-default"
+                                        };
+                                        var icon = status switch
+                                        {
+                                            "pending" => "<i class='fas fa-hourglass-half me-1'></i>",
+                                            "accepted" => "<i class='fas fa-check-circle me-1'></i>",
+                                            "rejected" => "<i class='fas fa-times-circle me-1'></i>",
+                                            "interview" => "<i class='fas fa-user-clock me-1'></i>",
+                                            "viewed" => "<i class='fas fa-eye me-1'></i>",
+                                            _ => "<i class='fas fa-info-circle me-1'></i>"
+                                        };
+                                    }
+                                    <span class="@badgeClass" style="font-size: 1rem;">
+                                        @Html.Raw(icon) @item.ApplicationStatus
+                                    </span>
+                                </td>
+
+
+                                <td class="border-end">@item.CompanyName</td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a asp-action="DetailsApplication"
+                                           asp-route-idUser="@item.IdUser"
+                                           asp-route-idJobPost="@item.IdJobPost"
+                                           class="btn btn-info btn-action"
+                                           data-bs-toggle="tooltip" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+
+                                        <a asp-action="Edit"
+                                           asp-route-idUser="@item.IdUser"
+                                           asp-route-idJobPost="@item.IdJobPost"
+                                           class="btn btn-warning btn-action"
+                                           data-bs-toggle="tooltip" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+
+                                        <button type="button"
+                                                class="btn btn-danger btn-action btn-delete-application"
+                                                data-toggle="modal"
+                                                data-target="#deleteModal"
+                                                data-iduser="@item.IdUser"
+                                                data-idjobpost="@item.IdJobPost"
+                                                data-bs-toggle="tooltip" title="Xóa ứng tuyển">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <div class="page-info">
+                        Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
+                    </div>
+
+                    <div class="page-buttons">
+                        @if ((int)ViewBag.CurrentPage > 1)
+                        {
+                            <a href="?page=@((int)ViewBag.CurrentPage - 1)" class="page-btn">
+                                <i class="fas fa-angle-left"></i>
+                            </a>
+                        }
+
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            if (i == 1 || i == ViewBag.TotalPages || (i >= ViewBag.CurrentPage - 1 && i <= ViewBag.CurrentPage + 1))
+                            {
+                                <a href="?page=@i" class="page-btn @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                            }
+                            else if (i == 2 || i == ViewBag.TotalPages - 1)
+                            {
+                                <span class="page-btn">...</span>
+                            }
+                        }
+
+                        @if ((int)ViewBag.CurrentPage < (int)ViewBag.TotalPages)
+                        {
+                            <a href="?page=@((int)ViewBag.CurrentPage + 1)" class="page-btn">
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Xem CoverLetter -->
+<div class="modal fade" id="coverLetterModal" tabindex="-1" role="dialog" aria-labelledby="coverLetterModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="coverLetterModalLabel">Thư Ứng Tuyển</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="coverLetterContent">
+                Đang tải...
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal xác nhận xóa -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa đơn ứng tuyển</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa đơn ứng tuyển này không?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <!-- Đảm bảo Toastr CSS và JS được tải -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        // Kích hoạt tooltip Bootstrap 5 (nếu dùng BS5)
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        });
+    </script>
+    <!-- Thêm cấu hình Toastr -->
+    <script>
+        // Cấu hình Toastr để hiển thị thông báo ở góc trên bên phải
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        // Kiểm tra Toastr đã tải chưa
+        if (typeof toastr === 'undefined') {
+            console.error('Toastr is not loaded');
+        } else {
+            console.log('Toastr loaded successfully');
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Search
+            $('#searchInput').on('keyup', function () {
+                var value = $(this).val().toLowerCase();
+                $("#applicationsTable tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+
+            // Filter Status
+            $('#statusFilter').change(function () {
+                var value = $(this).val();
+                $("#applicationsTable tbody tr").filter(function () {
+                    if (value === "Tất cả") return true;
+                    return $(this).find("td:nth-child(5) span").text().trim() === value;
+                }).show().end().filter(function () {
+                    if (value === "Tất cả") return false;
+                    return $(this).find("td:nth-child(5) span").text().trim() !== value;
+                }).hide();
+            });
+
+            // Show CoverLetter Modal
+            $('#coverLetterModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var letter = button.data('letter');
+                $('#coverLetterContent').text(letter || "Chưa có thư ứng tuyển.");
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Thêm hàm xóa riêng để dễ kiểm soát
+            function showDeleteSuccessNotification(message) {
+                // Thử với toastr
+                if (typeof toastr !== 'undefined') {
+                    toastr.success(message || "Xóa đơn ứng tuyển thành công!");
+                } else {
+                    // Fallback nếu toastr không tồn tại
+                    alert(message || "Xóa đơn ứng tuyển thành công!");
+                }
+            }
+
+            // Thêm nút test để kiểm tra thông báo
+            // $('#applicationsTable').before('<button id="testToastr" class="btn btn-primary mb-3">Kiểm tra thông báo</button>');
+
+            // Xử lý sự kiện click nút test
+            // $('#testToastr').click(function() {
+            //     showDeleteSuccessNotification("Đây là thông báo kiểm tra!");
+            // });
+
+            let idUserToDelete = null;
+            let idJobPostToDelete = null;
+
+            // Khi bấm nút xoá → mở modal & lưu lại id cần xoá
+            $('.btn-delete-application').click(function() {
+                idUserToDelete = $(this).data('iduser');
+                idJobPostToDelete = $(this).data('idjobpost');
+                // Mở modal
+                $('#deleteModal').modal('show');
+            });
+
+            // Khi xác nhận xoá trên modal
+            $('#confirmDeleteBtn').click(function() {
+                if (!idUserToDelete || !idJobPostToDelete) return;
+
+                // Lưu giá trị hiện tại để sử dụng trong promise sau khi xóa
+                const currentIdUser = idUserToDelete;
+                const currentIdJobPost = idJobPostToDelete;
+
+                // Đóng modal trước khi thực hiện AJAX
+                $('#deleteModal').modal('hide');
+
+                // Đợi modal đóng xong rồi mới gọi AJAX
+                setTimeout(function() {
+                    $.ajax({
+                        url: '@Url.Action("DeleteApplication", "Candidates")',
+                        type: 'POST',
+                        data: {
+                            idUser: currentIdUser,
+                            idJobPost: currentIdJobPost
+                        },
+                        success: function (res) {
+                            if (res.success) {
+                                // Xóa dòng khỏi bảng
+                                $(`button[data-iduser='${currentIdUser}'][data-idjobpost='${currentIdJobPost}']`).closest('tr').fadeOut();
+
+                                // Hiển thị thông báo thành công bằng hàm riêng
+                                showDeleteSuccessNotification(res.message || "Xóa đơn ứng tuyển thành công!");
+
+
+                                // Cập nhật số liệu thống kê (nếu cần)
+                                // Bỏ comment dòng dưới nếu bạn muốn tải lại trang sau khi xóa
+                                // setTimeout(function() {
+                                //     location.reload();
+                                // }, 2000);
+                            } else {
+                                // Hiển thị thông báo lỗi
+                                toastr.error(res.message || "Xóa thất bại!");
+                                console.log('Đang hiển thị thông báo lỗi');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            // Hiển thị thông báo lỗi chi tiết
+                            console.error('AJAX Error:', status, error);
+                            toastr.error("Có lỗi xảy ra khi xóa: " + error);
+
+                            // Thử hiển thị một thông báo khác nếu toastr không hoạt động
+                            alert("Có lỗi xảy ra khi xóa!");
+                        },
+                        complete: function() {
+                            // Reset biến sau khi hoàn thành
+                            idUserToDelete = null;
+                            idJobPostToDelete = null;
+                        }
+                    });
+                }, 300); // Đợi 300ms để đảm bảo modal đã đóng hoàn toàn
+            });
+
+            // Khi đóng modal thì reset biến
+            $('#deleteModal').on('hidden.bs.modal', function () {
+                // Đảm bảo xóa backdrop và reset body
+                $('.modal-backdrop').remove();
+                $('body').removeClass('modal-open').css('padding-right', '');
+
+                // Reset biến
+                idUserToDelete = null;
+                idJobPostToDelete = null;
+            });
+
+            // Đảm bảo các nút đóng modal hoạt động đúng
+            $('.modal-footer .btn-secondary, .modal-header .close').click(function() {
+                $('#deleteModal').modal('hide');
+            });
+        });
+    </script>
+}

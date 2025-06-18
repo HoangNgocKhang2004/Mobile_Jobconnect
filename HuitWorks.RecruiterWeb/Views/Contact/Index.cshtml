@@ -1,0 +1,310 @@
+﻿@model HuitWorks.RecruiterWeb.Models.ViewModel.ContactViewModel
+
+@{
+    ViewData["Title"] = "Liên hệ / Gửi báo cáo";
+}
+
+<style>
+    /* Một số style cơ bản (có thể để sang CSS riêng) */
+    :root {
+        --primary-color: #094174;
+        --light-color: #f0f8ff;
+        --accent-color: #0d6efd;
+        --dark-color: #052447;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+    }
+
+    .contact-container {
+        padding: 0 20px;
+    }
+
+    .contact-content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .contact-info {
+        flex: 1;
+        min-width: 300px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+    }
+
+        .contact-info h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 24px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+    .info-item {
+        margin-bottom: 20px;
+        display: flex;
+    }
+
+        .info-item i {
+            color: var(--primary-color);
+            font-size: 20px;
+            margin-right: 15px;
+            margin-top: 5px;
+        }
+
+    .info-item-content h3 {
+        margin: 0 0 5px 0;
+        font-size: 18px;
+        color: var(--primary-color);
+    }
+
+    .info-item-content p {
+        margin: 0;
+        color: #666;
+    }
+
+    .contact-form {
+        flex: 2;
+        min-width: 400px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+    }
+
+        .contact-form h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 24px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 16px;
+        transition: border-color 0.3s;
+    }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+    textarea.form-control {
+        min-height: 150px;
+        resize: vertical;
+    }
+
+    .btn-primary1 {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        transition: background-color 0.3s;
+    }
+
+        .btn-primary1:hover {
+            background-color: var(--dark-color);
+        }
+
+    .map-container {
+        height: 450px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 40px;
+    }
+
+    .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .social-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 50%;
+        text-decoration: none;
+        transition: background-color 0.3s;
+    }
+
+        .social-link:hover {
+            background-color: var(--dark-color);
+        }
+
+    .page-title {
+        color: #094174;
+        margin-bottom: 30px;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 15px;
+        font-size: 28px;
+    }
+
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: #094174;
+            border-radius: 2px;
+        }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<div class="contact-container">
+    <h2 class="page-title">Liên Hệ / Gửi Báo Cáo</h2>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Error
+        </div>
+    }
+
+    @if (Model.IsSuccess)
+    {
+        <div class="alert alert-success">
+            @Model.Message
+        </div>
+    }
+    else if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert alert-danger">
+            @Model.Message
+        </div>
+    }
+
+    <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d20925.57533816229!2d106.62532061024717!3d10.802332583817376!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752be27d8b4f4d%3A0x92dcba2950430867!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBDw7RuZyBUaMawxqFuZyBUUC4gSOG7kyBDaMOtIE1pbmggKEhVSVQp!5e0!3m2!1svi!2s!4v1725900549067!5m2!1svi!2s"
+                width="100%" height="100%" style="border:0;"
+                allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+    </div>
+
+    <div class="contact-content">
+        <!-- Thông tin liên hệ tĩnh -->
+        <div class="contact-info">
+            <h2>Thông Tin Liên Hệ</h2>
+
+            <div class="info-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <div class="info-item-content">
+                    <h3>Địa Chỉ</h3>
+                    <p>Trường Đại học Công Thương TP. Hồ Chí Minh (HUIT)</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <i class="fas fa-phone"></i>
+                <div class="info-item-content">
+                    <h3>Điện Thoại</h3>
+                    <p>+84 334 297 551</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <i class="fas fa-envelope"></i>
+                <div class="info-item-content">
+                    <h3>Email</h3>
+                    <p>support@huitworks.edu.vn</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <i class="fas fa-clock"></i>
+                <div class="info-item-content">
+                    <h3>Giờ Làm Việc</h3>
+                    <p>Thứ Hai - Thứ Sáu: 8:00 - 17:00</p>
+                    <p>Thứ Bảy: 8:00 - 12:00</p>
+                </div>
+            </div>
+
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+
+        <!-- Form Gửi báo cáo -->
+        <div class="contact-form">
+            <h2>Gửi Báo Cáo</h2>
+            <form asp-action="Index" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label asp-for="SelectedReportTypeId"></label>
+                    <select asp-for="SelectedReportTypeId" class="form-control" asp-items="@(new SelectList(Model.ReportTypes, "ReportTypeId", "Name"))">
+                        <option value="">-- Chọn loại báo cáo --</option>
+                        @* Các option sẽ được fill tự động từ Model.ReportTypes *@
+                    </select>
+                    <span asp-validation-for="SelectedReportTypeId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Title"></label>
+                    <input asp-for="Title" class="form-control" placeholder="Nhập tiêu đề" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Content"></label>
+                    <textarea asp-for="Content" class="form-control" rows="4" placeholder="Nhập nội dung báo cáo"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn-primary1">Gửi Báo Cáo</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @* Kích hoạt validation phía client (jQuery Unobtrusive) *@
+    <partial name="_ValidationScriptsPartial" />
+}

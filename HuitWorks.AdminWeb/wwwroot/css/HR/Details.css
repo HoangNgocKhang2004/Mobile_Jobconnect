@@ -1,0 +1,196 @@
+﻿:root {
+    --primary-color: #2563eb;
+    --secondary-color: #f8fafc;
+    --border-color: #e2e8f0;
+    --text-color: #334155;
+    --heading-color: #1e293b;
+    --section-bg: #ffffff;
+    --accent-color: #3b82f6;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--text-color);
+    background-color: #f9fafb;
+    line-height: 1.6;
+}
+
+.company-profile {
+    margin: 0 auto;
+}
+
+.card-container {
+    background-color: var(--section-bg);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    border: none;
+}
+
+.company-header {
+    position: relative;
+    background-color: var(--section-bg);
+    padding: 2.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.company-logo {
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+    border-radius: 12px;
+    background-color: white;
+    padding: 0.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.company-name {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--heading-color);
+    margin-bottom: 0.5rem;
+}
+
+.company-website {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+    .company-website:hover {
+        color: #1d4ed8;
+        text-decoration: underline;
+    }
+
+.company-details {
+    background-color: var(--section-bg);
+    padding: 2rem 2.5rem;
+}
+
+.info-section {
+    margin-bottom: 2.5rem;
+}
+
+    .info-section:last-child {
+        margin-bottom: 0;
+    }
+
+.section-title {
+    color: var(--heading-color);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+    .section-title i {
+        color: var(--accent-color);
+    }
+
+.info-content {
+    color: var(--text-color);
+    font-size: 1rem;
+    white-space: pre-line;
+}
+
+.hr-contact {
+    background-color: #f0f7ff;
+    border-radius: 12px;
+    padding: 1.75rem;
+    border-left: 4px solid var(--accent-color);
+}
+
+.contact-title {
+    color: var(--accent-color);
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.contact-icon {
+    width: 36px;
+    height: 36px;
+    background-color: rgba(59, 130, 246, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-color);
+    flex-shrink: 0;
+}
+
+.contact-info {
+    flex-grow: 1;
+}
+
+.contact-label {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 0.25rem;
+}
+
+.contact-value {
+    font-weight: 500;
+    color: var(--heading-color);
+    word-break: break-word;
+}
+
+.company-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+.description-content {
+    line-height: 1.75;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    background-color: white;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    margin-top: 1.5rem;
+}
+
+    .back-btn:hover {
+        background-color: var(--secondary-color);
+    }

@@ -1,0 +1,176 @@
+﻿@model List<HuitWorks.AdminWeb.Models.ViewModels.PodcastViewModel>
+@{
+    ViewData["Title"] = "Quản lý Podcast";
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+}
+
+<link href="~/css/podcast/index.css" rel="stylesheet" />
+
+<!-- Header Section -->
+<div class="row mb-4">
+    <!-- Tổng số Podcast -->
+    <div class="col-md-3">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Tổng số Podcast</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">...</div>
+                </div>
+                <i class="fas fa-podcast fa-2x text-gray-300"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Podcast đã xuất bản -->
+    <div class="col-md-3">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Đã xuất bản</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">...</div>
+                </div>
+                <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Podcast chờ xuất bản -->
+    <div class="col-md-3">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Chờ xuất bản</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">...</div>
+                </div>
+                <i class="fas fa-hourglass-half fa-2x text-gray-300"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Podcast bản nháp / từ chối -->
+    <div class="col-md-3">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Bản nháp / Đã từ chối</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">...</div>
+                </div>
+                <i class="fas fa-times-circle fa-2x text-gray-300"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="admin-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h2><i class="fa fa-podcast me-2"></i>Quản lý Podcast</h2>
+        </div>
+        <a class="btn btn-add px-4 py-2" asp-action="Create">
+            <i class="fa fa-plus me-2"></i>Thêm Podcast
+        </a>
+    </div>
+</div>
+
+<!-- Content Section -->
+<div class="row">
+    @if (Model != null && Model.Count > 0)
+    {
+        foreach (var pod in Model)
+        {
+            <div class="col-md-6 col-xl-4 mb-4">
+                <div class="card podcast-card h-100">
+                    <div class="card-img-overlay">
+                        <img src="@pod.CoverImageUrl" class="card-img-top" alt="@pod.Title"
+                             style="height: 200px; object-fit: cover;" />
+                    </div>
+
+                    <div class="card-body p-3">
+                        <h5 class="podcast-title">@pod.Title</h5>
+
+                        <div class="podcast-host">
+                            <i class="fa fa-microphone me-1"></i>@pod.Host
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(pod.Description))
+                        {
+                            <p class="podcast-description">@pod.Description</p>
+                        }
+
+                        <audio controls class="audio-player w-100">
+                            <source src="@pod.AudioUrl" type="audio/mpeg" />
+                            Trình duyệt không hỗ trợ audio.
+                        </audio>
+
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <span class="publish-date">
+                                <i class="fa fa-calendar me-1"></i>@pod.PublishDate?.ToString("dd/MM/yyyy")
+                            </span>
+
+                            <div class="action-buttons d-flex">
+                                <a asp-action="Edit" asp-route-id="@pod.IdPodcast"
+                                   class="btn btn-edit" title="Chỉnh sửa">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@pod.IdPodcast"
+                                   class="btn btn-delete" title="Xóa"
+                                   onclick="return confirm('Bạn có chắc chắn muốn xóa podcast này không?')">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="empty-state">
+                <i class="fa fa-podcast"></i>
+                <h4>Chưa có podcast nào</h4>
+                <p>Hãy thêm podcast đầu tiên để bắt đầu quản lý nội dung của bạn.</p>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Pagination -->
+@if (totalPages > 1)
+{
+    <div class="pagination">
+        <div class="page-info">
+            Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
+        </div>
+
+        <div class="page-buttons">
+            @if ((int)ViewBag.CurrentPage > 1)
+            {
+                <a href="?page=@((int)ViewBag.CurrentPage - 1)" class="page-btn">
+                    <i class="fas fa-angle-left"></i>
+                </a>
+            }
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                if (i == 1 || i == ViewBag.TotalPages || (i >= ViewBag.CurrentPage - 1 && i <= ViewBag.CurrentPage + 1))
+                {
+                    <a href="?page=@i" class="page-btn @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                }
+                else if (i == 2 || i == ViewBag.TotalPages - 1)
+                {
+                    <span class="page-btn">...</span>
+                }
+            }
+
+            @if ((int)ViewBag.CurrentPage < (int)ViewBag.TotalPages)
+            {
+                <a href="?page=@((int)ViewBag.CurrentPage + 1)" class="page-btn">
+                    <i class="fas fa-angle-right"></i>
+                </a>
+            }
+        </div>
+    </div>
+}

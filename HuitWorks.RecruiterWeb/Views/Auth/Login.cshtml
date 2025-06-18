@@ -1,0 +1,255 @@
+﻿@model HuitWorks.RecruiterWeb.Models.LoginViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập nhà tuyển dụng - HUITERN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="~/css/auth/login.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="login-container min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8 animate-fadeIn">
+            <div class="card bg-white overflow-hidden rounded-2xl shadow-xl border border-gray-100 animate-fadeIn delay-100">
+                <div class="bg-gradient-secondary p-6 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-primary opacity-80"></div>
+                    <div class="relative z-10">
+                        <h2 class="text-xl font-bold text-white">Chào mừng bạn đã quay trở lại</h2>
+                        <p class="text-indigo-100 text-sm mt-1">Đăng nhập để quản lý tuyển dụng</p>
+                    </div>
+                    <div class="absolute right-0 bottom-0 transform translate-x-4 translate-y-4">
+                        <svg width="120" height="120" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" fill="none">
+                            <path d="M20 5C12.8 5 7 10.8 7 18s5.8 13 13 13c7.2 0 13-5.8 13-13S27.2 5 20 5zm-3 19.5c0 .8-.7 1.5-1.5 1.5s-1.5-.7-1.5-1.5V16c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5v8.5zm10 0c0 .8-.7 1.5-1.5 1.5s-1.5-.7-1.5-1.5V16c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5v8.5z" fill="white" fill-opacity="0.15" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="p-8">
+                    <form asp-action="Login" asp-controller="Auth" method="post" class="space-y-6">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="text-red-500 text-sm"></div>
+
+                        <div class="space-y-1">
+                            <label for="Email" class="block text-sm font-medium text-gray-700">Email</label>
+                            <div class="relative">
+                                <span class="input-icon absolute left-3 top-3 text-gray-400">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                                <input asp-for="Email"
+                                       id="Email"
+                                       type="email"
+                                       autocomplete="email"
+                                       required
+                                       class="form-input block w-full pl-10 pr-4 py-3 rounded-lg text-gray-900 focus:outline-none border border-gray-300"
+                                       placeholder="nhập email..." />
+                            </div>
+                            <span asp-validation-for="Email" class="text-red-500 text-xs mt-1"></span>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label for="Password" class="block text-sm font-medium text-gray-700">Mật khẩu</label>
+                            <div class="relative">
+                                <span class="input-icon absolute left-3 top-3 text-gray-400">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input asp-for="Password"
+                                       id="Password"
+                                       type="password"
+                                       autocomplete="current-password"
+                                       required
+                                       class="form-input block w-full pl-10 pr-10 py-3 rounded-lg text-gray-900 focus:outline-none border border-gray-300"
+                                       placeholder="nhập mật khẩu..." />
+                                <span id="togglePassword" class="absolute right-3 top-3 cursor-pointer text-gray-400">
+                                    <i id="togglePasswordIcon" class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <span asp-validation-for="Password" class="text-red-500 text-xs mt-1"></span>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm">
+                                <a asp-action="ForgotPassword"
+                                   asp-controller="Auth"
+                                   class="font-medium text-indigo-600 hover:text-indigo-500">
+                                    Quên mật khẩu?
+                                </a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button type="submit"
+                                    class="btn-primary group relative w-full flex justify-center py-3 px-4 rounded-lg text-white focus:outline-none bg-indigo-600 hover:bg-indigo-700">
+                                <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                </span>
+                                Đăng nhập
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="mt-8">
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-gray-200"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-3 bg-white text-gray-500">Hoặc đăng nhập với</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 flex justify-center">
+                            <button id="btnGoogle"
+                                    class="social-btn w-full max-w-xs inline-flex justify-center py-2.5 px-4
+                                           rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-700
+                                           hover:bg-gray-50">
+                                <i class="fab fa-google text-red-500 mr-2 text-lg"></i>
+                                Google
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="px-8 py-6 bg-gray-50 border-t border-gray-100 animate-fadeIn delay-200">
+                    <p class="text-sm text-gray-600 text-center">
+                        Chưa có tài khoản?
+                        <a asp-action="RegisterRecruiter"
+                           asp-controller="Auth"
+                           class="font-medium text-indigo-600 hover:text-indigo-700">
+                            Đăng ký doanh nghiệp mới
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-center mt-6 animate-fadeIn delay-300">
+                <p class="text-xs text-gray-500">© 2025 HUITERN. Tất cả các quyền được bảo lưu.</p>
+                <div class="mt-2 flex justify-center space-x-4 text-xs">
+                    <a href="#" class="text-gray-500 hover:text-gray-700">Điều khoản sử dụng</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-700">Chính sách bảo mật</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-700">Trợ giúp</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('Password');
+            const toggleIcon = document.getElementById('togglePasswordIcon');
+            const toggleBtn = document.getElementById('togglePassword');
+
+            toggleBtn.addEventListener('click', function() {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    toggleIcon.classList.remove('fa-eye');
+                    toggleIcon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    toggleIcon.classList.remove('fa-eye-slash');
+                    toggleIcon.classList.add('fa-eye');
+                }
+            });
+        });
+    </script>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js';
+        import {
+          getAuth,
+          GoogleAuthProvider,
+          signInWithPopup
+        } from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js';
+
+        // 1) Khởi tạo Firebase
+        const firebaseConfig = {
+          apiKey: "AIzaSyCakd2ZNCuwTlouqWq4BKjabRn4cpUzEGM",
+          authDomain: "huit-mobile-recruit-app.firebaseapp.com",
+          databaseURL: "https://huit-mobile-recruit-app-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "huit-mobile-recruit-app",
+          storageBucket: "huit-mobile-recruit-app.appspot.com",
+          messagingSenderId: "189359785129",
+          appId: "1:189359785129:web:919e5a60fd83f1a16d15b8",
+          measurementId: "G-FP9RXL4L0V"
+        };
+        const app  = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // 2) Tạo provider, bắt buộc có openid + email + profile
+        const provider = new GoogleAuthProvider();
+        provider.addScope('openid');
+        provider.addScope('email');
+        provider.addScope('profile');
+
+        // 3) URL tới MVC action
+        const externalLoginUrl = '@Url.Action("ExternalLogin", "Auth")';
+
+        document.getElementById('btnGoogle').addEventListener('click', async () => {
+          try {
+            // 4) Mở popup Google Sign-In
+            const result = await signInWithPopup(auth, provider);
+            const user   = result.user;
+
+            // 5) Lấy email + name từ providerData nếu user.email/name null
+            const profile = user.providerData[0] || {};
+            const email   = user.email || profile.email;
+            const name    = user.displayName || profile.displayName;
+
+            if (!email || !name) {
+              throw new Error('Không lấy được email hoặc tên từ Google');
+            }
+
+            // 6) Lấy idToken thực sự đã bao gồm các claim
+            const idToken = await user.getIdToken();
+
+            // 7) Gửi POST lên MVC action
+            const resp = await fetch(externalLoginUrl, {
+              method:      'POST',
+              credentials: 'include',
+              headers:     { 'Content-Type': 'application/json' },
+              body:        JSON.stringify({ idToken, email, name })
+            });
+
+            if (!resp.ok) {
+              const txt = await resp.text();
+              throw new Error(`Server trả lỗi ${resp.status}: ${txt}`);
+            }
+
+            // 8) Nhận needProfile và redirect
+            const encodedName = encodeURIComponent(name);
+            window.location.href = `/Home/Index?welcome=true&userName=${encodedName}`;
+
+          } catch (err) {
+            console.error(err);
+            alert('Google Sign-In lỗi: ' + err.message);
+          }
+        });
+    </script>
+
+    <script>
+        $(function() {
+          $('form').validate({
+            rules: {
+              Email:    { required: true, email: true },
+              Password: { required: true, minlength: 6 }
+            },
+            messages: {
+              Email:    { required: "Vui lòng nhập email",    email: "Email không hợp lệ" },
+              Password: { required: "Vui lòng nhập mật khẩu", minlength: "Mật khẩu phải ≥6 ký tự" }
+            },
+            errorElement: 'div',
+            errorPlacement(error, el) {
+              error.addClass('text-red-500 text-xs mt-1').insertAfter(el);
+            }
+          });
+        });
+    </script>
+</body>
+</html>

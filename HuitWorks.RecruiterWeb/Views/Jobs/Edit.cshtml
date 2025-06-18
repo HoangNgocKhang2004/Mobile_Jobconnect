@@ -1,0 +1,245 @@
+﻿@model HuitWorks.RecruiterWeb.Models.ViewModel.JobPosting1ViewModel
+
+@{
+    ViewData["Title"] = "Chỉnh sửa bài tuyển dụng";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    .header-container {
+        border-left: 4px solid #4e73df;
+        transition: all 0.3s ease;
+    }
+
+        .header-container:hover {
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+        }
+
+    .hover-text-primary:hover {
+        color: #4e73df !important;
+        transition: color 0.3s ease;
+    }
+
+    .fs-14 {
+        font-size: 14px;
+    }
+
+    h1.text-primary {
+        color: #4e73df;
+    }
+
+    .hover-scale {
+        transition: transform 0.2s ease;
+    }
+
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+
+    .btn-outline-primary {
+        border-color: #4e73df;
+        color: #4e73df;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #4e73df;
+            color: white;
+        }
+
+    .page-title {
+        color: #094174;
+        margin-bottom: 30px;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 15px;
+        font-size: 28px;
+    }
+
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: #094174;
+            border-radius: 2px;
+        }
+</style>
+<div class="container-fluid">
+    <h2 class="page-title">Chỉnh sửa tin tuyển dụng</h2>
+    <div class="header-container bg-white shadow-sm rounded p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="header-content">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 fs-14">
+                        <li class="breadcrumb-item">
+                            <a asp-action="Index" class="text-decoration-none text-secondary hover-text-primary">
+                                <i class="fas fa-home me-1"></i>Quản lý tuyển dụng
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active fw-semibold" aria-current="page">Chỉnh sửa</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="header-actions">
+                <a asp-action="Index" class="btn btn-outline-primary rounded-pill px-4 hover-scale">
+                    <i class="fas fa-arrow-left me-2"></i>Quay lại
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow border-0 rounded-lg">
+        <div class="card-header bg-white px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-edit text-primary me-2"></i>
+                <h5 class="mb-0 text-primary">Bài tuyển dụng #@Model.IdJobPost</h5>
+            </div>
+            <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger") px-3 py-2">
+                <i class="fas fa-circle me-1" style="font-size: 8px;"></i>@(Model.IsActive ? "Đang hoạt động" : "Đã tắt")
+            </span>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="Edit" method="post">
+                <input type="hidden" asp-for="IdJobPost" />
+                <input type="hidden" asp-for="IdCompany" />
+                <input type="hidden" asp-for="PostStatus" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label">Tiêu đề công việc <span class="text-danger">*</span></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label">Mô tả công việc <span class="text-danger">*</span></label>
+                    <textarea asp-for="Description" class="form-control" rows="6"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Requirements" class="form-label">Yêu cầu ứng viên <span class="text-danger">*</span></label>
+                    <textarea asp-for="Requirements" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Requirements" class="text-danger"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Location" class="form-label">Địa điểm làm việc <span class="text-danger">*</span></label>
+                        <input asp-for="Location" class="form-control" />
+                        <span asp-validation-for="Location" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Salary" class="form-label">Mức lương</label>
+                        <input asp-for="Salary" class="form-control" />
+                        <span asp-validation-for="Salary" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="ApplicationDeadline" class="form-label">Hạn chót nhận hồ sơ <span class="text-danger">*</span></label>
+                        <input asp-for="ApplicationDeadline"
+                               type="date"
+                               class="form-control"
+                               min="@DateTime.UtcNow.ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="ApplicationDeadline" class="text-danger"></span>
+                    </div>
+                </div>
+
+                @* <div class="form-check form-switch mb-4"> *@
+                @*     <input asp-for="IsActive" *@
+                @*            class="form-check-input" *@
+                @*            type="checkbox" *@
+                @*            id="statusSwitch" /> *@
+
+                @*     <label asp-for="IsActive" class="form-check-label"> *@
+                @*         @(Model.IsActive ? "active" : "inactive") *@
+                @*     </label> *@
+                @* </div> *@
+
+                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                <a asp-action="Index" class="btn btn-secondary ms-2">Hủy</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function() {
+            // Khởi tạo Summernote với giao diện cải tiến
+            $('.editor').summernote({
+                height: 250,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+                ],
+                styleTags: [
+                    'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+                ],
+                callbacks: {
+                    onImageUpload: function(files) {
+                        toastr.warning('Chức năng upload ảnh không được hỗ trợ trong trình soạn thảo này.');
+                    }
+                }
+            });
+
+            // Cập nhật trạng thái động
+            function updateStatusDisplay() {
+                if ($('#statusSwitch').is(':checked')) {
+                    $('#statusText').removeClass('text-danger').addClass('text-success').text('Đang hoạt động');
+                    $('#statusHelp').text('Bỏ chọn để tạm dừng hiển thị bài tuyển dụng này');
+                } else {
+                    $('#statusText').removeClass('text-success').addClass('text-danger').text('Đã tắt');
+                    $('#statusHelp').text('Chọn để kích hoạt lại bài tuyển dụng này');
+                }
+            }
+
+            // Khởi tạo trạng thái ban đầu
+            updateStatusDisplay();
+
+            // Theo dõi thay đổi trạng thái
+            $('#statusSwitch').on('change', function() {
+                updateStatusDisplay();
+            });
+
+            // Thông báo xác nhận khi rời trang có thay đổi
+            let formChanged = false;
+            $('#jobEditForm').on('input change', function() {
+                formChanged = true;
+            });
+
+            $(window).on('beforeunload', function() {
+                if (formChanged) {
+                    return "Bạn có thay đổi chưa lưu. Bạn có chắc chắn muốn rời đi?";
+                }
+            });
+
+            // Loại bỏ cảnh báo khi submit form
+            $('#jobEditForm').on('submit', function() {
+                $(window).off('beforeunload');
+            });
+
+            // Hiển thị các thông báo validation với hiệu ứng
+            $('form').on('submit', function() {
+                if (!$(this).valid()) {
+                    toastr.error('Vui lòng kiểm tra lại thông tin nhập liệu!');
+                    $('html, body').animate({
+                        scrollTop: $('.text-danger').first().offset().top - 100
+                    }, 500);
+                    return false;
+                }
+                return true;
+            });
+        });
+    </script>
+}

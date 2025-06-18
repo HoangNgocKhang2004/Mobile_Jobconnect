@@ -1,0 +1,63 @@
+﻿@model HuitWorks.AdminWeb.Models.ViewModels.InterviewScheduleViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết lịch phỏng vấn";
+}
+
+
+<div class="container">
+    <div class="card shadow-sm mb-5 border-0">
+        <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between rounded-top">
+            <div>
+                <i class="fa-solid fa-calendar-check me-2"></i>
+                <span class="fw-bold">@ViewData["Title"]</span>
+            </div>
+            <span class="badge bg-light text-primary">#@Model.IdSchedule</span>
+        </div>
+        <div class="card-body py-4">
+            <h6 class="text-secondary fw-bold mb-2">Thông tin lịch phỏng vấn</h6>
+            <dl class="row mb-4">
+                <dt class="col-5 text-muted"><i class="fa-regular fa-clock me-1"></i> Ngày phỏng vấn:</dt>
+                <dd class="col-7">@Model.InterviewDate.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                <dt class="col-5 text-muted"><i class="fa-solid fa-video me-1"></i> Hình thức:</dt>
+                <dd class="col-7">@Model.InterviewMode</dd>
+
+                <dt class="col-5 text-muted"><i class="fa-solid fa-map-marker-alt me-1"></i> Địa điểm:</dt>
+                <dd class="col-7">@Model.Location</dd>
+
+                <dt class="col-5 text-muted"><i class="fa-solid fa-user-tie me-1"></i> Người phỏng vấn:</dt>
+                <dd class="col-7">@Model.Interviewer</dd>
+
+                <dt class="col-5 text-muted"><i class="fa-regular fa-note-sticky me-1"></i> Ghi chú:</dt>
+                <dd class="col-7">@Model.Note</dd>
+            </dl>
+
+            <h6 class="text-secondary fw-bold mb-2"><i class="fa-solid fa-user me-1"></i> Thông tin ứng viên</h6>
+            <dl class="row mb-4">
+                <dt class="col-5 text-muted">Tên ứng viên:</dt>
+                <dd class="col-7">@Model.CandidateName</dd>
+
+                <dt class="col-5 text-muted">Email:</dt>
+                <dd class="col-7">@Model.CandidateEmail</dd>
+            </dl>
+
+            <h6 class="text-secondary fw-bold mb-2"><i class="fa-solid fa-briefcase me-1"></i> Thông tin bài đăng</h6>
+            <dl class="row">
+                <dt class="col-5 text-muted">Vị trí tuyển:</dt>
+                <dd class="col-7">@Model.JobTitle</dd>
+
+                <dt class="col-5 text-muted">Mô tả công việc:</dt>
+                <dd class="col-7">@Model.JobDescription</dd>
+            </dl>
+        </div>
+        <div class="card-footer bg-light d-flex justify-content-end gap-2 rounded-bottom">
+            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+            </a>
+            <a asp-action="Edit" asp-route-id="@Model.IdSchedule" class="btn btn-primary px-4">
+                <i class="fa-solid fa-pen-to-square me-1"></i> Chỉnh sửa
+            </a>
+        </div>
+    </div>
+</div>

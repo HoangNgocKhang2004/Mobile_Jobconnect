@@ -1,0 +1,297 @@
+﻿@model List<HuitWorks.AdminWeb.Models.JobTransaction>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<link href="~/css/payment/index.css" rel="stylesheet" />
+
+<main class="container">
+
+    <div class="row mb-4">
+        <!-- Tổng doanh thu -->
+        <div class="col-md-3">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Tổng doanh thu
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @string.Format(
+                                     new System.Globalization.CultureInfo("vi-VN"),
+                                     "{0:C0}",
+                                     ViewBag.TotalRevenue
+                                     )
+                        </div>
+                        <p class="mb-0 text-muted">
+                            <i class="fas fa-arrow-up me-1 text-success"></i>
+                            Tăng 12.5% so với tháng trước
+                        </p>
+                    </div>
+                    <i class="fas fa-coins fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Giao dịch trong tháng -->
+        <div class="col-md-3">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Giao dịch trong tháng
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @ViewBag.MonthlyTransactions
+                        </div>
+                        <p class="mb-0 text-muted">
+                            <i class="fas fa-arrow-up me-1 text-success"></i>
+                            Tăng 8.3% so với tháng trước
+                        </p>
+                    </div>
+                    <i class="fas fa-handshake fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dịch vụ đang hoạt động -->
+        <div class="col-md-3">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Dịch vụ đang hoạt động
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @ViewBag.ActiveServices
+                        </div>
+                        <p class="mb-0 text-muted">
+                            <i class="fas fa-arrow-down me-1 text-danger"></i>
+                            Giảm 3.1% so với tháng trước
+                        </p>
+                    </div>
+                    <i class="fas fa-concierge-bell fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dịch vụ ngừng hoạt động -->
+        <div class="col-md-3">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Dịch vụ ngừng hoạt động
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @ViewBag.InactiveServices
+                        </div>
+                        <p class="mb-0 text-muted">
+                            <i class="fas fa-arrow-up me-1 text-warning"></i>
+                            Tăng nhẹ so với tháng trước
+                        </p>
+                    </div>
+                    <i class="fas fa-times-circle fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card">
+        @* <div class="card-header"> *@
+        @*     <h2>Lịch sử giao dịch</h2> *@
+        @*     <div> *@
+        @*         <button class="btn btn-outline"><i class="fas fa-filter"></i> Lọc</button> *@
+        @*     </div> *@
+        @* </div> *@
+        <div class="card-body">
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="status-filter">Trạng thái:</label>
+                    <select id="status-filter" class="form-select">
+                        <option value="all">Tất cả</option>
+                        <option value="completed">Hoàn thành</option>
+                        <option value="pending">Đang xử lý</option>
+                        <option value="failed">Thất bại</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="date-filter">Thời gian:</label>
+                    <select id="date-filter" class="form-select">
+                        <option value="all">Tất cả</option>
+                        <option value="today">Hôm nay</option>
+                        <option value="week">Tuần này</option>
+                        <option value="month">Tháng này</option>
+                        <option value="custom">Tùy chỉnh</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="search">Tìm kiếm:</label>
+                    <input type="text" id="search" class="form-input" placeholder="ID giao dịch, tên...">
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <div class="transaction-table-wrapper">
+                    <table class="transaction-table table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID Giao dịch</th>
+                                <th>Người dùng</th>
+                                <th>Gói dịch vụ</th>
+                                <th class="text-right">Số tiền</th>
+                                <th>Phương thức</th>
+                                <th>Ngày giao dịch</th>
+                                <th>Trạng thái</th>
+                                <th class="text-center">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var t in Model)
+                            {
+                                <tr>
+                                    <td class="text-muted">@t.IdTransaction</td>
+                                    <td><strong>@t.UserName</strong></td>
+                                    <td>@t.PackageName</td>
+                                    <td class="text-right text-success" style="font-weight:600;">@t.Amount.ToString("#,###") ₫</td>
+                                    <td>@t.PaymentMethod</td>
+                                    <td>@t.TransactionDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>
+                                        @switch (t.Status?.ToLower())
+                                        {
+                                            case "completed":
+                                                <span class="status-badge badge-success"><i class="fas fa-check-circle me-1"></i>Đã xác nhận</span>
+                                                ;
+                                                break;
+                                            case "pending":
+                                                <span class="status-badge badge-pending"><i class="fas fa-hourglass-half me-1"></i>Chờ xác nhận</span>
+                                                ;
+                                                break;
+                                            case "rejected":
+                                                <span class="status-badge badge-rejected"><i class="fas fa-ban me-1"></i>Đã từ chối</span>
+                                                ;
+                                                break;
+                                            default:
+                                                <span class="status-badge badge-rejected">Không xác định</span>
+                                                ;
+                                                break;
+                                        }
+                                    </td>
+                                    <td class="text-center" style="white-space: nowrap;">
+                                        @if (t.Status == "Pending")
+                                        {
+                                            <form asp-action="Confirm" asp-route-id="@t.IdTransaction" method="post" style="display:inline">
+                                                <button type="submit" class="btn btn-sm btn-success btn-action" title="Xác nhận" onclick="return confirm('Xác nhận giao dịch này?')">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            </form>
+                                            <form asp-action="Reject" asp-route-id="@t.IdTransaction" method="post" style="display:inline">
+                                                <button type="submit" class="btn btn-sm btn-danger btn-action" title="Từ chối" onclick="return confirm('Từ chối giao dịch này?')">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <div class="page-info">
+                        Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
+                    </div>
+
+                    <div class="page-buttons">
+                        @if ((int)ViewBag.CurrentPage > 1)
+                        {
+                            <a href="?page=@((int)ViewBag.CurrentPage - 1)" class="page-btn">
+                                <i class="fas fa-angle-left"></i>
+                            </a>
+                        }
+
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            if (i == 1 || i == ViewBag.TotalPages || (i >= ViewBag.CurrentPage - 1 && i <= ViewBag.CurrentPage + 1))
+                            {
+                                <a href="?page=@i" class="page-btn @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                            }
+                            else if (i == 2 || i == ViewBag.TotalPages - 1)
+                            {
+                                <span class="page-btn">...</span>
+                            }
+                        }
+
+                        @if ((int)ViewBag.CurrentPage < (int)ViewBag.TotalPages)
+                        {
+                            <a href="?page=@((int)ViewBag.CurrentPage + 1)" class="page-btn">
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Xử lý chọn phương thức thanh toán
+        const paymentMethods = document.querySelectorAll('.payment-method');
+        paymentMethods.forEach(method => {
+            method.addEventListener('click', function() {
+                paymentMethods.forEach(m => m.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Mô phỏng tương tác với form thanh toán
+        const checkoutButton = document.querySelector('.btn-checkout');
+        if (checkoutButton) {
+            checkoutButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Đang xử lý thanh toán...');
+            });
+        }
+
+        // Áp dụng mã giảm giá mẫu
+        const promoButton = document.querySelector('#promo_code + button');
+        if (promoButton) {
+            promoButton.addEventListener('click', function() {
+                const promoCode = document.querySelector('#promo_code').value;
+                if (promoCode === 'NEWUSER25') {
+                    alert('Áp dụng mã giảm giá thành công!');
+                } else {
+                    alert('Mã giảm giá không hợp lệ hoặc đã hết hạn.');
+                }
+            });
+        }
+
+        // Xử lý lọc giao dịch
+        const statusFilter = document.querySelector('#status-filter');
+        const dateFilter = document.querySelector('#date-filter');
+        if (statusFilter && dateFilter) {
+            statusFilter.addEventListener('change', filterTransactions);
+            dateFilter.addEventListener('change', filterTransactions);
+        }
+
+        function filterTransactions() {
+            // Mô phỏng lọc dữ liệu
+            console.log('Đang lọc theo:', statusFilter.value, dateFilter.value);
+            // Thực tế sẽ gọi API hoặc lọc dữ liệu ở đây
+        }
+    });
+</script>

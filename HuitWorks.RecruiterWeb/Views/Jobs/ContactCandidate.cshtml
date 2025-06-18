@@ -1,0 +1,143 @@
+﻿@model HuitWorks.RecruiterWeb.Models.ViewModel.ContactCandidateViewModel
+@{
+    ViewData["Title"] = "Liên hệ ứng viên";
+}
+
+<style>
+    :root {
+        --primary-color: #094174;
+        --primary-light: #125590;
+        --primary-dark: #062f54;
+        --accent-color: #f8f9fa;
+        --text-on-primary: #ffffff;
+    }
+
+    .contact-container {
+        max-width: 95%;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .page-header {
+        background-color: var(--primary-color);
+        color: var(--text-on-primary);
+        padding: 1.8rem 2rem;
+        border-radius: 6px 6px 0 0;
+        margin: -2rem -2rem 2rem -2rem;
+    }
+
+        .page-header h2 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+    .candidate-info {
+        background-color: var(--accent-color);
+        border-left: 4px solid var(--primary-color);
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border-radius: 4px;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: var(--primary-dark);
+    }
+
+    .form-control {
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(9, 65, 116, 0.25);
+        }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+    }
+
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary-light);
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        padding: 0.5rem 1.5rem;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+    .actions {
+        margin-top: 1.5rem;
+    }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="contact-container">
+        <div class="page-header mb-4">
+            <h2><i class="fas fa-envelope me-2"></i>Liên hệ ứng viên</h2>
+        </div>
+
+        <div class="candidate-info mb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-2"><strong>Ứng viên:</strong> @Model.CandidateName</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-2"><strong>Email:</strong> @Model.CandidateEmail</p>
+                </div>
+            </div>
+        </div>
+
+        <form asp-action="ContactCandidate" method="post">
+            <input type="hidden" asp-for="CandidateId" />
+            <input type="hidden" asp-for="CandidateName" />
+            <input type="hidden" asp-for="CandidateEmail" />
+
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="mb-4">
+                        <label asp-for="Subject" class="form-label">
+                            <i class="fas fa-heading me-2"></i>Tiêu đề
+                        </label>
+                        <input asp-for="Subject" class="form-control" placeholder="Nhập tiêu đề email" />
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Content" class="form-label">
+                            <i class="fas fa-align-left me-2"></i>Nội dung
+                        </label>
+                        <textarea asp-for="Content" class="form-control" rows="10" placeholder="Nhập nội dung email..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions d-flex justify-content-between mt-4">
+                <a asp-action="SavedApplications" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-arrow-left me-2"></i>Quay lại
+                </a>
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-paper-plane me-2"></i>Gửi email
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Thêm Font Awesome nếu chưa có trong layout -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>

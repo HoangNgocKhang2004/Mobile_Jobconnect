@@ -1,0 +1,221 @@
+﻿@model HuitWorks.RecruiterWeb.Models.ViewModel.CandidateResumeViewModel
+
+@{
+    ViewData["Title"] = "Xem CV ứng viên";
+}
+
+<style>
+    :root {
+        --primary-color: #094174;
+        --primary-light: #1a5a8c;
+        --primary-dark: #062e52;
+        --card-radius: 10px;
+        --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        --badge-bg: #094174;
+        --badge-color: #fff;
+    }
+
+    body {
+        background-color: #f4f6f9;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .page-header {
+        color: var(--primary-color);
+        margin-bottom: 30px;
+        font-size: 2rem;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+        .page-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+    .info-card {
+        border: none;
+        border-radius: var(--card-radius);
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+        .info-card .card-header {
+            background-color: var(--primary-color);
+            color: #fff;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 12px 20px;
+        }
+
+        .info-card .card-body {
+            padding: 20px;
+        }
+
+    .info-label {
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 6px;
+        display: block;
+        font-size: 0.9rem;
+    }
+
+    .info-value {
+        font-size: 0.95rem;
+        color: #333;
+        margin-bottom: 12px;
+    }
+
+    .skills-list .list-group-item {
+        border: none;
+        border-bottom: 1px solid #e9ecef;
+        padding: 10px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+    }
+
+        .skills-list .list-group-item:last-child {
+            border-bottom: none;
+        }
+
+    .skills-list .badge {
+        background-color: var(--badge-bg);
+        color: var(--badge-color);
+        font-size: 0.85rem;
+        padding: 5px 10px;
+    }
+
+    .pdf-container {
+        border: 1px solid #ddd;
+        border-radius: var(--card-radius);
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        margin-bottom: 30px;
+    }
+
+        .pdf-container h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+    .back-button {
+        background-color: var(--primary-color);
+        border: none;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: var(--card-radius);
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+
+        .back-button:hover {
+            background-color: var(--primary-light);
+            color: #fff;
+        }
+</style>
+
+<div class="container">
+    <h2 class="page-header">
+        <i class="fas fa-user-circle me-2"></i>Hồ sơ ứng viên: @Model.UserName
+    </h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card info-card">
+                <div class="card-header">Thông Tin Ứng Viên</div>
+                <div class="card-body">
+                    <span class="info-label">Tên:</span>
+                    <span class="info-value">@Model.UserName</span>
+
+                    <span class="info-label">Email:</span>
+                    <span class="info-value">@Model.Email</span>
+
+                    <span class="info-label">Vị trí ứng tuyển:</span>
+                    <span class="info-value">@Model.WorkPosition</span>
+
+                    <span class="info-label">Kinh nghiệm:</span>
+                    <span class="info-value">@Model.ExperienceYears năm</span>
+
+                    <span class="info-label">Học vấn:</span>
+                    <span class="info-value">@Model.EducationLevel – @Model.UniversityName</span>
+
+                    <span class="info-label">Kỹ năng (tóm tắt):</span>
+                    <span class="info-value">@Model.Skills</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card info-card">
+                <div class="card-header">Thông Tin CV</div>
+                <div class="card-body">
+                    <span class="info-label">Tên file CV:</span>
+                    <span class="info-value">@Model.FileName</span>
+
+                    <span class="info-label">Kích thước:</span>
+                    <span class="info-value">@Model.FileSizeKB KB</span>
+
+                    <span class="info-label">Mã hồ sơ (ID):</span>
+                    <span class="info-value">@Model.IdResume</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.SkillDetails != null && Model.SkillDetails.Any())
+    {
+        <div class="mb-4">
+            <h4 class="text-secondary mb-3">Chi tiết kỹ năng trong CV</h4>
+            <ul class="list-group skills-list">
+                @foreach (var sk in Model.SkillDetails)
+                {
+                    <li class="list-group-item">
+                        <span>@sk.Skill</span>
+                        <span class="badge">@sk.Proficiency %</span>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+
+    <hr />
+
+    @if (!string.IsNullOrEmpty(Model.FileUrl))
+    {
+        <div class="pdf-container">
+            <div class="p-3">
+                <h4>Xem trực tiếp CV (PDF)</h4>
+            </div>
+            <object data="@Model.FileUrl" type="application/pdf" width="100%" height="700px">
+                <p class="text-center mt-3">
+                    Trình duyệt của bạn không hỗ trợ nhúng PDF. Hoặc ứng viên chưa upload CV<br />
+                    Vui lòng <a href="@Model.FileUrl" target="_blank">tải CV tại đây</a>.
+                </p>
+            </object>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning mt-4">
+            Ứng viên chưa có CV để hiển thị.
+        </div>
+    }
+
+    <div class="text-center">
+        <a asp-action="Index" asp-controller="Candidates" class="back-button">
+            <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách ứng viên
+        </a>
+    </div>
+</div>

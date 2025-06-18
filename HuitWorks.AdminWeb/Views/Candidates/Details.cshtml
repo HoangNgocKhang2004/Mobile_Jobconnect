@@ -1,0 +1,227 @@
+﻿@model HuitWorks.AdminWeb.Models.ViewModels.CandidateInfoViewModel
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Ứng Viên - HuitWorks</title>
+    <link href="~/css/candidates/details.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Header with Breadcrumb -->
+    <div class="page-header">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i> Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="#">Quản lý ứng viên</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Chi tiết ứng viên</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        <!-- Heading Section -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0"><i class="fas fa-user-tie me-2"></i>Chi Tiết Ứng Viên</h2>
+            <div>
+                <a asp-action="ListCandidate" class="btn btn-outline-primary action-btn me-2">
+                    <i class="fas fa-arrow-left me-2"></i> Quay lại danh sách
+                </a>
+                <a href="#" class="btn btn-primary action-btn">
+                    <i class="fas fa-edit me-2"></i> Chỉnh sửa
+                </a>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Left Column - Profile Summary -->
+            <div class="col-lg-4 mb-4">
+                <div class="profile-sidebar">
+                    <div class="text-center">
+                        <div class="avatar-container">
+                            <img src="@(!string.IsNullOrEmpty(Model.User.AvatarUrl) ? Model.User.AvatarUrl : Url.Content("~/images/user.png"))"
+                                  alt="Avatar" class="avatar">
+                            <div class="status-badge"></div>
+                        </div>
+                        <h3 class="candidate-name">@Model.User.UserName</h3>
+                        <span class="active-status"><i class="fas fa-check-circle me-1"></i> Đang hoạt động</span>
+                        <p class="meta-info mt-2">Tham gia từ @(Model.User.CreatedAt)</p>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <div class="small text-muted">Email</div>
+                                <div>@Model.User.Email</div>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div>
+                                <div class="small text-muted">Số điện thoại</div>
+                                <div>@Model.User.PhoneNumber</div>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <div class="small text-muted">Địa chỉ</div>
+                                <div>@(string.IsNullOrEmpty(Model.User.Address) ? "Chưa cập nhật" : Model.User.Address)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        @if (!string.IsNullOrEmpty(Model.ResumeUrl))
+                        {
+                            <a href="@Model.ResumeUrl" target="_blank" class="btn btn-outline-primary w-100 mb-2">
+                                <i class="fas fa-file-alt me-2"></i> Xem CV
+                            </a>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-outline-secondary w-100 mb-2" disabled>
+                                <i class="fas fa-file-alt me-2"></i> Chưa có CV
+                            </button>
+                        }
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Right Column - Detailed Information -->
+            <div class="col-lg-8">
+                <!-- Personal Information -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <span class="header-icon"><i class="fas fa-info-circle"></i></span>
+                            Thông Tin Cá Nhân
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="info-list">
+                            <div class="info-item">
+                                <div class="info-label">Họ và tên:</div>
+                                <div class="info-value">@Model.User.UserName</div>
+                            </div>
+                            @* <div class="info-item"> *@
+                            @*     <div class="info-label">Ngày sinh:</div> *@
+                            @*     <div class="info-value">@(Model.User.DateOfBirth.HasValue ? Model.User.DateOfBirth.Value.ToString("dd/MM/yyyy") : "Chưa cập nhật")</div> *@
+                            @* </div> *@
+                            @* <div class="info-item"> *@
+                            @*     <div class="info-label">Giới tính:</div> *@
+                            @*     <div class="info-value">@(string.IsNullOrEmpty(Model.User.Gender) ? "Chưa cập nhật" : Model.User.Gender)</div> *@
+                            @* </div> *@
+                            <div class="info-item">
+                                <div class="info-label">Email:</div>
+                                <div class="info-value">@Model.User.Email</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Số điện thoại:</div>
+                                <div class="info-value">@Model.User.PhoneNumber</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Địa chỉ:</div>
+                                <div class="info-value">@(string.IsNullOrEmpty(Model.User.Address) ? "Chưa cập nhật" : Model.User.Address)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills & Experience -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <span class="header-icon"><i class="fas fa-briefcase"></i></span>
+                            Học vấn
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        @* <div class="info-section"> *@
+                        @*     <div class="section-title"> *@
+                        @*         <span class="section-icon"><i class="fas fa-code"></i></span> *@
+                        @*         Kỹ năng *@
+                        @*     </div> *@
+                        @*     <div class="skills-list"> *@
+                        @*         @if (Model.Skills != null && Model.Skills.Any()) *@
+                        @*         { *@
+                        @*             foreach (var skill in Model.Skills) *@
+                        @*             { *@
+                        @*                 <span class="skill-badge">@skill</span> *@
+                        @*             } *@
+                        @*         } *@
+                        @*         else *@
+                        @*         { *@
+                        @*             <p class="text-muted">Chưa cập nhật kỹ năng</p> *@
+                        @*         } *@
+                        @*     </div> *@
+                        @* </div> *@
+
+
+                        <div class="info-section">
+                            @* <div class="section-title"> *@
+                            @*     <span class="section-icon"><i class="fas fa-graduation-cap"></i></span> *@
+                            @*     Học vấn *@
+                            @* </div> *@
+                            <div class="info-list">
+                                <div class="info-item">
+                                    <div class="info-label">Học vấn:</div>
+                                    <div class="info-value">@(!string.IsNullOrEmpty(Model.UniversityName) ? Model.UniversityName : "Chưa cập nhật")</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Information -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <span class="header-icon"><i class="fas fa-cog"></i></span>
+                            Thông Tin Hệ Thống
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="info-list">
+                            <div class="info-item">
+                                <div class="info-label">ID:</div>
+                                <div class="info-value">@Model.IdUser</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Trạng thái:</div>
+                                <div class="info-value">
+                                    <span class="badge bg-success">Đang hoạt động</span>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Tạo lúc:</div>
+                                <div class="info-value">@Model.User.CreatedAt</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Cập nhật lúc:</div>
+                                @* <div class="info-value">@Model.User.UpdatedAt</div> *@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

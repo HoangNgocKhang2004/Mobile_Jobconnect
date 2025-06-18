@@ -1,0 +1,89 @@
+﻿@model List<HuitWorks.RecruiterWeb.Models.ViewModel.EvaluateSummaryViewModel>
+
+@{
+    ViewData["Title"] = "Danh sách đánh giá ứng viên";
+}
+
+<style>
+    .page-title {
+        color: #094174;
+        margin-bottom: 30px;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 15px;
+        font-size: 28px;
+    }
+
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: #094174;
+            border-radius: 2px;
+        }
+</style>
+
+<h2 class="page-title">@ViewData["Title"]</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Danh sách đánh giá ứng viên</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Công việc</th>
+                        <th scope="col">Ứng viên</th>
+                        <th scope="col">Trường</th>
+                        <th scope="col">Ngày đánh giá</th>
+                        <th scope="col" class="text-center">Thao tác</th>
+                        <th scope="col" class="text-center">Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        var e = Model[i];
+                        <tr>
+                            <th scope="row">@(@i + 1)</th>
+                            <td class="fw-semibold">@(!string.IsNullOrEmpty(e.JobTitle) ? e.JobTitle : e.IdJobPost)</td>
+                            <td>@(!string.IsNullOrEmpty(e.CandidateName) ? e.CandidateName : e.IdCandidate)</td>
+                            <td>
+                                @(!string.IsNullOrEmpty(e.UniversityName)
+                                    ? e.UniversityName
+                                    : "<em>Chưa cập nhật</em>")
+                            </td>
+                            <td>@e.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                            <td class="text-center">
+                                <a asp-action="Evaluate"
+                                   asp-route-idJobPost="@e.IdJobPost"
+                                   asp-route-idCandidate="@e.IdCandidate"
+                                   class="btn btn-sm btn-primary">
+                                    <i class="fas fa-pen-to-square me-1"></i>Đánh giá
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                @{
+                                    var badgeClass = e.Status switch
+                                    {
+                                        "Đã đánh giá" => "badge bg-success",
+                                        "Chưa xong" => "badge bg-warning text-dark",
+                                        "Chưa đánh giá" => "badge bg-secondary",
+                                        _ => "badge bg-light text-dark"
+                                    };
+                                }
+                                <span class="@badgeClass">@e.Status</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

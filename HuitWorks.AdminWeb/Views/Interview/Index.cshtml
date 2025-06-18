@@ -1,0 +1,251 @@
+﻿@model List<HuitWorks.AdminWeb.Models.ViewModels.InterviewScheduleViewModel>
+
+<link href="~/css/interview/index.css" rel="stylesheet" />
+
+<div class="container-fluid px-4">
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Tổng lịch phỏng vấn
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @ViewBag.TotalSchedules
+                        </div>
+                    </div>
+                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Đã phỏng vấn
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @ViewBag.InterviewedCount
+                        </div>
+                    </div>
+                    <i class="fas fa-search fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Đã chấp nhận
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @ViewBag.AcceptedCount
+                        </div>
+                    </div>
+                    <i class="fas fa-check fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Bị từ chối
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @ViewBag.RejectedCount
+                        </div>
+                    </div>
+                    <i class="fas fa-times fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Danh Sách Lịch Phỏng Vấn</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover shadow-sm rounded" id="dataTableInterviews" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Mã Lịch</th>
+                            <th class="text-center">Ngày Phỏng Vấn</th>
+                            <th class="text-center">Hình Thức</th>
+                            <th>Địa Điểm</th>
+                            <th>Người Phỏng Vấn</th>
+                            <th>Ghi Chú</th>
+                            <th class="text-center">Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var schedule in Model)
+                        {
+                            <tr>
+                                <td class="text-center">@schedule.IdSchedule</td>
+                                <td class="text-center">@schedule.InterviewDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td class="text-center">
+                                    @{
+                                        var mode = schedule.InterviewMode?.ToLower() ?? "";
+                                        var modeClass = mode switch
+                                        {
+                                            "online" => "badge-online",
+                                            "offline" => "badge-offline",
+                                            _ => "badge-default"
+                                        };
+                                    }
+                                    <span class="badge badge-mode @modeClass">
+                                        @schedule.InterviewMode
+                                    </span>
+                                </td>
+                                <td>@schedule.Location</td>
+                                <td>@schedule.Interviewer</td>
+                                <td class="note-cell">@schedule.Note</td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a asp-action="Details" asp-route-id="@schedule.IdSchedule"
+                                           class="btn btn-info btn-action" data-bs-toggle="tooltip" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@schedule.IdSchedule"
+                                           class="btn btn-warning btn-action" data-bs-toggle="tooltip" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-danger btn-action"
+                                                data-toggle="modal"
+                                                data-target="#deleteModal"
+                                                data-id="@schedule.IdSchedule"
+                                                data-bs-toggle="tooltip" title="Xóa lịch">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="pagination">
+                    <div class="page-info">
+                        Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
+                    </div>
+
+                    <div class="page-buttons">
+                        @if ((int)ViewBag.CurrentPage > 1)
+                        {
+                            <a href="?page=@((int)ViewBag.CurrentPage - 1)" class="page-btn">
+                                <i class="fas fa-angle-left"></i>
+                            </a>
+                        }
+
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            if (i == 1 || i == ViewBag.TotalPages || (i >= ViewBag.CurrentPage - 1 && i <= ViewBag.CurrentPage + 1))
+                            {
+                                <a href="?page=@i" class="page-btn @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                            }
+                            else if (i == 2 || i == ViewBag.TotalPages - 1)
+                            {
+                                <span class="page-btn">...</span>
+                            }
+                        }
+
+                        @if ((int)ViewBag.CurrentPage < (int)ViewBag.TotalPages)
+                        {
+                            <a href="?page=@((int)ViewBag.CurrentPage + 1)" class="page-btn">
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Xác Nhận Xóa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn xóa lịch phỏng vấn này không?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <form asp-action="Delete" method="post" id="deleteForm">
+                        <input type="hidden" name="id" id="deleteScheduleId" />
+                        <button type="submit" class="btn btn-danger">Xóa</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Kích hoạt tooltip Bootstrap 5 (nếu dùng BS5)
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            $('#dataTableInterviews').DataTable({
+                "language": {
+                    "sProcessing": "Đang xử lý...",
+                    "sLengthMenu": "Hiển thị _MENU_ dòng",
+                    "sZeroRecords": "Không tìm thấy dữ liệu",
+                    "sInfo": "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                    "sInfoEmpty": "Hiển thị 0 đến 0 trong tổng số 0 mục",
+                    "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Tìm kiếm:",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "Đầu",
+                        "sPrevious": "Trước",
+                        "sNext": "Tiếp",
+                        "sLast": "Cuối"
+                    }
+                }
+            });
+
+            // Delete modal handling
+            $('#deleteModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var scheduleId = button.data('id');
+                var modal = $(this);
+                modal.find('#deleteScheduleId').val(scheduleId);
+            });
+        });
+    </script>
+}

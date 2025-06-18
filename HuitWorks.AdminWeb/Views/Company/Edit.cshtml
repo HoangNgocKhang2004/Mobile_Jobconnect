@@ -1,0 +1,94 @@
+﻿@model HuitWorks.AdminWeb.Models.ViewModels.CompanyViewModel
+@{
+    ViewData["Title"] = "Sửa công ty";
+}
+
+<div class="container">
+    <div class="card shadow rounded">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="fas fa-building me-2"></i>@ViewData["Title"]</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post" autocomplete="off">
+                <input type="hidden" asp-for="IdCompany" />
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="CompanyName" class="form-label fw-semibold">Tên công ty <span class="text-danger">*</span></label>
+                        <input asp-for="CompanyName" class="form-control" required placeholder="Nhập tên công ty" />
+                        <span asp-validation-for="CompanyName" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Scale" class="form-label fw-semibold">Quy mô</label>
+                        <input asp-for="Scale" class="form-control" placeholder="Ví dụ: 50-100 nhân viên" />
+                        <span asp-validation-for="Scale" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-12">
+                        <label asp-for="Address" class="form-label fw-semibold">Địa chỉ</label>
+                        <input asp-for="Address" class="form-control" placeholder="Nhập địa chỉ công ty" />
+                        <span asp-validation-for="Address" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Industry" class="form-label fw-semibold">Lĩnh vực</label>
+                        <input asp-for="Industry" class="form-control" placeholder="Ví dụ: Công nghệ thông tin" />
+                        <span asp-validation-for="Industry" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="WebsiteUrl" class="form-label fw-semibold">Website</label>
+                        <input asp-for="WebsiteUrl" class="form-control" placeholder="https://yourcompany.com" />
+                        <span asp-validation-for="WebsiteUrl" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-12">
+                        <label asp-for="Description" class="form-label fw-semibold">Mô tả</label>
+                        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Giới thiệu công ty"></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="LogoCompany" class="form-label fw-semibold">Logo (URL)</label>
+                        <div class="input-group mb-2">
+                            <input asp-for="LogoCompany" class="form-control" placeholder="/images/logo.png hoặc URL logo..." />
+                            <span class="input-group-text"><i class="fas fa-image"></i></span>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.LogoCompany))
+                        {
+                            <div class="mb-2">
+                                <img src="@Model.LogoCompany" alt="Logo" style="max-height:50px; border-radius:8px; border:1px solid #eee;" />
+                            </div>
+                        }
+                        <span asp-validation-for="LogoCompany" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Status" class="form-label fw-semibold">Trạng thái</label>
+                        <select asp-for="Status" class="form-select">
+                            <option value="active">Đang hoạt động</option>
+                            <option value="inactive">Ngừng hoạt động</option>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="IsFeatured" class="form-label fw-semibold">Loại công ty</label>
+                        <select asp-for="IsFeatured" class="form-select">
+                            <option value="1">Nổi bật</option>
+                            <option value="0">Thường</option>
+                        </select>
+                        <span asp-validation-for="IsFeatured" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-end gap-2">
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="fas fa-save me-1"></i> Lưu thay đổi
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary px-4">
+                        <i class="fas fa-arrow-left me-1"></i> Quay lại
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

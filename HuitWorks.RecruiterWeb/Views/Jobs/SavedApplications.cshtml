@@ -1,0 +1,758 @@
+﻿@model IEnumerable<HuitWorks.RecruiterWeb.Models.ViewModel.SavedResumeViewModel>
+
+@{
+    ViewData["Title"] = "Hồ sơ đã lưu";
+}
+
+<style>
+    :root {
+        --primary-color: #094174;
+        --primary-light: #1a5990;
+        --primary-lighter: #e8f0f7;
+        --primary-dark: #063056;
+        --accent-color: #2a93d5;
+        --text-light: #ffffff;
+        --text-dark: #333333;
+        --text-gray: #6c757d;
+        --border-color: #dee2e6;
+        --hover-color: #0b4e8a;
+        --background-light: #f8f9fa;
+        --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.1);
+        --border-radius: 8px;
+        --transition-normal: all 0.3s ease;
+    }
+
+    body {
+        font-family: 'Roboto', 'Segoe UI', sans-serif;
+        color: var(--text-dark);
+        background-color: #f5f7fa;
+    }
+
+    .page-title {
+        color: var(--primary-color);
+        margin-bottom: 30px;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 15px;
+        font-size: 28px;
+    }
+
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+    /* Filter Section Styles */
+    .filter-section {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: var(--border-radius);
+        margin-bottom: 25px;
+        box-shadow: var(--shadow-sm);
+        border-left: 4px solid var(--primary-color);
+    }
+
+    .filter-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .filter-item {
+        flex: 1;
+        min-width: 200px;
+    }
+
+        .filter-item label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--primary-color);
+            font-size: 14px;
+        }
+
+        .filter-item select,
+        .filter-item input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            transition: var(--transition-normal);
+            background-color: #fff;
+        }
+
+            .filter-item select:focus,
+            .filter-item input:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(9, 65, 116, 0.15);
+            }
+
+    .filter-actions {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+        gap: 10px;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border: none;
+        color: var(--text-light);
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: var(--transition-normal);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .btn-primary:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+    .btn-reset {
+        background-color: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text-gray);
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: var(--transition-normal);
+    }
+
+        .btn-reset:hover {
+            background-color: #f0f0f0;
+            color: var(--text-dark);
+        }
+
+    /* Application Card Styles */
+    .applications-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+    }
+
+    .application-card {
+        border-radius: var(--border-radius);
+        background-color: #fff;
+        overflow: hidden;
+        transition: var(--transition-normal);
+        position: relative;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        flex-direction: column;
+    }
+
+        .application-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-light);
+        }
+
+    .card-bookmark {
+        position: absolute;
+        top: 0;
+        right: 20px;
+        background-color: var(--primary-color);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 0 0 8px 8px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .card-header {
+        background-color: #094174;
+        padding: 20px;
+        position: relative;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .applicant-name {
+        font-size: 20px;
+        font-weight: 600;
+        color: white;
+        margin: 0 0 5px 0;
+        line-height: 1.3;
+    }
+
+    .applicant-position {
+        color: white;
+        font-size: 14px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .card-body {
+        padding: 20px;
+        flex: 1;
+    }
+
+    .info-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 15px 0;
+    }
+
+    .info-item {
+        display: flex;
+        margin-bottom: 12px;
+        font-size: 14px;
+        align-items: flex-start;
+    }
+
+        .info-item i {
+            color: var(--primary-color);
+            width: 20px;
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+
+    .info-label {
+        font-weight: 500;
+        color: var(--text-gray);
+        width: 100px;
+        flex-shrink: 0;
+    }
+
+    .info-value {
+        flex: 1;
+        color: var(--text-dark);
+    }
+
+    /* Skills Section */
+    .skills-section {
+        margin-top: 20px;
+    }
+
+    .skills-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-gray);
+        margin-bottom: 10px;
+    }
+
+    .skills-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .skill-badge {
+        background-color: var(--primary-lighter);
+        color: var(--primary-color);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+        display: inline-block;
+        transition: var(--transition-normal);
+    }
+
+        .skill-badge:hover {
+            background-color: var(--primary-light);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+    /* Card Footer */
+    .card-footer {
+        padding: 15px 20px;
+        background-color: #fafafa;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .saved-date {
+        color: var(--text-gray);
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    /* Action Buttons */
+    .card-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .btn-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 15px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition-normal);
+        border: none;
+        text-decoration: none;
+        flex: 1;
+    }
+
+    .btn-view {
+        background-color: var(--primary-color);
+        color: var(--text-light);
+    }
+
+        .btn-view:hover {
+            background-color: var(--primary-dark);
+        }
+
+    .btn-contact {
+        background-color: #28a745;
+        color: var(--text-light);
+    }
+
+        .btn-contact:hover {
+            background-color: #218838;
+        }
+
+    .btn-remove {
+        background-color: #dc3545;
+        color: var(--text-light);
+    }
+
+        .btn-remove:hover {
+            background-color: #c82333;
+        }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        background-color: #fff;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .empty-state-icon {
+        font-size: 60px;
+        color: var(--primary-color);
+        opacity: 0.3;
+        margin-bottom: 20px;
+    }
+
+    .empty-state-text {
+        font-size: 18px;
+        color: var(--text-gray);
+        margin-bottom: 25px;
+    }
+
+    .btn-add {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background-color: var(--primary-color);
+        color: var(--text-light);
+        padding: 12px 25px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition-normal);
+    }
+
+        .btn-add:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-2px);
+        }
+
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+        animation: fadeIn 0.3s;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 80px auto;
+        max-width: 500px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+        animation: slideDown 0.3s;
+    }
+
+    .modal-header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 20px;
+        position: relative;
+    }
+
+    .modal-title {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .close-modal {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        color: white;
+        opacity: 0.7;
+        font-size: 24px;
+        cursor: pointer;
+        transition: var(--transition-normal);
+    }
+
+        .close-modal:hover {
+            opacity: 1;
+        }
+
+    .modal-body {
+        padding: 25px;
+    }
+
+        .modal-body p {
+            margin-top: 0;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+    .modal-footer {
+        padding: 20px;
+        background-color: #f8f9fa;
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+    }
+
+    .btn-cancel {
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        color: var(--text-gray);
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: var(--transition-normal);
+    }
+
+        .btn-cancel:hover {
+            background-color: #e9ecef;
+        }
+
+    .btn-confirm {
+        background-color: #dc3545;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: var(--transition-normal);
+    }
+
+        .btn-confirm:hover {
+            background-color: #c82333;
+        }
+
+    .nav-dropdown > .nav-link::after {
+        color: gray;
+    }
+</style>
+
+<div class="saved-applications-container">
+    <h2 class="page-title">Hồ sơ đã lưu</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="far fa-folder-open"></i>
+            </div>
+            <p class="empty-state-text">Bạn chưa lưu hồ sơ ứng viên nào.</p>
+            <a href="/Candidates/Index" class="btn-add">
+                <i class="fas fa-search"></i> Tìm ứng viên ngay
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="filter-section">
+            <div class="filter-row">
+                <div class="filter-item">
+                    <label for="positionFilter">Vị trí ứng tuyển</label>
+                    <select id="positionFilter" class="form-control">
+                        <option value="">Tất cả vị trí</option>
+                        @foreach (var pos in Model.Select(m => m.WorkPosition).Distinct().Where(p => !string.IsNullOrEmpty(p)))
+                        {
+                            <option value="@pos">@pos</option>
+                        }
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="experienceFilter">Kinh nghiệm</label>
+                    <select id="experienceFilter" class="form-control">
+                        <option value="">Tất cả kinh nghiệm</option>
+                        <option value="fresher">Mới tốt nghiệp</option>
+                        <option value="junior">1-2 năm</option>
+                        <option value="middle">3-5 năm</option>
+                        <option value="senior">Trên 5 năm</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="searchKeyword">Từ khóa tìm kiếm</label>
+                    <input type="text" id="searchKeyword" class="form-control" placeholder="Nhập tên, kỹ năng hoặc từ khóa">
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button class="btn-primary" id="btnApplyFilter">
+                    <i class="fas fa-filter"></i> Lọc kết quả
+                </button>
+                <button class="btn-reset" id="btnResetFilter">
+                    <i class="fas fa-undo"></i> Đặt lại
+                </button>
+            </div>
+        </div>
+
+        <div class="applications-grid" id="savedApplicationsList">
+            @foreach (var item in Model)
+            {
+                <div class="application-card" data-id="@item.CandidateId" data-name="@item.CandidateName" data-email="@item.CandidateEmail">
+                    <div class="card-bookmark">
+                        <i class="fas fa-bookmark"></i> Đã lưu
+                    </div>
+                    <div class="card-header">
+                        <h3 class="applicant-name">@item.CandidateName</h3>
+                        <div class="applicant-position">
+                            <i class="fas fa-briefcase"></i> @item.WorkPosition
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="info-list">
+                            <li class="info-item">
+                                <i class="fas fa-history"></i>
+                                <span class="info-label">Kinh nghiệm:</span>
+                                <span class="info-value">@item.ExperienceYears năm</span>
+                            </li>
+                            <li class="info-item">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span class="info-label">Học vấn:</span>
+                                <span class="info-value">@item.Education</span>
+                            </li>
+                        </ul>
+
+                        @if (!string.IsNullOrEmpty(item.Skills))
+                        {
+                            <div class="skills-section">
+                                <div class="skills-title">Kỹ năng chuyên môn:</div>
+                                <div class="skills-badges">
+                                    @foreach (var skill in item.Skills.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                                    {
+                                        <span class="skill-badge">@skill.Trim()</span>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <div class="card-actions">
+                            <a class="btn-action btn-view" href="/Candidates/DetailCandidate/@item.CandidateId">
+                                <i class="fas fa-eye"></i> Xem
+                            </a>
+
+                            <a class="btn-action btn-contact" href="/Jobs/ContactCandidate/@item.CandidateId">
+                                <i class="fas fa-envelope"></i> Liên hệ
+                            </a>
+                            <button class="btn-action btn-remove" data-id="@item.IdSave" data-name="@item.CandidateName">
+                                <i class="fas fa-trash-alt"></i> Bỏ lưu
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="saved-date">
+                            <i class="far fa-calendar-alt"></i> Đã lưu: @item.SavedAt.ToString("dd/MM/yyyy")
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<!-- Modal Xác Nhận Xóa -->
+<div id="removeModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Xác nhận bỏ lưu</h3>
+            <span class="close-modal" data-modal="removeModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Bạn có chắc chắn muốn bỏ lưu hồ sơ của <strong id="removeApplicantName"></strong>?</p>
+            <p>Hành động này không thể hoàn tác.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-confirm" id="confirmRemove">Xác nhận bỏ lưu</button>
+            <button class="btn-cancel" data-modal="removeModal">Hủy</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            // Khi bấm nút "Bỏ lưu" → mở modal xác nhận
+            $(document).on('click', '.btn-remove', function () {
+                const idSave = $(this).data('id');
+                const name = $(this).data('name');
+
+                $('#removeApplicantName').text(name);
+                $('#confirmRemove').data('id', idSave);
+
+                $('#removeModal').fadeIn(300);
+            });
+
+            // Khi xác nhận bỏ lưu
+            $('#confirmRemove').click(function () {
+                const idSave = $(this).data('id');
+
+                $.ajax({
+                    url: '/Jobs/Remove?idSave=' + idSave,
+                    method: 'DELETE',
+                    success: function (res) {
+                        if (res.success) {
+                            $(`.btn-remove[data-id="${idSave}"]`).closest('.application-card').fadeOut(300, function() {
+                                $(this).remove();
+
+                                // Kiểm tra nếu không còn hồ sơ nào
+                                if ($('.application-card').length === 0) {
+                                    $('.applications-grid').html(`
+                                        <div class="empty-state">
+                                            <div class="empty-state-icon">
+                                                <i class="far fa-folder-open"></i>
+                                            </div>
+                                            <p class="empty-state-text">Bạn chưa lưu hồ sơ ứng viên nào.</p>
+                                            <a href="/Jobs" class="btn-add">
+                                                <i class="fas fa-search"></i> Tìm ứng viên ngay
+                                            </a>
+                                        </div>
+                                    `);
+                                }
+                            });
+                            $('#removeModal').fadeOut(300);
+                        } else {
+                            alert("Xóa không thành công. Vui lòng thử lại.");
+                        }
+                    },
+                    error: function () {
+                        alert("Có lỗi xảy ra khi xóa.");
+                    }
+                });
+            });
+
+            // Đóng modal
+            $(document).on('click', '.close-modal, .btn-cancel', function () {
+                const modalId = $(this).data('modal');
+                $('#' + modalId).fadeOut(300);
+            });
+
+            $(window).click(function (e) {
+                if ($(e.target).hasClass('modal')) {
+                    $(e.target).fadeOut(300);
+                }
+            });
+
+            // Lọc kết quả
+            $('#btnApplyFilter').click(function() {
+                const position = $('#positionFilter').val().toLowerCase();
+                const experience = $('#experienceFilter').val().toLowerCase();
+                const keyword = $('#searchKeyword').val().toLowerCase();
+
+                $('.application-card').each(function() {
+                    let visible = true;
+                    const card = $(this);
+
+                    if (position && !card.find('.applicant-position').text().toLowerCase().includes(position)) {
+                        visible = false;
+                    }
+
+                    // Xử lý lọc theo kinh nghiệm
+                    if (experience) {
+                        const expYears = parseInt(card.find('.info-value').first().text());
+                        if (experience === 'fresher' && expYears > 0) visible = false;
+                        if (experience === 'junior' && (expYears < 1 || expYears > 2)) visible = false;
+                        if (experience === 'middle' && (expYears < 3 || expYears > 5)) visible = false;
+                        if (experience === 'senior' && expYears <= 5) visible = false;
+                    }
+
+                    // Xử lý tìm kiếm theo keyword
+                    if (keyword) {
+                        const cardText = card.text().toLowerCase();
+                        if (!cardText.includes(keyword)) visible = false;
+                    }
+
+                    // Hiển thị hoặc ẩn card
+                    if (visible) {
+                        card.fadeIn(300);
+                    } else {
+                        card.fadeOut(300);
+                    }
+                });
+
+                // Kiểm tra nếu không có kết quả nào
+                setTimeout(function() {
+                    if ($('.application-card:visible').length === 0) {
+                        if ($('#noResultsMessage').length === 0) {
+                            $('.applications-grid').append(`
+                                <div id="noResultsMessage" class="empty-state" style="grid-column: 1 / -1;">
+                                    <div class="empty-state-icon">
+                                        <i class="fas fa-search"></i>
+                                    </div>
+                                    <p class="empty-state-text">Không tìm thấy hồ sơ phù hợp với tiêu chí tìm kiếm.</p>
+                                </div>
+                            `);
+                        }
+                    } else {
+                        $('#noResultsMessage').remove();
+                    }
+                }, 400);
+            });
+
+            // Đặt lại bộ lọc
+            $('#btnResetFilter').click(function() {
+                $('#positionFilter').val('');
+                $('#experienceFilter').val('');
+                $('#searchKeyword').val('');
+                $('.application-card').fadeIn(300);
+                $('#noResultsMessage').remove();
+            });
+        });
+    </script>
+}

@@ -1,0 +1,14 @@
+﻿@model HuitWorks.RecruiterWeb.Models.ViewModel.JobTransactionDetailViewModel
+@{
+    ViewData["Title"] = "Chi tiết giao dịch";
+}
+
+<h3>Chi tiết giao dịch: @Model.IdTransaction</h3>
+<table class="table">
+    <tr><th>Số tiền:</th><td>@Model.AmountFormatted</td></tr>
+    <tr><th>Bằng chữ:</th><td>@Model.AmountInWords</td></tr>
+    <tr><th>Người gửi:</th><td>@Model.SenderName (@Model.SenderBank)</td></tr>
+    <tr><th>Người nhận:</th><td>@Model.ReceiverName (@Model.ReceiverBank)</td></tr>
+    <tr><th>Nội dung:</th><td>@Model.Content</td></tr>
+    <tr><th>Phí:</th><td>@Model.Fee</td></tr>
+</table>

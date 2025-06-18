@@ -1,0 +1,48 @@
+﻿@model HuitWorks.AdminWeb.Models.ReportDto
+
+@{
+    ViewData["Title"] = "Report Details";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+<dl class="row">
+    <dt class="col-sm-3">Report ID</dt>
+    <dd class="col-sm-9">@Model.ReportId</dd>
+
+    <dt class="col-sm-3">User ID</dt>
+    <dd class="col-sm-9">@Model.UserId</dd>
+
+    <dt class="col-sm-3">Report Type</dt>
+    <dd class="col-sm-9">
+        @if (Model.ReportType != null)
+        {
+            @Model.ReportType.Name
+        }
+        else
+        {
+            <span class="text-muted">N/A</span>
+        }
+    </dd>
+
+    <dt class="col-sm-3">Title</dt>
+    <dd class="col-sm-9">@Model.Title</dd>
+
+    <dt class="col-sm-3">Content</dt>
+    <dd class="col-sm-9">@Model.Content</dd>
+
+    <dt class="col-sm-3">Created At</dt>
+    <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")</dd>
+
+    <dt class="col-sm-3">Updated At</dt>
+    <dd class="col-sm-9">@Model.UpdatedAt.ToString("dd/MM/yyyy HH:mm:ss")</dd>
+</dl>
+
+<a asp-action="Report" class="btn btn-secondary">Back to List</a>

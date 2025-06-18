@@ -1,0 +1,404 @@
+﻿@model HuitWorks.AdminWeb.Models.ViewModels.ServicePackageViewModel
+@{
+    ViewData["Title"] = "Quản lý gói dịch vụ";
+}
+
+<link href="~/css/subscription/index.css" rel="stylesheet" />
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Tổng số gói dịch vụ
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.ServicePackages.Count</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-box-open fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Gói đang hoạt động
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Model.ServicePackages.Count(p => p.IsActive)
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Gói có giá cao nhất
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @(Model.ServicePackages.Any() ? Model.ServicePackages.Max(p => p.Price).ToString("#,###") + " VNĐ" : "0 VNĐ")
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-medal fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                Gói bị vô hiệu hóa
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Model.ServicePackages.Count(p => !p.IsActive)
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-times-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Danh sách gói dịch vụ</h6>
+                    <a href="/subscription/create" class="btn btn-primary">
+                         <i class="fas fa-plus"></i> Thêm gói dịch vụ mới
+                     </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div class="service-table-wrapper">
+                            <table class="table table-hover mb-0" id="servicePackagesTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tên gói</th>
+                                        <th>Giá (VNĐ)</th>
+                                        <th>Thời hạn<br>(ngày)</th>
+                                        <th>Tin đăng</th>
+                                        <th>CV xem</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var package in Model.ServicePackages)
+                                    {
+                                        <tr>
+                                            <td class="text-muted" style="max-width:80px;word-break:break-all;">@package.Id</td>
+                                            <td>
+                                                <strong>@package.Name</strong>
+                                                <div class="small text-muted">@package.Description</div>
+                                            </td>
+                                            <td class="text-end text-success" style="font-weight:600">@package.Price.ToString("#,###")</td>
+                                            <td class="text-center">@package.Duration</td>
+                                            <td class="text-center">@package.JobPostLimit</td>
+                                            <td class="text-center">@package.CVViewLimit</td>
+                                            <td>@package.CreatedDate.ToString("dd/MM/yyyy")</td>
+                                            <td class="text-center">
+                                                @if (package.IsActive)
+                                                {
+                                                    <span class="service-badge badge-active"><i class="fas fa-check-circle me-1"></i>Đang hoạt động</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="service-badge badge-inactive"><i class="fas fa-times-circle me-1"></i>Đã vô hiệu</span>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="d-inline-flex align-items-center">
+                                                    <form asp-action="ToggleStatus" asp-route-id="@package.Id" method="post" class="toggle-status-form me-1">
+                                                        @if (package.IsActive)
+                                                        {
+                                                            <button type="submit" class="btn btn-sm btn-success btn-action" title="Nhấn để vô hiệu hóa">
+                                                                <i class="fas fa-check-circle"></i>
+                                                            </button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button type="submit" class="btn btn-sm btn-secondary btn-action" title="Nhấn để kích hoạt">
+                                                                <i class="fas fa-times-circle"></i>
+                                                            </button>
+                                                        }
+                                                    </form>
+                                                    <a href="@Url.Action("Edit", new { id = package.Id })" class="btn btn-sm btn-primary btn-action" title="Chỉnh sửa">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pagination">
+                            <div class="page-info">
+                                Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
+                            </div>
+
+                            <div class="page-buttons">
+                                @if ((int)ViewBag.CurrentPage > 1)
+                                {
+                                    <a href="?page=@((int)ViewBag.CurrentPage - 1)" class="page-btn">
+                                        <i class="fas fa-angle-left"></i>
+                                    </a>
+                                }
+
+                                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                                {
+                                    if (i == 1 || i == ViewBag.TotalPages || (i >= ViewBag.CurrentPage - 1 && i <= ViewBag.CurrentPage + 1))
+                                    {
+                                        <a href="?page=@i" class="page-btn @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                                    }
+                                    else if (i == 2 || i == ViewBag.TotalPages - 1)
+                                    {
+                                        <span class="page-btn">...</span>
+                                    }
+                                }
+
+                                @if ((int)ViewBag.CurrentPage < (int)ViewBag.TotalPages)
+                                {
+                                    <a href="?page=@((int)ViewBag.CurrentPage + 1)" class="page-btn">
+                                        <i class="fas fa-angle-right"></i>
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Service Package Modal -->
+<div class="modal fade" id="addServicePackageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form asp-action="Create" method="post" id="createPackageForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thêm gói dịch vụ mới</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="NewPackage.Name"></label>
+                        <input asp-for="NewPackage.Name" class="form-control" />
+                        <span asp-validation-for="NewPackage.Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="NewPackage.Description"></label>
+                        <textarea asp-for="NewPackage.Description" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="NewPackage.Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label asp-for="NewPackage.Price"></label>
+                            <input asp-for="NewPackage.Price" class="form-control" />
+                            <span asp-validation-for="NewPackage.Price" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="NewPackage.Duration"></label>
+                            <input asp-for="NewPackage.Duration" class="form-control" />
+                            <span asp-validation-for="NewPackage.Duration" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="NewPackage.IsActive"></label>
+                            <select asp-for="NewPackage.IsActive" class="form-control">
+                                <option value="true">Kích hoạt</option>
+                                <option value="false">Vô hiệu hóa</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label asp-for="NewPackage.JobPostLimit"></label>
+                            <input asp-for="NewPackage.JobPostLimit" class="form-control" />
+                            <span asp-validation-for="NewPackage.JobPostLimit" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="NewPackage.CVViewLimit"></label>
+                            <input asp-for="NewPackage.CVViewLimit" class="form-control" />
+                            <span asp-validation-for="NewPackage.CVViewLimit" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu gói dịch vụ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container for Notifications -->
+<div id="toast-container" class="toast-top-right"></div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <!-- Include Toastr CSS and JS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Khởi tạo DataTable
+            $('#servicePackagesTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Vietnamese.json'
+                },
+                "order": [[0, "desc"]]
+            });
+
+            // Toastr configuration
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            // Check if success message exists in TempData and show toast
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <text>
+                    toastr.success('@TempData["SuccessMessage"]');
+            </text>
+        }
+
+            // Handle toggle status form submission via AJAX
+            $('.toggle-status-form').submit(function(e) {
+                e.preventDefault();
+
+                var form = $(this);
+                var url = form.attr('action');
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: form.serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            // Show success toast
+                            toastr.success(response.message);
+
+                            // Update button state without page reload
+                            var button = form.find('button');
+                            if (button.hasClass('btn-success')) {
+                                button.removeClass('btn-success').addClass('btn-secondary');
+                                button.html('<i class="fas fa-times-circle"></i> Đã vô hiệu');
+                                button.attr('title', 'Nhấn để kích hoạt');
+                            } else {
+                                button.removeClass('btn-secondary').addClass('btn-success');
+                                button.html('<i class="fas fa-check-circle"></i> Đang hoạt động');
+                                button.attr('title', 'Nhấn để vô hiệu hóa');
+                            }
+
+                            // Update counters
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        } else {
+                            toastr.error(response.message || 'Có lỗi xảy ra');
+                        }
+                    },
+                    error: function() {
+                        toastr.error('Có lỗi xảy ra khi xử lý yêu cầu');
+                    }
+                });
+            });
+
+            // Submit create form via AJAX
+            $('#createPackageForm').submit(function(e) {
+                e.preventDefault();
+
+                var form = $(this);
+                var url = form.attr('action');
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: form.serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            // Show success toast
+                            toastr.success(response.message || 'Thêm gói dịch vụ thành công');
+
+                            // Close modal and reload page
+                            $('#addServicePackageModal').modal('hide');
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        } else {
+                            toastr.error(response.message || 'Có lỗi xảy ra khi thêm gói dịch vụ');
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.responseJSON && xhr.responseJSON.errors) {
+                            // Display validation errors
+                            var errors = xhr.responseJSON.errors;
+                            for (var key in errors) {
+                                toastr.error(errors[key]);
+                            }
+                        } else {
+                            toastr.error('Có lỗi xảy ra khi xử lý yêu cầu');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

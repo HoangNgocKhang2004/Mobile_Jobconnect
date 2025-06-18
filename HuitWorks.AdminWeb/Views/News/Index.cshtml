@@ -1,0 +1,214 @@
+﻿@model List<HuitWorks.AdminWeb.Models.News>
+
+<link href="~/css/news/index.css" rel="stylesheet" />
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    
+    <!-- Main content -->
+    <div class="flex-grow-1">
+        <!-- Top navbar -->
+        
+        <div class="content">
+            <div class="row mb-4">
+                <!-- Tổng số tin tức -->
+                <div class="col-md-3">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Tổng số tin tức</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">128 tin</div>
+                                <p class="mb-0 text-muted"><i class="fas fa-arrow-up me-1"></i>12% trong tháng này</p>
+                            </div>
+                            <i class="fas fa-newspaper fa-2x text-gray-300"></i> <!-- Đổi icon từ fa-file-alt sang fa-newspaper -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tin đã xuất bản -->
+                <div class="col-md-3">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Đã xuất bản</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">96 tin</div>
+                                <div class="stat-card-desc text-muted">Đang hiển thị công khai</div>
+                            </div>
+                            <i class="fas fa-eye fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tin chờ duyệt -->
+                <div class="col-md-3">
+                    <div class="card border-left-warning shadow h-100 py-2">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Chờ duyệt</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">18 tin</div>
+                                <div class="stat-card-desc text-muted">Chưa được phê duyệt</div>
+                            </div>
+                            <i class="fas fa-hourglass-half fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tin nháp / từ chối -->
+                <div class="col-md-3">
+                    <div class="card border-left-danger shadow h-100 py-2">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Bản nháp</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">14 tin</div>
+                                <div class="stat-card-desc text-muted">Lưu tạm hoặc bị từ chối</div>
+                            </div>
+                            <i class="fas fa-edit fa-2x text-gray-300"></i> <!-- Đổi icon từ fa-ban sang fa-edit -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Filters -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form class="row g-3">
+                        <div class="col-md-3">
+                            <select class="form-select" aria-label="Lọc theo danh mục">
+                                <option selected>-- Tất cả danh mục --</option>
+                                <option value="1">Tin tức ứng viên</option>
+                                <option value="2">Tin tức nhà tuyển dụng</option>
+                                <option value="3">Mẹo phỏng vấn</option>
+                                <option value="4">Kinh nghiệm làm việc</option>
+                                <option value="5">Sự kiện</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" aria-label="Lọc theo trạng thái">
+                                <option selected>-- Tất cả trạng thái --</option>
+                                <option value="1">Đã xuất bản</option>
+                                <option value="2">Chờ duyệt</option>
+                                <option value="3">Bản nháp</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Tìm kiếm theo tiêu đề...">
+                                <button class="btn btn-outline-secondary" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- News table -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>Danh sách tin tức</div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNewsModal">
+                        <i class="fas fa-plus me-1"></i> Thêm tin tức mới
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <div class="news-table-wrapper">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th width="50">#</th>
+                                        <th width="80">Hình ảnh</th>
+                                        <th>Tiêu đề</th>
+                                        <th>Danh mục</th>
+                                        <th>Tác giả</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Trạng thái</th>
+                                        <th width="150">Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td class="text-muted">@item.idNews</td>
+                                            <td>
+                                                <img src="@item.ImageUrl" class="news-image" alt="Tin tức">
+                                            </td>
+                                            <td><strong>@item.Title</strong></td>
+                                            <td>
+                                                <span class="badge category-badge">@item.CategoryName</span>
+                                            </td>
+                                            <td>@item.Author</td>
+                                            <td>@item.PublishDate</td>
+                                            <td style="text-wrap: nowrap;">
+                                                @if (item.IsPublished)
+                                                {
+                                                    <span class="status-badge bg-success">Đã xuất bản</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="status-badge bg-secondary">Nháp</span>
+                                                }
+                                            </td>
+                                            <td class="table-actions">
+                                                <a href="/news/details/@item.idNews" class="btn btn-sm btn-outline-primary" title="Xem">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="/news/edit/@item.idNews" class="btn btn-sm btn-outline-warning ms-1" title="Sửa">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="#" class="btn btn-sm btn-outline-danger ms-1" title="Xóa">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="pagination">
+                            <div class="page-info">
+                                Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
+                            </div>
+
+                            <div class="page-buttons">
+                                @if ((int)ViewBag.CurrentPage > 1)
+                                {
+                                    <a href="?page=@((int)ViewBag.CurrentPage - 1)" class="page-btn">
+                                        <i class="fas fa-angle-left"></i>
+                                    </a>
+                                }
+
+                                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                                {
+                                    if (i == 1 || i == ViewBag.TotalPages || (i >= ViewBag.CurrentPage - 1 && i <= ViewBag.CurrentPage + 1))
+                                    {
+                                        <a href="?page=@i" class="page-btn @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                                    }
+                                    else if (i == 2 || i == ViewBag.TotalPages - 1)
+                                    {
+                                        <span class="page-btn">...</span>
+                                    }
+                                }
+
+                                @if ((int)ViewBag.CurrentPage < (int)ViewBag.TotalPages)
+                                {
+                                    <a href="?page=@((int)ViewBag.CurrentPage + 1)" class="page-btn">
+                                        <i class="fas fa-angle-right"></i>
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>

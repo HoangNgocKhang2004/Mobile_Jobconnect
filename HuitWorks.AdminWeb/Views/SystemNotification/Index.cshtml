@@ -1,0 +1,159 @@
+﻿@model List<HuitWorks.AdminWeb.Models.ViewModels.NotificationViewModel>
+
+@{
+}
+
+<link href="~/css/systemnotification/index.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="main-content" style="margin-left: 0px !important; padding: 10px !important;">
+        <div class="row mb-4">
+            <!-- Tổng số tài khoản -->
+            <div class="col-md-3">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Tổng số thông báo</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count()</div>
+                        </div>
+                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tài khoản chờ xác thực -->
+            <div class="col-md-3">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Thông báo đã gửi</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">...</div>
+                        </div>
+                        <i class="fas fa-user-clock fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nhà tuyển dụng -->
+            <div class="col-md-3">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Thông báo đã lên lịch</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">...</div>
+                        </div>
+                        <i class="fas fa-building fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dịch vụ đã sử dụng -->
+            <div class="col-md-3">
+                <div class="card border-left-danger shadow h-100 py-2">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Thông báo chờ xử lý</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">...</div>
+                        </div>
+                        <i class="fas fa-concierge-bell fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Danh sách thông báo</h2>
+                <a href="/systemnotification/create" class="btn btn-info"><i class="fa-solid fa-user-plus"></i>  Tạo thông báo mới</a>
+            </div>
+
+            <div class="table-responsive">
+                <div class="notification-table-wrapper">
+                    <table class="notification-table">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width:70px">#</th>
+                                <th>Tiêu đề</th>
+                                <th>Đối tượng</th>
+                                <th>Loại</th>
+                                <th>Thời gian</th>
+                                <th>Trạng thái</th>
+                                <th class="text-center" style="width:110px">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="text-muted text-center">@item.IdNotification</td>
+                                    <td><strong>@item.Title</strong></td>
+                                    <td>@(string.IsNullOrEmpty(item.TargetName) ? "<i class='text-muted'>Tất cả</i>" : item.TargetName)</td>
+                                    <td>@item.Type</td>
+                                    <td>
+                                        <span class="text-muted" style="font-size:.96em;">
+                                            @item.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @{
+                                            var status = item.Status?.ToLowerInvariant().Replace(" ", "-") ?? "unknown";
+                                            string badgeClass = status switch
+                                            {
+                                                "đã-gửi" or "sent" => "badge-status badge-sent",
+                                                "lên-lịch" or "scheduled" => "badge-status badge-schedule",
+                                                "chờ-xử-lý" or "pending" => "badge-status badge-pending",
+                                                _ => "badge-status badge-unknown"
+                                            };
+                                        }
+                                        <span class="@badgeClass">
+                                            <i class="fas fa-info-circle me-1"></i> @item.Status
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="@Url.Action("Edit", new { id = item.IdNotification })" class="btn btn-edit" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <div class="page-info">
+                        Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
+                    </div>
+
+                    <div class="page-buttons">
+                        @if ((int)ViewBag.CurrentPage > 1)
+                        {
+                            <a href="?page=@((int)ViewBag.CurrentPage - 1)" class="page-btn">
+                                <i class="fas fa-angle-left"></i>
+                            </a>
+                        }
+
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            if (i == 1 || i == ViewBag.TotalPages || (i >= ViewBag.CurrentPage - 1 && i <= ViewBag.CurrentPage + 1))
+                            {
+                                <a href="?page=@i" class="page-btn @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                            }
+                            else if (i == 2 || i == ViewBag.TotalPages - 1)
+                            {
+                                <span class="page-btn">...</span>
+                            }
+                        }
+
+                        @if ((int)ViewBag.CurrentPage < (int)ViewBag.TotalPages)
+                        {
+                            <a href="?page=@((int)ViewBag.CurrentPage + 1)" class="page-btn">
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

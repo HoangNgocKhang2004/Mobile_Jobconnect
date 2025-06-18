@@ -1,0 +1,281 @@
+﻿@model List<HuitWorks.AdminWeb.Models.ViewModels.JobPostingVM>
+@{
+    var applications = ViewBag.Applications as List<HuitWorks.AdminWeb.Models.JobApplicationDto>;
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<link href="~/css/jobpost/index.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="row mb-4">
+        <!-- Tổng số bài đăng -->
+        <div class="col-md-3">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Tổng số bài đăng
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @ViewBag.TotalPosts
+                        </div>
+                        <p class="mb-0 text-muted"><i class="fas fa-arrow-up me-1"></i>12% trong tháng này</p>
+                    </div>
+                    <i class="fas fa-file-alt fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bài đăng đang hoạt động -->
+        <div class="col-md-3">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Đang hiển thị
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @ViewBag.ActivePosts
+                        </div>
+                        <div class="stat-card-desc text-muted">Bài đăng đang công khai</div>
+                    </div>
+                    <i class="fas fa-eye fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bài đăng chờ duyệt -->
+        <div class="col-md-3">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Chờ duyệt
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @ViewBag.PendingPosts
+                        </div>
+                        <div class="stat-card-desc text-muted">Đang chờ xét duyệt</div>
+                    </div>
+                    <i class="fas fa-hourglass-half fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bài đăng bị từ chối hoặc tạm dừng -->
+        <div class="col-md-3">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Tạm dừng / Từ chối
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @ViewBag.ClosedPosts
+                        </div>
+                        <div class="stat-card-desc text-muted">Vi phạm hoặc đã ngưng hiển thị</div>
+                    </div>
+                    <i class="fas fa-ban fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Filters -->
+    <div class="filter-row">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Tìm kiếm theo tiêu đề hoặc công ty...">
+        </div>
+
+        <div class="filter-options">
+            <select class="filter-select">
+                <option value="">Ngành nghề</option>
+                <option value="it">Công nghệ thông tin</option>
+                <option value="marketing">Marketing</option>
+                <option value="sales">Kinh doanh</option>
+                <option value="finance">Tài chính - Kế toán</option>
+            </select>
+
+            <select class="filter-select">
+                <option value="">Khu vực</option>
+                <option value="hanoi">Hà Nội</option>
+                <option value="hcm">TP. Hồ Chí Minh</option>
+                <option value="danang">Đà Nẵng</option>
+            </select>
+
+            <select class="filter-select">
+                <option value="">Sắp xếp theo</option>
+                <option value="newest">Mới nhất</option>
+                <option value="oldest">Cũ nhất</option>
+                <option value="most_applied">Nhiều lượt ứng tuyển</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Job Listings Table -->
+    <div class="job-listings">
+        <table class="job-table mb-0">
+            <thead>
+                <tr>
+                    <th colspan="2" class="text-center">Bài đăng</th>
+                    <th>Ngày đăng</th>
+                    <th>Hết hạn</th>
+                    <th>Lượt ứng tuyển</th>
+                    <th>Trạng thái</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var job in Model)
+                {
+                    <tr>
+                        <td class="text-muted" style="max-width:90px;word-break:break-all;">@job.IdJobPost</td>
+                        <td>
+                            <div class="company-info">
+                                <img src="@job.Company.LogoCompany" alt="Company Logo" class="company-logo">
+                                <div class="company-text">
+                                    <div class="job-title">@job.Title</div>
+                                    <div class="company-name">@job.CompanyName</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>@job.CreatedAt.ToString("dd/MM/yyyy")</td>
+                        <td>@(job.ApplicationDeadline.ToString("dd/MM/yyyy"))</td>
+                        <td class="text-center">
+                            <span class="badge bg-primary bg-opacity-20" style="font-size:1.01rem;">
+                                @(applications?.Count(a => a.IdJobPost == job.IdJobPost) ?? 0)
+                            </span>
+                        </td>
+                        <td style="text-wrap: nowrap;">
+                            @switch (job.PostStatus?.ToLower())
+                            {
+                                case "open":
+                                    <span class="status-badge status-active">Đang hoạt động</span>
+                                    ; break;
+                                case "waiting":
+                                    <span class="status-badge status-pending">Chờ duyệt</span>
+                                    ; break;
+                                case "closed":
+                                    <span class="status-badge status-rejected">Đóng</span>
+                                    ; break;
+                                case "editing":
+                                    <span class="status-badge status-draft">Không hoạt động</span>
+                                    ; break;
+                                default:
+                                    <span class="status-badge status-draft">Không xác định</span>
+                                    ; break;
+                            }
+                        </td>
+                        <td style="white-space: nowrap;" class="text-center">
+                            <div class="d-inline-flex gap-1">
+                                @if (job.PostStatus == "waiting")
+                                {
+                                    <form asp-action="ChangeStatus" asp-controller="JobPost" method="post" style="display:inline;">
+                                        <input type="hidden" name="idJobPost" value="@job.IdJobPost" />
+                                        <input type="hidden" name="newStatus" value="open" />
+                                        <input type="hidden" name="page" value="@ViewBag.CurrentPage" />
+                                        <button type="submit" class="btn btn-sm btn-success" title="Duyệt bài" onclick="return confirm('Xác nhận duyệt bài này?')">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        @Html.AntiForgeryToken()
+                                    </form>
+
+                                    <form asp-action="ChangeStatus" asp-controller="JobPost" method="post" style="display:inline;">
+                                        <input type="hidden" name="idJobPost" value="@job.IdJobPost" />
+                                        <input type="hidden" name="workType" value="@job.workType" />
+                                        <input type="hidden" name="RequiredSkills" value="@job.RequiredSkills" />
+                                        <input type="hidden" name="CompanyName" value="@job.CompanyName" />
+                                        <input type="hidden" name="newStatus" value="closed" />
+                                        <input type="hidden" name="page" value="@ViewBag.CurrentPage" />
+                                        <button type="submit" class="btn btn-sm btn-danger" title="Từ chối bài" onclick="return confirm('Xác nhận từ chối bài này?')">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                        @Html.AntiForgeryToken()
+                                    </form>
+                                }
+                                <a href="/JobPost/Details/@job.IdJobPost" class="btn btn-sm btn-info" title="Xem chi tiết">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <div class="page-info">
+                Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
+            </div>
+
+            <div class="page-buttons">
+                @if ((int)ViewBag.CurrentPage > 1)
+                {
+                    <a href="?page=@((int)ViewBag.CurrentPage - 1)" class="page-btn">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                }
+
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    if (i == 1 || i == ViewBag.TotalPages || (i >= ViewBag.CurrentPage - 1 && i <= ViewBag.CurrentPage + 1))
+                    {
+                        <a href="?page=@i" class="page-btn @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                    }
+                    else if (i == 2 || i == ViewBag.TotalPages - 1)
+                    {
+                        <span class="page-btn">...</span>
+                    }
+                }
+
+                @if ((int)ViewBag.CurrentPage < (int)ViewBag.TotalPages)
+                {
+                    <a href="?page=@((int)ViewBag.CurrentPage + 1)" class="page-btn">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                }
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+<script>
+    // Javascript có thể được thêm vào đây để tăng tính tương tác
+    document.addEventListener('DOMContentLoaded', function() {
+        // Xử lý khi nhấp vào các tab
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                // Có thể thêm code để lọc dữ liệu tương ứng ở đây
+            });
+        });
+
+        // Xử lý khi nhấp vào các nút phân trang
+        const pageButtons = document.querySelectorAll('.page-btn');
+        pageButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (!this.classList.contains('active') && !this.innerHTML.includes('fa-angle')) {
+                    pageButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    // Có thể thêm code để chuyển trang ở đây
+                }
+            });
+        });
+    });
+</script>

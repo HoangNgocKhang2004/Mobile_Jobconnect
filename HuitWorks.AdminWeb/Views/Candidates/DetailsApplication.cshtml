@@ -1,0 +1,58 @@
+﻿@model HuitWorks.AdminWeb.Models.ViewModels.JobAppViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết đơn ứng tuyển";
+}
+
+<div class="container">
+    <h2 class="mb-4">Chi tiết đơn ứng tuyển</h2>
+    <div class="card shadow p-4">
+        <h5 class="mb-3 text-primary">Thông tin ứng viên</h5>
+        <dl class="row">
+            <dt class="col-sm-3">Họ tên:</dt>
+            <dd class="col-sm-9">@Model.CandidateName</dd>
+
+            <dt class="col-sm-3">Email:</dt>
+            <dd class="col-sm-9">@Model.CandidateEmail</dd>
+
+            <dt class="col-sm-3">Số điện thoại:</dt>
+            <dd class="col-sm-9">@Model.CandidatePhone</dd>
+        </dl>
+        <hr>
+        <h5 class="mb-3 text-primary">Thông tin công việc</h5>
+        <dl class="row">
+            <dt class="col-sm-3">Tên công việc:</dt>
+            <dd class="col-sm-9">@Model.JobTitle</dd>
+
+            <dt class="col-sm-3">Công ty:</dt>
+            <dd class="col-sm-9">@Model.CompanyName</dd>
+
+            <dt class="col-sm-3">Mô tả công việc:</dt>
+            <dd class="col-sm-9">@Model.JobDescription</dd>
+        </dl>
+        <hr>
+        <h5 class="mb-3 text-primary">Chi tiết ứng tuyển</h5>
+        <dl class="row">
+            <dt class="col-sm-3">Ngày nộp:</dt>
+            <dd class="col-sm-9">@Model.SubmittedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+            <dt class="col-sm-3">Trạng thái:</dt>
+            <dd class="col-sm-9">@Model.ApplicationStatus</dd>
+            <dt class="col-sm-3">Thư ứng tuyển:</dt>
+            <dd class="col-sm-9">@Model.CoverLetter</dd>
+            <dt class="col-sm-3">CV:</dt>
+            <dd class="col-sm-9">
+                @if (!string.IsNullOrEmpty(Model.CvFileUrl))
+                {
+                        <a href="@Model.CvFileUrl" target="_blank">Tải CV</a>
+                }
+                else
+                {
+                        <span>Không có</span>
+                }
+            </dd>
+        </dl>
+        <div class="mt-4">
+            <a asp-action="Applications" class="btn btn-secondary">Quay lại</a>
+        </div>
+    </div>
+</div>

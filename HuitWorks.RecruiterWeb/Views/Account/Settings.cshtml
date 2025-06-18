@@ -1,0 +1,269 @@
+﻿@model HuitWorks.RecruiterWeb.Models.ViewModel.SettingsViewModel
+
+@{
+    ViewData["Title"] = "Cài đặt tài khoản";
+}
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+<style>
+    :root {
+        --bg-light: #F9FBFD;
+        --primary-color: #094174;
+        --primary-dark: #073256;
+        --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        --border-radius: 8px;
+    }
+
+    body {
+        background-color: var(--bg-light);
+    }
+
+    .page-title {
+        color: var(--primary-color);
+        font-size: 2rem;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+
+        .page-title:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+    .settings-header {
+        background: var(--primary-color);
+        color: white;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+    }
+
+        .settings-header i {
+            margin-right: 0.5rem;
+        }
+
+        .settings-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+    .settings-body {
+        padding: 1.5rem;
+    }
+
+    .avatar-preview {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--primary-color);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        margin-bottom: 1rem;
+    }
+
+    .section-title {
+        color: var(--primary-color);
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid rgba(9,65,116,0.2);
+        padding-bottom: 4px;
+    }
+
+    .form-label {
+        font-weight: 500;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+    .text-muted-note {
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+</style>
+
+<div class="container">
+    <h1 class="page-title">@ViewData["Title"]</h1>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+    @if (TempData["Warning"] != null)
+    {
+        <div class="alert alert-warning">@TempData["Warning"]</div>
+    }
+
+    <div class="card settings-card">
+        <form asp-action="Settings" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="AvatarUrl" value="@Model.AvatarUrl" />
+            <input type="hidden" asp-for="IdUser" />
+            <input type="hidden" asp-for="IdRole" />
+            <input type="hidden" asp-for="AccountStatus" />
+            <input type="hidden" asp-for="CreatedAt" />
+            <input type="hidden" asp-for="UpdatedAt" />
+
+            <div class="row settings-body gx-4 gy-4">
+                <div class="col-lg-5 border-end">
+                    <div class="section-title">
+                        <i class="fas fa-user-circle me-2"></i>Thông tin cá nhân
+                    </div>
+
+                    <div class="text-center mb-3">
+                        <img id="avatarPreview" src="@Model.AvatarUrl" alt="Avatar" class="avatar-preview" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="AvatarFile" class="form-label">Đổi ảnh đại diện</label>
+                        <input asp-for="AvatarFile" type="file" class="form-control" accept=".png,.jpg,.jpeg" />
+                        <span asp-validation-for="AvatarFile" class="text-danger"></span>
+                        <div class="text-muted-note">Chọn file ảnh PNG/JPG tối đa 2MB.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="UserName" class="form-label">Tên hiển thị *</label>
+                        <input asp-for="UserName" class="form-control" placeholder="Tên hiển thị" required />
+                        <div class="invalid-feedback">Vui lòng nhập tên.</div>
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">Email *</label>
+                        <input asp-for="Email" class="form-control" placeholder="user@example.com" required />
+                        <div class="invalid-feedback">Vui lòng nhập email hợp lệ.</div>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="PhoneNumber" class="form-label">Số điện thoại</label>
+                        <input asp-for="PhoneNumber" class="form-control" placeholder="+84xxxxxxxx" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Gender" class="form-label">Giới tính *</label>
+                        <select asp-for="Gender" class="form-select" required>
+                            <option value="">-- Chọn --</option>
+                            <option value="male" selected="@(Model.Gender == "male" ? "selected" : "")">Nam</option>
+                            <option value="female" selected="@(Model.Gender == "female" ? "selected" : "")">Nữ</option>
+                            <option value="other" selected="@(Model.Gender == "other" ? "selected" : "")">Khác</option>
+                        </select>
+                        <div class="invalid-feedback">Vui lòng chọn giới tính.</div>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Address" class="form-label">Địa chỉ</label>
+                        <input asp-for="Address" class="form-control" placeholder="Địa chỉ hiện tại" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="DateOfBirth" class="form-label">Ngày sinh</label>
+                        <input asp-for="DateOfBirth" type="date" class="form-control" />
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="section-title">
+                        <i class="fas fa-briefcase me-2"></i>Thông tin Nhà tuyển dụng
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Title" class="form-label">Chức danh</label>
+                        <input asp-for="Title" class="form-control" placeholder="Ví dụ: Quản lý Tuyển dụng" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="IdCompany" class="form-label">Mã công ty</label>
+                        <input asp-for="IdCompany" class="form-control" readonly />
+                        <div class="text-muted-note">Nếu muốn đổi công ty, liên hệ Admin.</div>
+                        <span asp-validation-for="IdCompany" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Department" class="form-label">Phòng ban</label>
+                        <input asp-for="Department" class="form-control" placeholder="Phòng ban / Bộ phận" />
+                        <span asp-validation-for="Department" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label">Mô tả thêm</label>
+                        <textarea asp-for="Description" class="form-control" rows="4"
+                                  placeholder="Thông tin công việc, kinh nghiệm..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-12 text-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i> Lưu thay đổi
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Validation Bootstrap
+        (function () {
+            'use strict';
+            var forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+
+        // Preview avatar khi chọn file mới
+        document.addEventListener("DOMContentLoaded", function () {
+            var avatarInput = document.getElementById("AvatarFile");
+            var avatarPreview = document.getElementById("avatarPreview");
+
+            avatarInput.addEventListener("change", function () {
+                var file = avatarInput.files[0];
+                if (file && file.type.startsWith("image/")) {
+                    var reader = new FileReader();
+                    reader.onload = function (evt) {
+                        avatarPreview.src = evt.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+}

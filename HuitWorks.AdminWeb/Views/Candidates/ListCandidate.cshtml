@@ -1,0 +1,357 @@
+﻿@model List<HuitWorks.AdminWeb.Models.ViewModels.CandidateInfoViewModel>
+
+<link href="~/css/candidates/listcandidate.css" rel="stylesheet" />
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <!-- Tổng ứng viên -->
+        <div class="col-md-3">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Tổng ứng viên
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @ViewBag.TotalApplications
+                        </div>
+                    </div>
+                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ngừng hoạt động (Pending) -->
+        <div class="col-md-3">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Ngừng hoạt động
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @ViewBag.PendingApplications
+                        </div>
+                    </div>
+                    <i class="fas fa-search fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Đang hoạt động (Accepted) -->
+        <div class="col-md-3">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Đang hoạt động
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @ViewBag.AcceptedApplications
+                        </div>
+                    </div>
+                    <i class="fas fa-check fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bị từ chối / Cấm (Rejected) -->
+        <div class="col-md-3">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Bị từ chối / Cấm
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @ViewBag.RejectedApplications
+                        </div>
+                    </div>
+                    <i class="fas fa-times fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">Danh sách ứng viên</h3>
+            <div>
+
+                <button class="btn btn-outline-secondary ms-2" id="btnExport">
+                    <i class="fas fa-file-export me-2"></i>Xuất file
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm ứng viên...">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="positionFilter">
+                        <option value="">Tất cả vị trí</option>
+                        <option value="developer">Developer</option>
+                        <option value="designer">Designer</option>
+                        <option value="manager">Manager</option>
+                        <option value="tester">Tester</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="statusFilter">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="mới">Mới</option>
+                        <option value="đang xem xét">Đang xem xét</option>
+                        <option value="đã phỏng vấn">Đã phỏng vấn</option>
+                        <option value="đã tuyển">Đã tuyển</option>
+                        <option value="đã từ chối">Đã từ chối</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-outline-primary w-100" id="btnFilter">Lọc</button>
+                </div>
+            </div>
+
+            <div class="table-responsive" style="overflow: visible !important;">
+                <div class="candidate-table-wrapper">
+                    <table class="table table-hover mb-0" id="candidateTable">
+                        <thead class="table-light">
+                            <tr>
+                                @* <th class="sort" data-sort="id">ID</th> *@
+                                <th class="sort" data-sort="name">Họ và tên</th>
+                                <th class="sort" data-sort="email">Email</th>
+                                <th class="sort" data-sort="phone">Số điện thoại</th>
+                                <th class="sort" data-sort="position">Vị trí ứng tuyển</th>
+                                <th class="sort" data-sort="experience">Kinh nghiệm</th>
+                                <th class="sort" data-sort="status">Trạng thái</th>
+                                <th class="sort" data-sort="date">Ngày ứng tuyển</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                var statusClass = item.User.AccountStatus?.ToLower() switch
+                                {
+                                    "active" => "badge-status active",
+                                    "pending" => "badge-status pending",
+                                    "locked" => "badge-status locked",
+                                    _ => "badge-status"
+                                };
+                                <tr data-id="@item.IdUser">
+                                    @* <td class="text-muted">@item.IdUser</td> *@
+                                    <td>
+                                        <div class="d-flex align-items-center candidate-table-user">
+                                            <div>
+                                                <h6>@item.User.UserName</h6>
+                                                <span>@item.User.Address</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@item.User.Email</td>
+                                    <td>@item.User.PhoneNumber</td>
+                                    <td>@item.WorkPosition</td>
+                                    <td>@item.ExperienceYears năm</td>
+                                    <td>
+                                        <span class="@statusClass">@item.User.AccountStatus</span>
+                                    </td>
+                                    <td>@item.User.CreatedAt.ToString("dd/MM/yyyy")</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-light btn-sm rounded-circle shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" href="/Candidates/Details/@item.IdUser">
+                                                        <i class="fas fa-eye me-2"></i>Chi tiết
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="/Candidates/Update/@item.IdUser">
+                                                        <i class="fas fa-edit me-2"></i>Chỉnh sửa
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="@Url.Action("Details", "Interview", new { id = item.FirstScheduleId })">
+                                                        <i class="fas fa-calendar-alt me-2"></i>Lịch phỏng vấn
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <div class="page-info">
+                        Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
+                    </div>
+
+                    <div class="page-buttons">
+                        @if ((int)ViewBag.CurrentPage > 1)
+                        {
+                            <a href="?page=@((int)ViewBag.CurrentPage - 1)" class="page-btn">
+                                <i class="fas fa-angle-left"></i>
+                            </a>
+                        }
+
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            if (i == 1 || i == ViewBag.TotalPages || (i >= ViewBag.CurrentPage - 1 && i <= ViewBag.CurrentPage + 1))
+                            {
+                                <a href="?page=@i" class="page-btn @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                            }
+                            else if (i == 2 || i == ViewBag.TotalPages - 1)
+                            {
+                                <span class="page-btn">...</span>
+                            }
+                        }
+
+                        @if ((int)ViewBag.CurrentPage < (int)ViewBag.TotalPages)
+                        {
+                            <a href="?page=@((int)ViewBag.CurrentPage + 1)" class="page-btn">
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal xác nhận xóa -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa ứng viên này không?
+                Hành động này không thể hoàn tác.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        // Xử lý tìm kiếm
+        $("#searchInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#candidateTable tbody tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+            updateShownCount();
+        });
+
+        // Xử lý lọc
+        $("#btnFilter").click(function() {
+            var position = $("#positionFilter").val().toLowerCase();
+            var status = $("#statusFilter").val().toLowerCase();
+
+            $("#candidateTable tbody tr").filter(function() {
+                var rowPosition = $(this).find("td:eq(4)").text().toLowerCase();
+                var rowStatus = $(this).find("td:eq(6)").text().toLowerCase();
+
+                var positionMatch = position === "" || rowPosition.indexOf(position) > -1;
+                var statusMatch = status === "" || rowStatus.indexOf(status) > -1;
+
+                $(this).toggle(positionMatch && statusMatch);
+            });
+            updateShownCount();
+        });
+
+        // Cập nhật số lượng hiển thị
+        function updateShownCount() {
+            var visibleRows = $("#candidateTable tbody tr:visible").length;
+            $("#showingCount").text(visibleRows);
+        }
+
+        // Xử lý sắp xếp
+        $(".sort").click(function() {
+            var column = $(this).data("sort");
+            var table = $("#candidateTable");
+            var rows = table.find("tbody tr").toArray();
+            var isAscending = $(this).hasClass("asc");
+
+            $(".sort").removeClass("asc desc");
+
+            if (isAscending) {
+                $(this).addClass("desc");
+            } else {
+                $(this).addClass("asc");
+            }
+
+            rows.sort(function(a, b) {
+                var aValue = $(a).find("td").eq(getColumnIndex(column)).text();
+                var bValue = $(b).find("td").eq(getColumnIndex(column)).text();
+
+                if (isAscending) {
+                    return aValue.localeCompare(bValue);
+                } else {
+                    return bValue.localeCompare(aValue);
+                }
+            });
+
+            $.each(rows, function(index, row) {
+                table.children("tbody").append(row);
+            });
+        });
+
+        function getColumnIndex(column) {
+            switch(column) {
+                case "id": return 0;
+                case "name": return 1;
+                case "email": return 2;
+                case "phone": return 3;
+                case "position": return 4;
+                case "experience": return 5;
+                case "status": return 6;
+                case "date": return 7;
+                default: return 0;
+            }
+        }
+
+        // Xử lý xóa ứng viên
+        var candidateIdToDelete = null;
+
+        $(".delete-candidate").click(function(e) {
+            e.preventDefault();
+            candidateIdToDelete = $(this).data("id");
+            $("#deleteModal").modal("show");
+        });
+
+        $("#confirmDelete").click(function() {
+            if (candidateIdToDelete) {
+                // Mô phỏng xóa ứng viên
+                $("tr[data-id='" + candidateIdToDelete + "']").fadeOut(300, function() {
+                    $(this).remove();
+                    updateShownCount();
+                    toastr.success("Xóa ứng viên thành công");
+                    $("#deleteModal").modal("hide");
+                });
+            }
+        });
+
+        // Xử lý xuất file
+        $("#btnExport").click(function() {
+            toastr.info("Đang xuất file danh sách ứng viên...");
+            setTimeout(function() {
+                toastr.success("Xuất file thành công!");
+            }, 1500);
+        });
+    });
+</script>

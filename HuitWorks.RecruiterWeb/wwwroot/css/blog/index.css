@@ -1,0 +1,87 @@
+﻿.gradient-bg {
+    background: linear-gradient(135deg, #094174, #0c5999);
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.tag {
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.card-image-hover {
+    overflow: hidden;
+}
+
+    .card-image-hover img {
+        transition: transform 0.5s ease;
+    }
+
+    .card-image-hover:hover img {
+        transform: scale(1.05);
+    }
+
+.gradient-bg {
+    background: linear-gradient(135deg, #094174 0%, #073256 100%);
+}
+
+.text-indigo-600 {
+    color: #094174 !important;
+}
+
+.text-indigo-700 {
+    color: #083560 !important;
+}
+
+.text-indigo-800 {
+    color: #07294c !important;
+}
+
+.bg-indigo-600 {
+    background-color: #094174 !important;
+}
+
+.bg-indigo-700 {
+    background-color: #083560 !important;
+}
+
+.bg-indigo-100 {
+    background-color: #d3e2f0 !important;
+}
+
+.hover\:bg-indigo-700:hover {
+    background-color: #083560 !important;
+}
+
+.hover\:bg-indigo-200:hover {
+    background-color: #a7c5e1 !important;
+}
+
+.hover\:bg-indigo-100:hover {
+    background-color: #d3e2f0 !important;
+}
+
+.hover\:bg-indigo-50:hover {
+    background-color: #e9f0f7 !important;
+}
+
+.hover\:text-indigo-700:hover {
+    color: #083560 !important;
+}
+
+.hover\:text-indigo-800:hover {
+    color: #07294c !important;
+}
+
+.focus\:ring-indigo-500:focus {
+    --tw-ring-color: #094174 !important;
+}
+
+.border-indigo-100 {
+    border-color: #d3e2f0 !important;
+}

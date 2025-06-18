@@ -1,0 +1,357 @@
+﻿@model List<HuitWorks.RecruiterWeb.Models.ViewModel.CandidateInfoViewModel>
+
+@{
+    ViewData["Title"] = "Quản lý danh sách ứng viên";
+    var totalApps = Model.Sum(c => c.Applications?.Count ?? 0);
+    var rejectedApps = Model.Sum(c => c.Applications?.Count(a => a.Status == "rejected") ?? 0);
+}
+
+<style>
+    :root {
+        --primary-color: #094174;
+        --primary-light: #1a5a8c;
+        --primary-dark: #062e52;
+        --accent-color: #f8f9fa;
+        --text-light: #ffffff;
+        --text-muted: #6c757d;
+        --border-radius: 8px;
+        --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .page-title {
+        color: var(--primary-color);
+        margin-bottom: 30px;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 15px;
+        font-size: 28px;
+    }
+
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+    .btn-disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    .nav-tabs .nav-link.active {
+        color: var(--primary-color);
+        font-weight: 600;
+        border-color: var(--primary-color);
+        border-bottom: 3px solid var(--primary-color);
+    }
+
+    .nav-tabs .nav-link {
+        color: var(--text-muted);
+        border: none;
+        padding: 10px 20px;
+        position: relative;
+    }
+
+        .nav-tabs .nav-link .badge {
+            margin-left: 5px;
+        }
+
+    .trash-icon {
+        color: #dc3545;
+    }
+
+    .table thead th {
+        vertical-align: middle;
+    }
+
+    .table-secondary {
+        background: linear-gradient(90deg, #f0f4f9 60%, #e9ecef 100%);
+        border-left: 4px solid #3b82f6;
+    }
+
+    .table td, .table th {
+        vertical-align: middle;
+    }
+
+    .btn-outline-primary, .btn-outline-warning {
+        min-width: 36px;
+    }
+
+    .btn-icon {
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .btn-icon .fa {
+            font-size: 1.2rem;
+        }
+</style>
+
+<div class="container">
+    <h2 class="page-title">Danh sách ứng viên đã ứng tuyển</h2>
+
+    <ul class="nav nav-tabs mb-3" id="candidatesTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="active-tab" data-bs-toggle="tab" data-bs-target="#active"
+                    type="button" role="tab" aria-controls="active" aria-selected="true">
+                Danh sách ứng viên <span class="badge bg-primary">@(totalApps - rejectedApps)</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="trash-tab" data-bs-toggle="tab" data-bs-target="#trash"
+                    type="button" role="tab" aria-controls="trash" aria-selected="false">
+                <i class="fas fa-trash-alt trash-icon"></i> Danh sách đã từ chối <span class="badge bg-danger">@rejectedApps</span>
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="candidatesTabsContent">
+        <!-- Tab danh sách ứng viên đang hoạt động -->
+        <div class="tab-pane fade show active" id="active" role="tabpanel" aria-labelledby="active-tab">
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-users me-2"></i>Ứng viên đang xem xét</h5>
+                        <div>
+                            <span class="badge bg-primary me-2">@(totalApps - rejectedApps) ứng viên</span>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-outline-secondary">
+                                    <i class="fas fa-download me-1"></i>Xuất Excel
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary">
+                                    <i class="fas fa-print me-1"></i>In
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <div class="card mt-3 shadow-sm">
+                            <div class="card-body p-3">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover align-middle mb-0">
+                                        <thead class="table-light text-center">
+                                            <tr>
+                                                <th>Ứng viên</th>
+                                                <th>Vị trí đã ứng tuyển</th>
+                                                <th>Ngày nộp</th>
+                                                <th>Trạng thái</th>
+                                                <th>Thao tác</th>
+                                                <th>Xác nhận</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var cand in Model)
+                                            {
+                                                if (cand.User == null)
+                                                {
+                                                    continue;
+                                                }
+
+                                                var activeApps = cand.Applications?.Where(a => a.Status != "rejected").ToList();
+                                                if (activeApps == null || !activeApps.Any())
+                                                {
+                                                    continue;
+                                                }
+
+                                                <tr class="table-secondary">
+                                                    <td colspan="6">
+                                                        <strong>@cand.User.UserName</strong>
+                                                        <small class="text-muted">(@cand.User.Email)</small>
+                                                    </td>
+                                                </tr>
+
+                                                @foreach (var app in activeApps)
+                                                {
+                                                    <tr>
+                                                        <td></td>
+                                                        <td>@app.JobTitle</td>
+                                                        <td>@app.SubmittedAt.ToString("dd/MM/yyyy")</td>
+                                                        <td class="text-center">
+                                                            <span class="badge
+                                                                @(app.Status switch {
+                                                                    "pending"   => "bg-secondary",
+                                                                    "viewed"    => "bg-info",
+                                                                    "interview" => "bg-warning text-dark",
+                                                                    "accepted"  => "bg-success",
+                                                                    _           => "bg-light text-dark"
+                                                                })">
+                                                                @app.Status
+                                                            </span>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <a asp-action="Details" asp-controller="Candidates"
+                                                               asp-route-idUser="@cand.User.IdUser"
+                                                               asp-route-idJobPost="@app.JobPostId"
+                                                               class="btn btn-sm btn-outline-primary me-1 btn-icon"
+                                                               data-bs-toggle="tooltip" title="Xem hồ sơ">
+                                                                <i class="fas fa-user fa-fw"></i>
+                                                            </a>
+                                                            <a asp-action="InviteInterview" asp-controller="Candidates"
+                                                               asp-route-idUser="@cand.User.IdUser"
+                                                               asp-route-idJobPost="@app.JobPostId"
+                                                               class="btn btn-sm btn-outline-success me-1 btn-icon @(app.Status == "interview" || app.Status == "accepted" ? "btn-disabled" : "")"
+                                                               data-bs-toggle="tooltip" title="Mời phỏng vấn">
+                                                                <i class="fas fa-envelope-open-text"></i>
+                                                            </a>
+                                                            <form asp-action="RejectCandidate" asp-controller="Candidates" method="post" class="d-inline">
+                                                                <input type="hidden" name="idUser" value="@cand.User.IdUser" />
+                                                                <input type="hidden" name="idJobPost" value="@app.JobPostId" />
+                                                                <button type="submit"
+                                                                        class="btn btn-sm btn-outline-danger btn-icon @(app.Status == "interview" || app.Status == "accepted" ? "btn-disabled" : "")"
+                                                                        onclick="return confirm('Xác nhận từ chối?');"
+                                                                        data-bs-toggle="tooltip" title="Từ chối">
+                                                                    <i class="fas fa-trash-alt"></i>
+                                                                </button>
+                                                            </form>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            @if (app.Status == "interview")
+                                                            {
+                                                                <form asp-action="ConfirmInterviewSuccess" asp-controller="Candidates" method="post" class="d-inline">
+                                                                    <input type="hidden" name="idUser" value="@cand.User.IdUser" />
+                                                                    <input type="hidden" name="idJobPost" value="@app.JobPostId" />
+                                                                    <button type="submit" class="btn btn-sm btn-success me-1 btn-icon"
+                                                                            onclick="return confirm('Phỏng vấn thành công?');"
+                                                                            data-bs-toggle="tooltip" title="Tuyển">
+                                                                        <i class="fas fa-check"></i>
+                                                                    </button>
+                                                                </form>
+                                                                <form asp-action="ConfirmInterviewFail" asp-controller="Candidates" method="post" class="d-inline">
+                                                                    <input type="hidden" name="idUser" value="@cand.User.IdUser" />
+                                                                    <input type="hidden" name="idJobPost" value="@app.JobPostId" />
+                                                                    <button type="submit" class="btn btn-sm btn-danger btn-icon"
+                                                                            onclick="return confirm('Phỏng vấn không thành công?');"
+                                                                            data-bs-toggle="tooltip" title="Fail phỏng vấn">
+                                                                        <i class="fas fa-times"></i>
+                                                                    </button>
+                                                                </form>
+                                                            }
+                                                            else if (app.Status == "accepted")
+                                                            {
+                                                                <span class="badge bg-success">
+                                                                    <i class="fas fa-check-circle me-1"></i> Đã tuyển
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="text-muted">
+                                                                    <i class="fas fa-clock"></i> Chưa phỏng vấn
+                                                                </span>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab thùng rác -->
+        <div class="tab-pane fade" id="trash" role="tabpanel" aria-labelledby="trash-tab">
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-trash-alt trash-icon me-2"></i>Ứng viên đã từ chối</h5>
+                        <span class="badge bg-danger me-2">@rejectedApps ứng viên</span>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover shadow rounded mt-4 bg-white">
+                            <thead class="table-light">
+                                <tr class="text-center align-middle">
+                                    <th style="width: 240px;">Ứng viên</th>
+                                    <th>Vị trí đã ứng tuyển</th>
+                                    <th>Ngày nộp</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var cand in Model)
+                                {
+                                    var rejectedApplications = cand.Applications?.Where(a => a.Status == "rejected").ToList();
+                                    if (rejectedApplications != null && rejectedApplications.Any())
+                                    {
+                                        <tr class="table-secondary">
+                                            <td colspan="5" class="fw-bold text-primary" style="font-size: 1.1rem;">
+                                                <i class="fas fa-user me-2"></i>
+                                                @cand.User?.UserName
+                                                <span class="text-muted small">(@cand.User?.Email)</span>
+                                            </td>
+                                        </tr>
+
+                                        @foreach (var app in rejectedApplications)
+                                        {
+                                            <tr class="align-middle">
+                                                <td></td>
+                                                <td class="text-center fw-semibold">@app.JobTitle</td>
+                                                <td class="text-center">@app.SubmittedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                                <td class="text-center">
+                                                    <span class="badge bg-danger px-3 py-2" style="font-size:0.95rem;letter-spacing:0.5px;">
+                                                        <i class="fas fa-times-circle me-1"></i> Đã từ chối
+                                                    </span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a asp-action="Details" asp-controller="Candidates"
+                                                       asp-route-idUser="@cand.User.IdUser"
+                                                       asp-route-idJobPost="@app.JobPostId"
+                                                       class="btn btn-outline-primary rounded-circle btn-icon"
+                                                       data-bs-toggle="tooltip" title="Xem hồ sơ">
+                                                        <i class="fas fa-user fa-fw"></i>
+                                                    </a>
+                                                    <form method="post" asp-action="UndoRejectCandidate" asp-controller="Candidates" class="d-inline">
+                                                        <input type="hidden" name="idUser" value="@cand.User.IdUser" />
+                                                        <input type="hidden" name="idJobPost" value="@app.JobPostId" />
+                                                        <button type="submit" class="btn btn-outline-warning btn-sm"
+                                                                onclick="return confirm('Xác nhận khôi phục ứng viên này?');"
+                                                                data-bs-toggle="tooltip" title="Khôi phục">
+                                                            <i class="fas fa-undo"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function (el) {
+            new bootstrap.Tooltip(el);
+        });
+    });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>

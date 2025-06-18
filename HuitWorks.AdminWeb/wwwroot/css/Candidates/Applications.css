@@ -1,0 +1,127 @@
+﻿:root {
+    --white: #ffffff;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+    .header h1 {
+        color: #1e293b;
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+.header-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 15px 20px;
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.page-info {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.page-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.page-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background-color: var(--white);
+    color: #495057;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .page-btn.active {
+        background-color: var(--primary);
+        border-color: var(--primary);
+    }
+
+    .page-btn:hover:not(.active) {
+        background-color: #f5f5f5;
+    }
+
+#applicationsTable th,
+#applicationsTable td {
+    vertical-align: middle !important;
+    font-size: 1rem;
+}
+
+#applicationsTable thead th {
+    background: #f8fafc;
+    border-bottom: 2px solid #e5e7eb;
+    text-transform: uppercase;
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: #334155;
+    letter-spacing: 1px;
+}
+
+#applicationsTable tr {
+    transition: background 0.2s;
+}
+
+    #applicationsTable tr:hover {
+        background: #f3f4f6;
+    }
+
+.badge-status {
+    font-size: 0.97rem;
+    padding: 0.45em 1.1em;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.badge-waiting {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.badge-approved {
+    background: #d1fae5;
+    color: #047857;
+}
+
+.badge-rejected {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.badge-default {
+    background: #e0e7ef;
+    color: #64748b;
+}
+
+.btn-action {
+    border-radius: 7px !important;
+    margin-right: 2px;
+}

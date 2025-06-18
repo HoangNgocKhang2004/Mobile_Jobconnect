@@ -1,0 +1,370 @@
+﻿@model List<HuitWorks.RecruiterWeb.Models.ViewModel.JobTransactionViewModel>
+
+@{
+    ViewData["Title"] = "Lịch sử giao dịch";
+}
+<link rel="stylesheet" href="~/css/transaction-history.css" />
+
+<style>
+    .page-title {
+        color: #094174;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 15px;
+        font-size: 28px;
+    }
+
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: #094174;
+            border-radius: 2px;
+        }
+
+    .pagination {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        padding: 15px 20px;
+        background-color: var(--white);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+    }
+
+    .page-info {
+        color: #6c757d;
+        font-size: 14px;
+    }
+
+    .page-buttons {
+        display: flex;
+        gap: 5px;
+    }
+
+    .page-btn {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        background-color: var(--white);
+        color: #495057;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+        .page-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .page-btn:hover:not(.active) {
+            background-color: #f5f5f5;
+        }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+    .badge {
+        border-radius: 1.25rem;
+        font-size: 1rem;
+        letter-spacing: .2px;
+    }
+
+    .table-hover tbody tr:hover {
+        background: #f8fafc;
+        transition: background 0.15s;
+    }
+</style>
+
+<div class="container-fluid px-4">
+    <h2 class="page-title">@ViewData["Title"]</h2>
+
+    <!-- Tiêu đề trang -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-white-50">Số dư hiện tại</h6>
+                    <h3 class="mb-0">... VND</h3>
+                    <div class="mt-3 small">
+                        <span class="text-white-50">Cập nhật: </span>
+                        <span>Hôm nay, 15:30</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-white-50">Tổng nạp</h6>
+                    <h3 class="mb-0">... VND</h3>
+                    <div class="progress mt-3" style="height: 5px;">
+                        <div class="progress-bar bg-white" role="progressbar" style="width: 75%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-white-50">Tổng chi</h6>
+                    <h3 class="mb-0">... VND</h3>
+                    <div class="progress mt-3" style="height: 5px;">
+                        <div class="progress-bar bg-white" role="progressbar" style="width: 45%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-white-50">Giao dịch gần đây</h6>
+                    <h3 class="mb-0">... giao dịch</h3>
+                    <div class="mt-3 small">
+                        <span class="text-white-50">Trong 7 ngày qua</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Danh sách giao dịch -->
+    <div class="card shadow-sm">
+        @* <div class="card-header bg-white py-3"> *@
+        @*     <h5 class="card-title mb-0">Danh sách giao dịch</h5> *@
+        @* </div> *@
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle shadow-sm rounded bg-white">
+                    <thead class="table-light">
+                        <tr class="align-middle text-center">
+                            <th style="width: 110px;"><i class="fas fa-hashtag text-primary"></i> Mã GD</th>
+                            <th><i class="fas fa-calendar-day text-info"></i> Ngày GD</th>
+                            <th><i class="fas fa-cube text-secondary"></i> Loại</th>
+                            <th><i class="fas fa-coins text-warning"></i> Số tiền</th>
+                            <th><i class="fas fa-credit-card text-success"></i> Phương thức</th>
+                            <th><i class="fas fa-info-circle"></i> Trạng thái</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var t in Model)
+                        {
+                            <tr>
+                                <td class="fw-semibold text-center">@t.IdTransaction</td>
+                                <td class="text-nowrap text-center">
+                                    <span class="fw-bold">@t.TransactionDate.ToString("dd/MM/yyyy")</span>
+                                    <div class="small text-muted">@t.TransactionDate.ToString("HH:mm")</div>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-info bg-opacity-10 text-info px-3 py-2">
+                                        <i class="fas fa-box-open me-1"></i> @t.IdPackage
+                                    </span>
+                                </td>
+                                <td class="fw-bold text-end @(t.Amount >= 0 ? "text-success" : "text-danger")">
+                                    @(t.Amount >= 0 ? "+" : "-")
+                                    @string.Format("{0:N0}", Math.Abs(t.Amount)) <span class="text-muted small">VND</span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-light border text-dark px-3 py-2">
+                                        <i class="fas fa-wallet me-1"></i> @t.PaymentMethod
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge @(
+                        t.Status.ToLower() switch {
+                            "completed" => "bg-success",
+                            "pending"   => "bg-warning text-dark",
+                            "failed"    => "bg-danger",
+                            _           => "bg-secondary"
+                        }) px-3 py-2">
+                                        @switch (t.Status.ToLower())
+                                        {
+                                            case "completed":
+                                                <i class="fas fa-check-circle me-1"></i>
+                                                break;
+                                            case "pending":
+                                                <i class="fas fa-hourglass-half me-1"></i>
+                                                break;
+                                            case "failed":
+                                                <i class="fas fa-times-circle me-1"></i>
+                                                break;
+                                        }
+                                        @t.Status
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <a asp-action="Details" asp-route-id="@t.IdTransaction"
+                                           class="btn btn-sm btn-outline-primary" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <div class="page-info">
+                        Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
+                    </div>
+
+                    <div class="page-buttons">
+                        @if ((int)ViewBag.CurrentPage > 1)
+                        {
+                            <a href="?page=@((int)ViewBag.CurrentPage - 1)" class="page-btn">
+                                <i class="fas fa-angle-left"></i>
+                            </a>
+                        }
+
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            if (i == 1 || i == ViewBag.TotalPages || (i >= ViewBag.CurrentPage - 1 && i <= ViewBag.CurrentPage + 1))
+                            {
+                                <a href="?page=@i" class="page-btn @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                            }
+                            else if (i == 2 || i == ViewBag.TotalPages - 1)
+                            {
+                                <span class="page-btn">...</span>
+                            }
+                        }
+
+                        @if ((int)ViewBag.CurrentPage < (int)ViewBag.TotalPages)
+                        {
+                            <a href="?page=@((int)ViewBag.CurrentPage + 1)" class="page-btn">
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Chi tiết giao dịch -->
+<div class="modal fade" id="transactionDetailModal" tabindex="-1" aria-labelledby="transactionDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="transactionDetailModalLabel">Chi tiết giao dịch #TX00123</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="mb-2"><strong>Mã giao dịch:</strong> #TX00123</p>
+                        <p class="mb-2"><strong>Loại giao dịch:</strong> Nạp tiền</p>
+                        <p class="mb-2"><strong>Thời gian:</strong> 20/04/2023 15:30</p>
+                        <p class="mb-2"><strong>Số tiền:</strong> <span class="text-success">+2,000,000 VND</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-2"><strong>Phương thức thanh toán:</strong> Chuyển khoản ngân hàng</p>
+                        <p class="mb-2"><strong>Ngân hàng:</strong> Vietcombank</p>
+                        <p class="mb-2"><strong>Mã giao dịch ngân hàng:</strong> VCB123456789</p>
+                        <p class="mb-2"><strong>Trạng thái:</strong> <span class="badge bg-success">Thành công</span></p>
+                    </div>
+                </div>
+                <hr>
+                <div class="mb-3">
+                    <h6>Mô tả giao dịch</h6>
+                    <p>Nạp tiền vào tài khoản HuitWorks từ tài khoản ngân hàng Vietcombank của Nguyễn Văn A.</p>
+                </div>
+                <div class="mb-3">
+                    <h6>Lịch sử giao dịch</h6>
+                    <div class="transaction-timeline">
+                        <div class="d-flex mb-2">
+                            <div class="me-3">
+                                <div class="timeline-icon bg-success"><i class="fas fa-check"></i></div>
+                            </div>
+                            <div>
+                                <p class="mb-0 fw-bold">Giao dịch hoàn tất</p>
+                                <p class="mb-0 text-muted small">20/04/2023 15:35</p>
+                            </div>
+                        </div>
+                        <div class="d-flex mb-2">
+                            <div class="me-3">
+                                <div class="timeline-icon bg-primary"><i class="fas fa-sync"></i></div>
+                            </div>
+                            <div>
+                                <p class="mb-0 fw-bold">Đang xử lý</p>
+                                <p class="mb-0 text-muted small">20/04/2023 15:32</p>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <div class="timeline-icon bg-info"><i class="fas fa-plus"></i></div>
+                            </div>
+                            <div>
+                                <p class="mb-0 fw-bold">Tạo giao dịch</p>
+                                <p class="mb-0 text-muted small">20/04/2023 15:30</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary"><i class="fas fa-download me-1"></i>Tải biên lai</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(function() {
+          // 1. Lấy element modal và append vào body để đảm bảo z-index
+          var modalEl = document.getElementById('transactionDetailModal');
+          if (modalEl && modalEl.parentNode !== document.body) {
+            document.body.appendChild(modalEl);
+          }
+
+          // 2. Bắt click để show modal qua API của Bootstrap 5
+          $('.btn-outline-primary').on('click', function() {
+            var myModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+            myModal.show();
+          });
+
+          // 3. Các xử lý form tìm kiếm và reset
+          $('#searchForm').on('submit', function(e) {
+            e.preventDefault();
+            console.log('Tìm kiếm với:', {
+              type: $('#transactionType').val(),
+              status: $('#status').val(),
+              from: $('#fromDate').val(),
+              to: $('#toDate').val()
+            });
+          });
+          $('#resetBtn').on('click', function() {
+            $('#transactionType, #status, #fromDate, #toDate').val('');
+          });
+        });
+    </script>
+
+    <style>
+        /* override z-index nếu backdrop còn che modal */
+        .modal-backdrop.show {
+            z-index: 1040 !important;
+        }
+
+        .modal.show {
+            z-index: 1050 !important;
+        }
+    </style>
+}

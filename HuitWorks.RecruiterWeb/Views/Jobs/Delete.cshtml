@@ -1,0 +1,300 @@
+﻿@model HuitWorks.RecruiterWeb.Models.ViewModel.JobPostingViewModel
+@{
+    ViewData["Title"] = "Xác nhận xóa tin tuyển dụng";
+}
+
+<style>
+    :root {
+        --primary-color: #094174;
+        --danger-color: #dc3545;
+        --danger-dark: #bb2d3b;
+        --warning-bg: #fff8e6;
+        --warning-border: #ffeeba;
+        --border-radius: 8px;
+        --box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .confirmation-container {
+        max-width: 700px;
+        margin: 40px auto;
+    }
+
+    .confirmation-card {
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        overflow: hidden;
+    }
+
+    .confirmation-header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 20px;
+        position: relative;
+    }
+
+    .warning-icon {
+        font-size: 64px;
+        color: #ffc107;
+        background: white;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: -40px auto 15px;
+        box-shadow: var(--box-shadow);
+    }
+
+    .confirmation-body {
+        padding: 30px;
+    }
+
+    .job-info {
+        background-color: var(--warning-bg);
+        border: 1px solid var(--warning-border);
+        border-radius: var(--border-radius);
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+        .job-info dt {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .job-info dd {
+            margin-bottom: 12px;
+        }
+
+    .warning-message {
+        display: flex;
+        align-items: center;
+        background-color: rgba(220, 53, 69, 0.1);
+        color: var(--danger-color);
+        padding: 15px;
+        border-radius: var(--border-radius);
+        margin: 20px 0;
+    }
+
+    .btn-danger {
+        background-color: var(--danger-color);
+        border-color: var(--danger-color);
+        padding: 10px 24px;
+        border-radius: var(--border-radius);
+        font-weight: 500;
+    }
+
+        .btn-danger:hover {
+            background-color: var(--danger-dark);
+            border-color: var(--danger-dark);
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        padding: 10px 24px;
+        border-radius: var(--border-radius);
+        font-weight: 500;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    /* Toast Notification Styles */
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+    }
+
+    .toast {
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        overflow: hidden;
+        margin-bottom: 10px;
+        width: 350px;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+    .toast-header {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .toast-success .toast-header {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .toast-icon {
+        margin-right: 8px;
+        font-size: 20px;
+    }
+
+    .toast-title {
+        font-weight: 600;
+        flex-grow: 1;
+    }
+
+    .toast-close {
+        background: transparent;
+        border: 0;
+        color: inherit;
+        font-size: 1.2rem;
+        opacity: 0.8;
+        cursor: pointer;
+    }
+
+    .toast-body {
+        padding: 15px;
+    }
+</style>
+
+<div class="confirmation-container">
+    <div class="confirmation-card">
+        <div class="confirmation-header text-center">
+            <h2 class="mb-0">@ViewData["Title"]</h2>
+        </div>
+
+        <div class="confirmation-body text-center">
+            <div class="warning-icon">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+            </div>
+
+            <h4 class="mt-3">Bạn chắc chắn muốn xóa tin tuyển dụng này?</h4>
+            <p class="text-muted">Vui lòng kiểm tra thông tin bên dưới trước khi xác nhận</p>
+
+            <div class="job-info mt-4 text-start">
+                <dl class="row mb-0">
+                    <dt class="col-sm-3">Mã tin</dt>
+                    <dd class="col-sm-9">@Model.IdJobPost</dd>
+
+                    <dt class="col-sm-3">Tiêu đề</dt>
+                    <dd class="col-sm-9 fw-medium">@Model.Title</dd>
+
+                    <dt class="col-sm-3">Công ty</dt>
+                    <dd class="col-sm-9">@Model.Company?.CompanyName</dd>
+
+                    <dt class="col-sm-3">Hạn nộp</dt>
+                    <dd class="col-sm-9">@Model.ApplicationDeadline.ToString("dd/MM/yyyy")</dd>
+                </dl>
+            </div>
+
+            <div class="warning-message">
+                <i class="bi bi-shield-exclamation me-2 fs-4"></i>
+                <div>
+                    <strong>Cảnh báo:</strong> Hành động này sẽ xóa vĩnh viễn tin tuyển dụng và không thể khôi phục lại.
+                </div>
+            </div>
+
+            <form asp-action="Delete" method="post" id="deleteForm">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="IdJobPost" />
+
+                <div class="action-buttons">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left me-1"></i> Quay lại
+                    </a>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i> Xác nhận xóa
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+@section Scripts {
+    <script>
+        // Thêm Bootstrap Icons nếu chưa có
+        if (!document.querySelector('link[href*="bootstrap-icons"]')) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css';
+            document.head.appendChild(link);
+        }
+
+        // Xử lý form submit và hiển thị toast notification
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteForm = document.getElementById('deleteForm');
+
+            deleteForm.addEventListener('submit', function(event) {
+                // Lưu giá trị Title để hiển thị trong toast
+                localStorage.setItem('deletedJobTitle', '@Model.Title');
+            });
+
+            // Kiểm tra xem có thông báo xóa thành công không (từ lần load trang trước)
+            const queryParams = new URLSearchParams(window.location.search);
+            if (queryParams.get('deleted') === 'true') {
+                const deletedJobTitle = localStorage.getItem('deletedJobTitle') || 'Tin tuyển dụng';
+
+                // Hiển thị toast notification
+                showToast('Xóa thành công', `${deletedJobTitle} đã được xóa thành công.`, 'success');
+
+                // Xóa parameter trên URL để không hiển thị lại toast khi refresh
+                const newUrl = window.location.pathname;
+                history.replaceState({}, document.title, newUrl);
+
+                // Xóa dữ liệu lưu trữ
+                localStorage.removeItem('deletedJobTitle');
+            }
+        });
+
+        // Hàm hiển thị toast notification
+        function showToast(title, message, type = 'success') {
+            const toastContainer = document.getElementById('toastContainer');
+
+            // Tạo toast element
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <div class="toast-header">
+                    <i class="bi bi-check-circle-fill toast-icon"></i>
+                    <strong class="toast-title">${title}</strong>
+                    <button type="button" class="toast-close" onclick="this.parentElement.parentElement.remove()">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+                <div class="toast-body">
+                    ${message}
+                </div>
+            `;
+
+            // Thêm toast vào container
+            toastContainer.appendChild(toast);
+
+            // Hiển thị toast với animation
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+
+            // Tự động đóng toast sau 5 giây
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 5000);
+        }
+    </script>
+}
